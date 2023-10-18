@@ -1,0 +1,119 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RandomSelectMinoScript : MonoBehaviour,IRandomSelectMino
+{
+    [SerializeField]
+    private GameObject _iMino = default;
+
+    [SerializeField]
+    private GameObject _oMino = default;
+
+    [SerializeField]
+    private GameObject _sMino = default;
+
+    [SerializeField]
+    private GameObject _zMino = default;
+
+    [SerializeField]
+    private GameObject _jMino = default;
+
+    [SerializeField]
+    private GameObject _lMino = default;
+
+    [SerializeField]
+    private GameObject _tMino = default;
+
+    private int _randomNumber = default;
+
+    private int _selectNumber = default;
+
+    private enum MinoTable
+    {
+        IMINO,
+        OMINO,
+        SMINO,
+        ZMINO,
+        JMINO,
+        LMINO,
+        TMINO
+    }
+
+    private MinoTable[] _minoTable = {
+        MinoTable.IMINO, MinoTable.OMINO, MinoTable.SMINO,
+        MinoTable.ZMINO, MinoTable.JMINO, MinoTable.LMINO, MinoTable.TMINO };
+
+    List<GameObject> _minoList = new List<GameObject>();
+
+    List<int> _numberList = new List<int>();
+
+    public List<GameObject> MinoList { get => _minoList; set => _minoList = value; }
+
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.T))
+    //    {
+    //        MinoRandomSelect();
+    //    }
+    //}
+
+    /// <summary>
+    /// ７種類のミノを重複なくリストに入れる
+    /// </summary>
+    public void RandomSelectMino()
+    {
+        // リストの中に0～7の数字を追加する
+        for (int i = 0; i < 7; i++)
+        {
+            _numberList.Add(i);
+        }
+
+        for (int j = 0; j < 7; j++)
+        {
+            if (_numberList.Count > 0)
+            {
+                // 0～7の中からランダムに数字を選ぶ
+                _randomNumber = Random.Range(0, _numberList.Count);
+
+                _selectNumber = _numberList[_randomNumber];
+                Debug.Log(_selectNumber);
+                
+                // 選ばれた数字を削除する
+                _numberList.RemoveAt(_randomNumber);
+            }
+
+            // 選ばれた数字のミノをリストに追加する
+            switch (_minoTable[_selectNumber])
+            {
+                case MinoTable.IMINO:
+                    MinoList.Add(_iMino);
+                    break;
+
+                case MinoTable.OMINO:
+                    MinoList.Add(_oMino);
+                    break;
+
+                case MinoTable.SMINO:
+                    MinoList.Add(_sMino);
+                    break;
+
+                case MinoTable.ZMINO:
+                    MinoList.Add(_zMino);
+                    break;
+
+                case MinoTable.JMINO:
+                    MinoList.Add(_jMino);
+                    break;
+
+                case MinoTable.LMINO:
+                    MinoList.Add(_lMino);
+                    break;
+
+                case MinoTable.TMINO:
+                    MinoList.Add(_tMino);
+                    break;
+            }
+        }
+    }
+}
