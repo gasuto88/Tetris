@@ -31,6 +31,19 @@ public class GameControllerScript : MonoBehaviour,IGameController
 
     private GameObject _playerMino = default;
 
+    private Vector2 _playerPosition = default;
+
+    private bool isInput = default;
+
+    [SerializeField,Header("入力クールタイム")]
+    private float _inputCoolTime = 0.1f;
+
+    private float _inputTime = default;
+
+    private float _fallTime = default;
+
+    private float _fallCoolTime = 1f;
+
     public GameObject PlayerMino { get => _playerMino; set => _playerMino = value; }
 
     private void Start()
@@ -42,6 +55,8 @@ public class GameControllerScript : MonoBehaviour,IGameController
         _iRandomSelectMino = g.GetComponent<RandomSelectMinoScript>();
 
         _instanceMinoTransform = GameObject.Find("InstanceMinoPosition").transform;
+
+        _playerPosition = _instanceMinoTransform.position;
     }
 
     private void Update()
@@ -57,36 +72,57 @@ public class GameControllerScript : MonoBehaviour,IGameController
         switch (_gameState)
         {
             case GameState.START:
+
                 _iRandomSelectMino.RandomSelectMino();
+
                 _gameState = GameState.MINO_CREATE;
+
                 break;
 
             case GameState.MINO_CREATE:
+
                 _iCreateMino.NextMinoInstance();
+
                 _gameState = GameState.MINO_MOVE;
+
                 break;
 
             case GameState.MINO_MOVE:
+
                 float _horizontalInput = Input.GetAxisRaw("Horizontal");
                 float _verticalInput = Input.GetAxisRaw("Vertical");
 
-                if (_horizontalInput > 0)
+                if (_horizontalInput > 0 && (Time.time - _inputTime) > _inputCoolTime)
                 {
-                    PlayerMino.transform.Translate(1f, 0f, 0f);
+                    _playerPosition += Vector2.right;
+
+                    _inputTime = Time.time;
                 }
-                else if (_horizontalInput < 0)
+                else if (_horizontalInput < 0 && (Time.time - _inputTime) > _inputCoolTime)
                 {
-                    PlayerMino.transform.Translate(-1f, 0f, 0f);
+                    _playerPosition += Vector2.left;
+
+                    _inputTime = Time.time;
                 }
+
                 if(_verticalInput > 0)
                 {
                     
                 }
-                else if(_verticalInput < 0)
+                else if(_verticalInput < 0 && (Time.time - _inputTime) > _inputCoolTime)
                 {
-                    PlayerMino.transform.Translate(0f, -1f, 0f);
+                    _playerPosition += Vector2.down;
+
+                    _inputTime = Time.time;
                 }
 
+                if ((Time.time - _fallTime) > _fallCoolTime) 
+                {
+                    _playerPosition += Vector2.down;
+
+                    _fallTime = Time.time;
+                }
+                PlayerMino.transform.position = _playerPosition;
                 break;
 
             case GameState.STOP:
