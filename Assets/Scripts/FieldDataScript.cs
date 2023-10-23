@@ -39,4 +39,6 @@ public class FieldDataScript : MonoBehaviour
         {1,1,1,1,1,1,1,1,1,1,1,1},
        
     };
+
+    public int[,] FieldData { get => _fieldData; set => _fieldData = value; }
 }

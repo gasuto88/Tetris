@@ -5,4 +5,6 @@ using UnityEngine;
 public interface IGameController
 {
     GameObject PlayerMino { get; set; } 
+
+
 }

@@ -21,6 +21,10 @@ public class GameControllerScript : MonoBehaviour,IGameController
         END
     }
 
+    public delegate void GameTypeChangeMethod();
+
+    public GameTypeChangeMethod gameTypeChangeMethod = default;
+
     private ICreateMino _iCreateMino = default;
 
     private IRandomSelectMino _iRandomSelectMino = default;
@@ -30,8 +34,6 @@ public class GameControllerScript : MonoBehaviour,IGameController
     private GameState _gameState = GameState.START;
 
     private GameObject _playerMino = default;
-
-    private Vector2 _playerPosition = default;
 
     public GameObject PlayerMino { get => _playerMino; set => _playerMino = value; }
 
@@ -45,7 +47,7 @@ public class GameControllerScript : MonoBehaviour,IGameController
 
         _playerInputScript = GetComponent<PlayerControllerScript>();
 
-        _playerPosition = GameObject.Find("InstanceMinoPosition").transform.position;
+        gameTypeChangeMethod = () => { _gameState = GameState.MINO_CREATE; };
     }
 
     private void Update()
@@ -78,7 +80,7 @@ public class GameControllerScript : MonoBehaviour,IGameController
             // ƒ~ƒm‚ª‘€ì‚Å‚«‚é‚Æ‚«
             case GameState.MINO_MOVE:
 
-                _playerInputScript.PlayerController(PlayerMino);
+                _playerInputScript.PlayerController(PlayerMino , gameTypeChangeMethod);
                 break;
 
             case GameState.STOP:
