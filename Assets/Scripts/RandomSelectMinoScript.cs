@@ -50,14 +50,6 @@ public class RandomSelectMinoScript : MonoBehaviour,IRandomSelectMino
 
     public List<GameObject> MinoList { get => _minoList; set => _minoList = value; }
 
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.T))
-    //    {
-    //        MinoRandomSelect();
-    //    }
-    //}
-
     /// <summary>
     /// ７種類のミノを重複なくリストに入れる
     /// </summary>
