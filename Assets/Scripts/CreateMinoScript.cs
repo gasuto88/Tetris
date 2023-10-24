@@ -10,6 +10,8 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
 
     private Transform _minoSpawnTransform = default;
 
+    private Transform _oIMinoSpawnTransform = default;
+
     private void Start()
     {
         _iRandomSelectMino = GameObject.Find("MinoController").GetComponent<RandomSelectMinoScript>();
@@ -17,6 +19,8 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
         _iGameController = GameObject.Find("GameController").GetComponent<GameControllerScript>();
 
         _minoSpawnTransform = GameObject.Find("MinoSpawnPosition").transform;
+
+        _oIMinoSpawnTransform = GameObject.Find("O_IMinoSpawnPosition").transform;
     }
    
     /// <summary>
@@ -24,16 +28,18 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
     /// </summary>
     public void NextMinoInstance()
     {
+        Transform tempTransform = _minoSpawnTransform;    
+   
         if (_iRandomSelectMino.MinoList[0].name == "OMino" || _iRandomSelectMino.MinoList[0].name == "IMino")
         {
-            
+            tempTransform = _oIMinoSpawnTransform;
         }
 
         // ÉäÉXÉgÇÃêÊì™ÇÃÉ~ÉmÇê∂ê¨Ç∑ÇÈ
         _iGameController.PlayerMino = Instantiate(
             _iRandomSelectMino.MinoList[0],
-            _minoSpawnTransform.position,
-            _minoSpawnTransform.rotation
+            tempTransform.position,
+            tempTransform.rotation
              );
         
 
