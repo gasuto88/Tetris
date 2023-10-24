@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class GameControllerScript : MonoBehaviour,IGameController
+public class GameControllerScript : MonoBehaviour
 {
 
     // START         ゲームが開始される前の処理
@@ -33,10 +33,6 @@ public class GameControllerScript : MonoBehaviour,IGameController
 
     private GameState _gameState = GameState.START;
 
-    private GameObject _playerMino = default;
-
-    public GameObject PlayerMino { get => _playerMino; set => _playerMino = value; }
-
     private void Start()
     {
         GameObject g = GameObject.Find("MinoController");
@@ -52,7 +48,7 @@ public class GameControllerScript : MonoBehaviour,IGameController
 
     private void Update()
     {
-        GameController();  
+        GameController();
     }
 
     /// <summary>
@@ -80,7 +76,7 @@ public class GameControllerScript : MonoBehaviour,IGameController
             // ミノが操作できるとき
             case GameState.MINO_MOVE:
 
-                _playerInputScript.PlayerController(PlayerMino , gameTypeChangeMethod);
+                _playerInputScript.PlayerController(gameTypeChangeMethod);
                 break;
 
             case GameState.STOP:

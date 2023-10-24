@@ -7,6 +7,10 @@ public class PlayerControllerScript : MonoBehaviour
     private float _horizontalInput = default;
     private float _verticalInput = default;
 
+    private GameObject _playerMino = default;
+
+    public GameObject PlayerMino { get => _playerMino; set => _playerMino = value; }
+
     [SerializeField, Header("入力時のクールタイム")]
     private float _inputCoolTime = 0.1f;
 
@@ -37,41 +41,42 @@ public class PlayerControllerScript : MonoBehaviour
     private float _beforeTime = default;
 
     private float _beforeCoolTime = 0.3f;
-
+    
     private void Start()
     {
         _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();
-
+        
         _defaultMinoLifeTime = _minoLifeTime;
     }
 
-    public void PlayerController(GameObject _playerMino,GameControllerScript.GameTypeChangeMethod _gameTypeChangeMethod)
+    public void PlayerController(GameControllerScript.GameTypeChangeMethod _gameTypeChangeMethod)
     {
         _horizontalInput = Input.GetAxisRaw("Horizontal");
-        _verticalInput = Input.GetAxisRaw("Vertical");
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            _playerMino.transform.Rotate(0f, 0f, 90f, Space.World);
-        }
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-            _playerMino.transform.Rotate(0f, 0f, -90f, Space.World);
-        }       
+        _verticalInput = Input.GetAxisRaw("Vertical");    
         
         // 右入力されたとき
         if (_horizontalInput > 0 && (Time.time - _inputTime) > _inputCoolTime)
         {
-            _playerMino.transform.Translate(1f, 0f, 0f,Space.World);
+            PlayerMino.transform.Translate(1f, 0f, 0f,Space.World);
 
             _inputTime = Time.time;
+
+            if (BeforeMoving())
+            {
+                PlayerMino.transform.Translate(-1f, 0f, 0f, Space.World);
+            }
         }
         // 左入力されたとき
         else if (_horizontalInput < 0 && (Time.time - _inputTime) > _inputCoolTime)
         {
-            _playerMino.transform.Translate(-1f, 0f, 0f,Space.World);
+            PlayerMino.transform.Translate(-1f, 0f, 0f,Space.World);
 
             _inputTime = Time.time;
+
+            if (BeforeMoving())
+            {
+                PlayerMino.transform.Translate(1f, 0f, 0f, Space.World);
+            }
         }
         // 上入力されたとき
         if (_verticalInput > 0)
@@ -81,79 +86,162 @@ public class PlayerControllerScript : MonoBehaviour
         // 下入力されたとき
         else if (_verticalInput < 0 && (Time.time - _inputTime) > _inputCoolTime)
         {
-            _playerMino.transform.Translate(0f, -1f, 0f,Space.World);
+            PlayerMino.transform.Translate(0f, -1f, 0f,Space.World);
 
             _inputTime = Time.time;
+
+            if (BeforeMoving())
+            {
+                PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
+
+                AddMinoToField();
+                _gameTypeChangeMethod();
+                return;
+            }
         }
 
         if ((Time.time - _fallTime) > _fallCoolTime)
         {          
-            _playerMino.transform.Translate(0f, -1f, 0f,Space.World);
+            PlayerMino.transform.Translate(0f, -1f, 0f,Space.World);
 
             _fallTime = Time.time;
+
+            if (BeforeMoving())
+            {
+                PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
+
+                AddMinoToField();
+                _gameTypeChangeMethod();
+                return;
+            }
         }
 
-        foreach (Transform t in _playerMino.GetComponentInChildren<Transform>())
+        if (Input.GetKeyDown(KeyCode.Q))
         {
+            // 右回転
+            PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
 
-            for (;0f >= t.position.x;)
-            {
-                _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
-
-            }
-            for (; 11f <= t.position.x;)
-            {
-                _playerMino.transform.Translate(-1f, 0f, 0f, Space.World);
-            }
-            for (;-20f >= t.position.y ; )
-            {
-                _playerMino.transform.Translate(0f, 1f, 0f, Space.World);
-            }
+            //for (; BeforeMoving();) 
+            //{
+            //    PutInside();
+            //}
         }
-        foreach(Transform t in _playerMino.GetComponentInChildren<Transform>())
+        else if (Input.GetKeyDown(KeyCode.E))
         {
-            if(_fieldDataScript.FieldData[(int)t.position.x,(int)t.position.y - 1] >= 1)
-            {
+            // 左回転
+            PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);
 
+            //for (; BeforeMoving();)
+            //{
+            //    PutInside();
+            //}
+        }
+
+        //for (int j = 0;j < 20;j++)
+        //{
+        //    string unti = "";
+        //    for (int i = 0; i < 10; i++)
+        //    {
+        //        unti += _fieldDataScript.FieldData[j, i];
+
+        //        Debug.LogError(unti);
+        //            }
+        //}
+
+
+        //if (-17.5f >= PlayerMino.transform.position.y)
+        //{
+        //    _minoFloorTime += Time.deltaTime;
+
+        //    //// ミノが動いていたら
+        //    //if (_playerMino.transform != _beforeTransform)
+        //    //{
+        //    //    Debug.LogError("呼ばれた");
+        //    //    // ミノの生存時間を増やす
+        //    //    _minoLifeTime += _addDeathTime;
+        //    //}
+        //    //if ((Time.time - _beforeTime) > _beforeCoolTime)
+        //    //{
+
+        //    //    _beforeTransform.position = _playerMino.transform.position;
+        //    //    _beforeTime = Time.time;
+        //    //}
+        //    _minoLifeTime = Mathf.Clamp(_minoLifeTime, _minMinoLifeTime, _maxMinoLifeTime);
+        //}
+
+        //if (_minoFloorTime > _minoLifeTime)
+        //{
+        //    //foreach(Transform t in _playerMino.GetComponentInChildren<Transform>())
+        //    //{
+        //    //    _fieldDataScript.FieldData[(int)t.position.x,(int)t.position.y] = 2;
+        //    //}
+
+        //    // ミノの生存時間リセット
+        //    _minoLifeTime = _defaultMinoLifeTime;
+
+        //    // タイマーリセット
+        //    _minoFloorTime = 0;
+
+        //    // 次のミノを生成する処理に切り替える
+        //    _gameTypeChangeMethod();
+        //}
+
+    }
+
+    private bool BeforeMoving()
+    {
+        foreach(Transform _children in PlayerMino.GetComponentInChildren<Transform>())
+        {
+            int _posX = (int)_children.position.x;
+            int _posY = (int)_children.position.y;
+
+            // ミノがステージの範囲外だったら
+            if (_posX <= -1 || 10 <= _posX || _posY <= -20)
+            {
+                return true;
+            }
+
+            if (_posY <= 0 && _fieldDataScript.FieldData[-_posY,_posX] != 0)
+            {
+                return true;
             }
         }
+        return false;
+    }
 
-        if (-17.5f >= _playerMino.transform.position.y)
+    private void PutInside()
+    {
+        foreach (Transform _children in PlayerMino.GetComponentInChildren<Transform>())
         {
-            _minoFloorTime += Time.deltaTime;
+            int _posX = (int)_children.position.x;
+            int _posY = (int)_children.position.y;
 
-            //// ミノが動いていたら
-            //if (_playerMino.transform != _beforeTransform)
-            //{
-            //    Debug.LogError("呼ばれた");
-            //    // ミノの生存時間を増やす
-            //    _minoLifeTime += _addDeathTime;
-            //}
-            //if ((Time.time - _beforeTime) > _beforeCoolTime)
-            //{
-
-            //    _beforeTransform.position = _playerMino.transform.position;
-            //    _beforeTime = Time.time;
-            //}
-            _minoLifeTime = Mathf.Clamp(_minoLifeTime,_minMinoLifeTime,_maxMinoLifeTime);
+            // ミノがステージの範囲外だったら
+            if ( _posX <= -1)
+            {
+                PlayerMino.transform.Translate(1f, 0f, 0f, Space.World);
+            }
+            else if ( 10 <= _posX)
+            {
+                PlayerMino.transform.Translate(-1f, 0f, 0f, Space.World);
+            }
+            if(_posY <= -20)
+            {
+                PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
+            }
+           
         }
+    }
 
-        if (_minoFloorTime > _minoLifeTime)
-        {      
-            //foreach(Transform t in _playerMino.GetComponentInChildren<Transform>())
-            //{
-            //    _fieldDataScript.FieldData[(int)t.position.x,(int)t.position.y] = 2;
-            //}
+    private void AddMinoToField()
+    {
+        foreach (Transform _children in PlayerMino.GetComponentInChildren<Transform>())
+        {
+            int _posX = (int)_children.position.x;
+            int _posY = (int)_children.position.y;
 
-            // ミノの生存時間リセット
-            _minoLifeTime = _defaultMinoLifeTime;
-
-            // タイマーリセット
-            _minoFloorTime = 0;
-
-            // 次のミノを生成する処理に切り替える
-            _gameTypeChangeMethod();
+            // フィールドに置いたミノを反映させる
+            _fieldDataScript.FieldData[-_posY, _posX] = 1;
         }
-        
     }
 }
