@@ -38,4 +38,38 @@ public class FieldDataScript : MonoBehaviour
     };
 
     public int[,] FieldData { get => _fieldData; set => _fieldData = value; }
+
+    /// <summary>
+    /// ミノが横一列埋まったら消す処理
+    /// </summary>
+    public void FieldMinoErase()
+    {
+        int blockCount = default;
+
+        for (int i = 19; i > -1; i--)
+        {
+            for(int j = 0;j < 10; j++)
+            {
+                if (FieldData[i, j] == 1)
+                {
+                    blockCount++;
+                }
+            }
+
+            if(blockCount >= 10)
+            {
+
+                for (int k = i + 1; k > 0; k--)
+                {
+                    for (int l = 0; l < 10; l++)
+                    {
+                        //　消す段に一個上の段を上書きする
+                        FieldData[k, l] = FieldData[k - 1, l];
+                    }
+                }
+
+                blockCount = 0;
+            }
+        }
+    }
 }

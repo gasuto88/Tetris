@@ -17,6 +17,7 @@ public class GameControllerScript : MonoBehaviour
         START,     
         MINO_CREATE,
         MINO_MOVE,
+        MINO_ERASE,
         STOP,
         END
     }
@@ -31,6 +32,8 @@ public class GameControllerScript : MonoBehaviour
 
     private PlayerControllerScript _playerInputScript = default;
 
+    private FieldDataScript _fieldDataScript = default;
+
     private GameState _gameState = GameState.START;
 
     private void Start()
@@ -43,7 +46,9 @@ public class GameControllerScript : MonoBehaviour
 
         _playerInputScript = GetComponent<PlayerControllerScript>();
 
-        gameTypeChangeMethod = () => { _gameState = GameState.MINO_CREATE; };
+        _fieldDataScript = GetComponent<FieldDataScript>();
+
+        gameTypeChangeMethod = () => { _gameState = GameState.MINO_ERASE; };
     }
 
     private void Update()
@@ -77,12 +82,22 @@ public class GameControllerScript : MonoBehaviour
             case GameState.MINO_MOVE:
 
                 _playerInputScript.PlayerController(gameTypeChangeMethod);
-                break;
 
+                break;
+            
+            case GameState.MINO_ERASE:
+
+                _fieldDataScript.FieldMinoErase();
+
+                _gameState = GameState.MINO_CREATE;
+
+                break;
             case GameState.STOP:
+
                 break;
 
             case GameState.END:
+
                 break;
 
         }
