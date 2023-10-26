@@ -12,32 +12,32 @@ public class FieldDataScript : MonoBehaviour
     private const int STATIC_MINO = 1;
 
     // フィールドデータ
-    private int[,] _fieldData =
-    {
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0,0}
+    private GameObject[,] _fieldData = new GameObject[20,10];
+    //{
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0},
+    //    {0,0,0,0,0,0,0,0,0,0}
            
-    };
+    //};
 
-    public int[,] FieldData { get => _fieldData; set => _fieldData = value; }
+    public GameObject[,] FieldData { get => _fieldData; set => _fieldData = value; }
 
     /// <summary>
     /// ミノが横一列埋まったら消す処理
@@ -50,7 +50,7 @@ public class FieldDataScript : MonoBehaviour
         {
             for(int j = 0;j < 10; j++)
             {
-                if (FieldData[i, j] == 1)
+                if (FieldData[i, j] != null)
                 {
                     blockCount++;
                 }
@@ -59,17 +59,51 @@ public class FieldDataScript : MonoBehaviour
             if(blockCount >= 10)
             {
 
-                for (int k = i + 1; k > 0; k--)
+                for (int k = i; k > -1; k--)
                 {
                     for (int l = 0; l < 10; l++)
                     {
-                        //　消す段に一個上の段を上書きする
-                        FieldData[k, l] = FieldData[k - 1, l];
-                    }
-                }
+                        Debug.LogError(i);
+                        if(k == i &&FieldData[i, l] != null)
+                        {
+                            Destroy(FieldData[i, l].gameObject);
+                            FieldData[i, l] = null;
+                        }
+                        if (FieldData[k-1, l] != null)
+                        {
+                            
+                            //Debug.LogError(FieldData[k - 1, l]);
+                            FieldData[k-1, l].transform.Translate(0f, -1f, 0f,Space.World);
 
-                blockCount = 0;
+                            //　消す段に一個上の段を上書きする
+                            FieldData[k, l] = FieldData[k - 1, l];
+
+                            FieldData[k - 1, l] = null;
+                        }
+                                            
+                    }
+                    Debug.LogError(k);
+                }            
+
             }
+            blockCount = 0;
+        }
+        //デバック用
+        for (int j = 0; j < 20; j++)
+        {
+            string unti = "";
+            for (int i = 0; i < 10; i++)
+            {
+                if (FieldData[j, i] != null)
+                {
+                    unti += 1;
+                }
+                else
+                {
+                    unti += 0;
+                }
+            }
+            Debug.LogWarning(unti);
         }
     }
 }

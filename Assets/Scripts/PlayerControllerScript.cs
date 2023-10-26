@@ -95,7 +95,7 @@ public class PlayerControllerScript : MonoBehaviour
                 PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
 
                 AddMinoToField();
-                Debug.LogError("ミノが置かれた");
+                //Debug.LogError("ミノが置かれた");
                 _gameTypeChangeMethod();               
             }
         }
@@ -111,7 +111,7 @@ public class PlayerControllerScript : MonoBehaviour
                 PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
 
                 AddMinoToField();
-                Debug.LogError("ミノが置かれた");
+                //Debug.LogError("ミノが置かれた");
                 _gameTypeChangeMethod();            
             }
         }
@@ -137,16 +137,17 @@ public class PlayerControllerScript : MonoBehaviour
             }
         }
 
-        for (int j = 0; j < 20; j++)
-        {
-            string unti = "";
-            for (int i = 0; i < 10; i++)
-            {
-                unti += _fieldDataScript.FieldData[j, i];
+        // デバック用
+        //for (int j = 0; j < 20; j++)
+        //{
+        //    string unti = "";
+        //    for (int i = 0; i < 10; i++)
+        //    {
+        //        unti += _fieldDataScript.FieldData[j, i];
                
-            }
-            Debug.LogWarning(unti);
-        }
+        //    }
+        //    Debug.LogWarning(unti);
+        //}
 
 
         //if (-17.5f >= PlayerMino.transform.position.y)
@@ -192,18 +193,19 @@ public class PlayerControllerScript : MonoBehaviour
     {
         foreach(Transform _children in PlayerMino.GetComponentInChildren<Transform>())
         {
-            Debug.Log("X "+_children.position.x +" Y "+ _children.position.y);
+            Debug.Log("X "+_children.transform.position.x +" Y "+ _children.transform.position.y);
             
-            int _posX = Mathf.RoundToInt(_children.position.x);
-            int _posY = Mathf.RoundToInt(_children.position.y);
+            int _posX = Mathf.RoundToInt(_children.transform.position.x);
+            int _posY = Mathf.RoundToInt(_children.transform.position.y);
 
+            Debug.Log(_posX + "" + _posY);
             // ミノがステージの範囲外だったら
             if (_posX <= -1 || 10 <= _posX || _posY <= -20)
             {
                 return true;
             }
 
-            if (_posY <= 0 && _fieldDataScript.FieldData[-_posY,_posX] != 0)
+            if (_posY <= 0 && _fieldDataScript.FieldData[-_posY,_posX] != null)
             {
                 return true;
             }
@@ -215,8 +217,8 @@ public class PlayerControllerScript : MonoBehaviour
     {
         foreach (Transform _children in PlayerMino.GetComponentInChildren<Transform>())
         {
-            int _posX = Mathf.RoundToInt(_children.position.x);
-            int _posY = Mathf.RoundToInt(_children.position.y);
+            int _posX = Mathf.RoundToInt(_children.transform.position.x);
+            int _posY = Mathf.RoundToInt(_children.transform.position.y);
 
             // ミノがステージの範囲外だったら
             if ( _posX <= -1)
@@ -239,11 +241,11 @@ public class PlayerControllerScript : MonoBehaviour
     {
         foreach (Transform _children in PlayerMino.GetComponentInChildren<Transform>())
         {
-            int _posX = Mathf.RoundToInt(_children.position.x);
-            int _posY = Mathf.RoundToInt(_children.position.y);
+            int _posX = Mathf.RoundToInt(_children.transform.position.x);
+            int _posY = Mathf.RoundToInt(_children.transform.position.y);
 
             // フィールドに置いたミノを反映させる
-            _fieldDataScript.FieldData[-_posY, _posX] = 1;
+            _fieldDataScript.FieldData[-_posY, _posX] = _children.gameObject;
         }
     }
 }

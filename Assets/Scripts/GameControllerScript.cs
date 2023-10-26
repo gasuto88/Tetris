@@ -46,7 +46,7 @@ public class GameControllerScript : MonoBehaviour
 
         _playerInputScript = GetComponent<PlayerControllerScript>();
 
-        _fieldDataScript = GetComponent<FieldDataScript>();
+        _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();
 
         gameTypeChangeMethod = () => { _gameState = GameState.MINO_ERASE; };
     }
