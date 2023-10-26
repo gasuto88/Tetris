@@ -18,7 +18,7 @@ public class PlayerControllerScript : MonoBehaviour
 
     private float _fallTime = default;
 
-    [SerializeField,Header("ƒ~ƒm‚Ì—‰º‚Å~‚Ü‚éŠÔ")]
+    [SerializeField,Header("ƒ~ƒm‚ª—‚¿‚éŠÔ")]
     private float _fallCoolTime = 1f;
 
     // ƒ~ƒm‚ª°‚É‚Ó‚ê‚Ä‚©‚ç‚ÌŠÔ
@@ -123,7 +123,8 @@ public class PlayerControllerScript : MonoBehaviour
 
             if ( BeforeMoving())
             {
-                PutInside();
+                PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);
+                //PutInside();
             }
         }
         else if (Input.GetKeyDown(KeyCode.E))
@@ -133,7 +134,8 @@ public class PlayerControllerScript : MonoBehaviour
 
             if (BeforeMoving())
             {
-                PutInside();
+                PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
+                //PutInside();
             }
         }
 

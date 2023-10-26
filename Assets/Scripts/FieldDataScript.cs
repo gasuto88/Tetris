@@ -58,7 +58,6 @@ public class FieldDataScript : MonoBehaviour
 
             if(blockCount >= 10)
             {
-
                 for (int k = i; k > -1; k--)
                 {
                     for (int l = 0; l < 10; l++)
@@ -70,8 +69,7 @@ public class FieldDataScript : MonoBehaviour
                             FieldData[i, l] = null;
                         }
                         if (FieldData[k-1, l] != null)
-                        {
-                            
+                        {                          
                             //Debug.LogError(FieldData[k - 1, l]);
                             FieldData[k-1, l].transform.Translate(0f, -1f, 0f,Space.World);
 
