@@ -96,6 +96,8 @@ public class PlayerControllerScript : MonoBehaviour
 
                 AddMinoToField();
                 //Debug.LogError("ミノが置かれた");
+
+                CutParentMino();
                 _gameTypeChangeMethod();               
             }
         }
@@ -112,6 +114,7 @@ public class PlayerControllerScript : MonoBehaviour
 
                 AddMinoToField();
                 //Debug.LogError("ミノが置かれた");
+                CutParentMino();
                 _gameTypeChangeMethod();            
             }
         }
@@ -137,6 +140,11 @@ public class PlayerControllerScript : MonoBehaviour
                 PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
                 //PutInside();
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+
         }
 
         // デバック用
@@ -249,5 +257,11 @@ public class PlayerControllerScript : MonoBehaviour
             // フィールドに置いたミノを反映させる
             _fieldDataScript.FieldData[-_posY, _posX] = _children.gameObject;
         }
+    }
+    
+    private void CutParentMino()
+    {
+        PlayerMino.transform.DetachChildren();
+        Destroy(PlayerMino);
     }
 }

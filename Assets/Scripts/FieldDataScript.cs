@@ -61,30 +61,29 @@ public class FieldDataScript : MonoBehaviour
                 for (int k = i; k > -1; k--)
                 {
                     for (int l = 0; l < 10; l++)
-                    {
-                        Debug.LogError(i);
+                    {             
                         if(k == i &&FieldData[i, l] != null)
                         {
                             Destroy(FieldData[i, l].gameObject);
+
                             FieldData[i, l] = null;
+                            
                         }
-                        if (FieldData[k-1, l] != null)
-                        {                          
-                            //Debug.LogError(FieldData[k - 1, l]);
+                        if (k > 0 && FieldData[k-1, l] != null)
+                        {                                                
                             FieldData[k-1, l].transform.Translate(0f, -1f, 0f,Space.World);
 
                             //　消す段に一個上の段を上書きする
                             FieldData[k, l] = FieldData[k - 1, l];
 
                             FieldData[k - 1, l] = null;
-                        }
-                                            
-                    }
-                    Debug.LogError(k);
-                }            
-
+                        }                                        
+                    }               
+                }
+                i++;
             }
             blockCount = 0;
+            
         }
         //デバック用
         for (int j = 0; j < 20; j++)

@@ -42,7 +42,6 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
             tempTransform.rotation
              );
         
-
         // ƒŠƒXƒg‚Ì’†‚©‚ç¶¬‚³‚ê‚½ƒ~ƒm‚ğíœ‚·‚é
         _iRandomSelectMino.MinoList.RemoveAt(0);
     }
