@@ -16,9 +16,9 @@ public class MinoControllerScript : MonoBehaviour
 
     private Transform _nextPositionFive = default;
 
-    private Transform[] _nextData = new Transform[5];
+    private Transform[] _nextData = new Transform[3];
 
-    private Transform[] _nextPositions = new Transform[5];
+    private Transform[] _nextPositions = new Transform[4];
 
     private ICreateMino _iCreateMino = default;
 
@@ -32,19 +32,14 @@ public class MinoControllerScript : MonoBehaviour
 
         _nextPositionThree = GameObject.Find("NextPosition (3)").transform;
 
-        _nextPositionFour = GameObject.Find("NextPosition (4)").transform;
-
-        _nextPositionFive = GameObject.Find("NextPosition (5)").transform;
-
-        _nextPositions = new Transform[] { _nextPositionOne, _nextPositionTwo, _nextPositionThree, _nextPositionFour, _nextPositionFive };
+        _nextPositions = new Transform[] { _nextPositionOne, _nextPositionTwo, _nextPositionThree};
 
         _iCreateMino = GameObject.Find("MinoController").GetComponent<CreateMinoScript>();
 
     }
     private void Update()
     {
-        AddMino();
-        NextDisplay();
+        AddMino();       
     }
     /// <summary>
     /// ƒ~ƒm‚ÌŒÂ”‚ðŠÇ—‚·‚é
@@ -60,22 +55,13 @@ public class MinoControllerScript : MonoBehaviour
 
     private void NextDisplay()
     {
+        //for (int i = 2; i > -1; i--)
+        //{
+        //    if ()
+        //    {
 
-        for (int i = 0; i < 4; i++)
-        {
-            for (int j = 0; j < 4; j++)
-            {
-                if (_nextData[j] == null)
-                {
-
-                    //_nextData[j] = _iCreateMino.NextMinoInstance(_nextPositions[]);
-
-                    break;
-                }
-
-            }
-
-        }
-        
+        //    }
+        //    _iRandomSelectMino.MinoList[0].transform.position = _nextPositions[i].transform.position;
+        //}
     }
 }

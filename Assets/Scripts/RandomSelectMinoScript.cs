@@ -80,6 +80,7 @@ public class RandomSelectMinoScript : MonoBehaviour,IRandomSelectMino
             {
                 case MinoTable.IMINO:
                     MinoList.Add(_iMino);
+                    
                     break;
 
                 case MinoTable.OMINO:
