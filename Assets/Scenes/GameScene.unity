@@ -4260,6 +4260,8 @@ GameObject:
   - component: {fileID: 1964237674}
   - component: {fileID: 1964237673}
   - component: {fileID: 1964237676}
+  - component: {fileID: 1964237678}
+  - component: {fileID: 1964237677}
   m_Layer: 0
   m_Name: MinoController
   m_TagString: Untagged
@@ -4325,6 +4327,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bddea4b8fb237f439d8735a147813db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1964237677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964237672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d98c35e636a5747b7e0a6eb6797cdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1964237678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964237672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4360cbd141046fc49a1758e02b072dc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inputCoolTime: 0.08
+  _fallCoolTime: 0.8
 --- !u!4 &1970694554 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5671083459066336236, guid: 0e9514d5bd8803e4dad7f121addc0f07, type: 3}
@@ -4566,7 +4594,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2124482019}
   - component: {fileID: 2124482020}
-  - component: {fileID: 2124482022}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -4601,20 +4628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 995f548389e748c45b2dde07e5bcddb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2124482022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2124482018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4360cbd141046fc49a1758e02b072dc2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _inputCoolTime: 0.05
-  _fallCoolTime: 0.8
 --- !u!1001 &2143628083
 PrefabInstance:
   m_ObjectHideFlags: 0

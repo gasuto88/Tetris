@@ -12,28 +12,36 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
 
     private Transform _oIMinoSpawnTransform = default;
 
+    private GhostMinoScript _ghostMinoScript = default;
+
+    private SpriteRenderer _spriteRenderer = default;
+
+    private Color _ghostColor = new Color(1.0f,1.0f,1.0f,0.3f);
+
     private void Start()
     {
-        _iRandomSelectMino = GameObject.Find("MinoController").GetComponent<RandomSelectMinoScript>();
+        _iRandomSelectMino = GetComponent<RandomSelectMinoScript>();
 
-        _playerControllerScript = GameObject.Find("GameController").GetComponent<PlayerControllerScript>();
+        _playerControllerScript = GetComponent<PlayerControllerScript>();
 
         _minoSpawnTransform = GameObject.Find("MinoSpawnPosition").transform;
 
         _oIMinoSpawnTransform = GameObject.Find("O_IMinoSpawnPosition").transform;
+
+        _ghostMinoScript = GetComponent<GhostMinoScript>();
+
+        
     }
-   
+    
     /// <summary>
     /// Nextにあるミノを生成する
     /// </summary>
     public void NextMinoInstance()
-    {
-        
+    {   
         // OMinoとIMinoじゃなかったら
         if (_iRandomSelectMino.MinoList[0].tag != "OMino" && _iRandomSelectMino.MinoList[0].tag != "IMino")
         {
             _iRandomSelectMino.MinoList[0].transform.position = _minoSpawnTransform.position;
-
         }
         // OMinoとIMInoのとき
         else
@@ -43,7 +51,16 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
 
         _playerControllerScript.PlayerMino = _iRandomSelectMino.MinoList[0];
 
-        //// リストの先頭のミノを生成する
+        _ghostMinoScript.GhostMino = _iRandomSelectMino.GhostList[0];
+
+        _ghostMinoScript.GhostMino.transform.position =
+            _playerControllerScript.PlayerMino.transform.position;
+
+        foreach(Transform _children in _ghostMinoScript.GhostMino.GetComponentInChildren<Transform>())
+        {
+            _children.GetComponent<SpriteRenderer>().color = _ghostColor;
+        }
+        // リストの先頭のミノを生成する
         //_playerControllerScript.PlayerMino = Instantiate(
         //    _iRandomSelectMino.MinoList[0],
         //    tempTransform.position,
@@ -52,5 +69,6 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
 
         // リストの中から生成されたミノを削除する
         _iRandomSelectMino.MinoList.RemoveAt(0);
+        _iRandomSelectMino.GhostList.RemoveAt(0);
     }
 }

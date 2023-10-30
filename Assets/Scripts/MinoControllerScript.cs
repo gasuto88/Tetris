@@ -22,11 +22,15 @@ public class MinoControllerScript : MonoBehaviour
 
     private Transform _holdTransform = default;
 
+    private GameObject[] _holdGhostObject = new GameObject[1];
+
     private ICreateMino _iCreateMino = default;
 
     private bool isHold = default;
 
     private int _holdCount = default;
+
+    private GhostMinoScript _ghostMinoScript = default;
 
     public GameObject[] HoldObject { get => _holdObject; set => _holdObject = value; }
 
@@ -43,6 +47,8 @@ public class MinoControllerScript : MonoBehaviour
         _nextPositions = new Transform[] { _nextPositionOne, _nextPositionTwo, _nextPositionThree};
 
         _iCreateMino = GetComponent<CreateMinoScript>();
+
+        _ghostMinoScript = GetComponent<GhostMinoScript>();
 
         _holdTransform = GameObject.Find("HoldPosition").transform;
 
@@ -85,11 +91,16 @@ public class MinoControllerScript : MonoBehaviour
             {
                 // ホールドに入ってるミノをリストの先頭に追加
                 _iRandomSelectMino.MinoList.Insert(0, HoldObject[0]);
+                _iRandomSelectMino.GhostList.Insert(0, _holdGhostObject[0]);
             }
             _holdObject[0] = _holdMino;
 
+            _holdGhostObject[0] = _ghostMinoScript.GhostMino;
+
             _holdObject[0].transform.position = _holdTransform.position;
 
+            _holdGhostObject[0].transform.position = _holdTransform.position;
+            
             _holdCount = 0;
 
             _minoCreateMethod();

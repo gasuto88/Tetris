@@ -42,6 +42,10 @@ public class GameControllerScript : MonoBehaviour
 
     private MinoControllerScript _minoControllerScript = default;
 
+    private GhostMinoScript _ghostMinoScript = default;
+
+    //public GameState GameState { get => _gameState; set => _gameState = value; }
+
     private void Start()
     {
         GameObject g = GameObject.Find("MinoController");
@@ -52,7 +56,9 @@ public class GameControllerScript : MonoBehaviour
 
         _minoControllerScript = g.GetComponent<MinoControllerScript>();
 
-        _playerInputScript = GetComponent<PlayerControllerScript>();
+        _playerInputScript = g.GetComponent<PlayerControllerScript>();
+
+        _ghostMinoScript = g.GetComponent<GhostMinoScript>();
 
         _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();
 
@@ -89,6 +95,8 @@ public class GameControllerScript : MonoBehaviour
 
                 _minoControllerScript.HoldCount();
 
+                //_ghostMinoScript.ghost
+
                 _gameState = GameState.MINO_MOVE;
 
                 break;
@@ -97,11 +105,15 @@ public class GameControllerScript : MonoBehaviour
 
                 _playerInputScript.PlayerController(_minoEraseMethod,_minoCreateMethod);
 
+                _ghostMinoScript.GhostController();
+
                 break;
             
             case GameState.MINO_ERASE:
 
                 _fieldDataScript.FieldMinoErase();
+
+                Destroy(_ghostMinoScript.GhostMino);
 
                 _gameState = GameState.MINO_CREATE;
 

@@ -66,7 +66,7 @@ public class PlayerControllerScript : MonoBehaviour
 
             _inputTime = Time.time;
 
-            if (BeforeMoving())
+            if (BeforeMoving(PlayerMino))
             {
                 PlayerMino.transform.Translate(-1f, 0f, 0f, Space.World);
             }
@@ -78,7 +78,7 @@ public class PlayerControllerScript : MonoBehaviour
 
             _inputTime = Time.time;
 
-            if (BeforeMoving())
+            if (BeforeMoving(PlayerMino))
             {
                 PlayerMino.transform.Translate(1f, 0f, 0f, Space.World);
             }
@@ -86,7 +86,7 @@ public class PlayerControllerScript : MonoBehaviour
         // è„ì¸óÕÇ≥ÇÍÇΩÇ∆Ç´
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
-            while (!BeforeMoving())
+            while (!BeforeMoving(PlayerMino))
             {
                 PlayerMino.transform.Translate(0f, -1f, 0f, Space.World);
             }
@@ -96,6 +96,7 @@ public class PlayerControllerScript : MonoBehaviour
 
             CutParentMino();
             _minoEraseMethod();
+            return;
         }
         // â∫ì¸óÕÇ≥ÇÍÇΩÇ∆Ç´
         else if (_verticalInput < 0 && (Time.time - _inputTime) > _inputCoolTime)
@@ -104,14 +105,15 @@ public class PlayerControllerScript : MonoBehaviour
 
             _inputTime = Time.time;
 
-            if (BeforeMoving())
+            if (BeforeMoving(PlayerMino))
             {
                 PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
 
                 AddMinoToField();
                 
                 CutParentMino();
-                _minoEraseMethod();               
+                _minoEraseMethod();
+                return;
             }
         }
 
@@ -121,14 +123,15 @@ public class PlayerControllerScript : MonoBehaviour
 
             _fallTime = Time.time;
 
-            if (BeforeMoving())
+            if (BeforeMoving(PlayerMino))
             {
                 PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
 
                 AddMinoToField();
                 
                 CutParentMino();
-                _minoEraseMethod();            
+                _minoEraseMethod();
+                return;
             }
         }
 
@@ -137,7 +140,7 @@ public class PlayerControllerScript : MonoBehaviour
             // âEâÒì]
             PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
 
-            if ( BeforeMoving())
+            if ( BeforeMoving(PlayerMino))
             {
                 PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);              
             }
@@ -147,7 +150,7 @@ public class PlayerControllerScript : MonoBehaviour
             // ç∂âÒì]
             PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);
 
-            if (BeforeMoving())
+            if (BeforeMoving(PlayerMino))
             {
                 PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);              
             }
@@ -159,7 +162,7 @@ public class PlayerControllerScript : MonoBehaviour
             _minoControllerScript.HoldController(PlayerMino,_minoCreateMethod);          
         }
 
-     
+        
         //if (-17.5f >= PlayerMino.transform.position.y)
         //{
         //    _minoFloorTime += Time.deltaTime;
@@ -199,9 +202,9 @@ public class PlayerControllerScript : MonoBehaviour
 
     }
 
-    private bool BeforeMoving()
+    public bool BeforeMoving(GameObject _mino)
     {
-        foreach(Transform _children in PlayerMino.GetComponentInChildren<Transform>())
+        foreach(Transform _children in _mino.GetComponentInChildren<Transform>())
         {
             Debug.Log("X "+_children.transform.position.x +" Y "+ _children.transform.position.y);
             
@@ -221,33 +224,6 @@ public class PlayerControllerScript : MonoBehaviour
             }
         }
         return false;
-    }
-
-    private int FloorLocation()
-    {
-        int _leastPosY = default;
-        foreach (Transform _children in PlayerMino.GetComponentInChildren<Transform>())
-        {
-            int _playerPosY = Mathf.RoundToInt(PlayerMino.transform.position.y);
-            int _posX = Mathf.RoundToInt(_children.transform.position.x);
-            int _posY = Mathf.RoundToInt(_children.transform.position.y);
-            
-
-            for (int i = _posY;i > -20;i--)
-            {
-                if (_fieldDataScript.FieldData[-i, _posX] != null && _leastPosY < (i + 1) - (_playerPosY - _posY))
-                {
-                    _leastPosY = (i + 1) - (_playerPosY - _posY);
-                }                              
-            }
-
-            //if (_leastPosY == 0)
-            //{
-            //    _leastPosY = -_fieldDataScript.Height + (_posY - (_playerPosY - _posY));
-            //}          
-        }
-       
-        return _leastPosY;
     }
 
     //private void PutInside()

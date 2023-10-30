@@ -50,7 +50,10 @@ public class RandomSelectMinoScript : MonoBehaviour,IRandomSelectMino
 
     List<int> _numberList = new List<int>();
 
+    List<GameObject> _ghostList = new List<GameObject>(); 
+
     public List<GameObject> MinoList { get => _minoList; set => _minoList = value; }
+    public List<GameObject> GhostList { get => _ghostList; set => _ghostList = value; }
 
     private void Start()
     {
@@ -76,8 +79,7 @@ public class RandomSelectMinoScript : MonoBehaviour,IRandomSelectMino
                 _randomNumber = Random.Range(0, _numberList.Count);
 
                 _selectNumber = _numberList[_randomNumber];
-                
-                
+                                
                 // ëIÇŒÇÍÇΩêîéöÇçÌèúÇ∑ÇÈ
                 _numberList.RemoveAt(_randomNumber);
             }
@@ -87,31 +89,37 @@ public class RandomSelectMinoScript : MonoBehaviour,IRandomSelectMino
             {
                 case MinoTable.IMINO:
                     MinoList.Add(Instantiate(_iMino,_minoWaitTransform));
-                    
+                    GhostList.Add(Instantiate(_iMino, _minoWaitTransform));
                     break;
 
                 case MinoTable.OMINO:
                     MinoList.Add(Instantiate(_oMino,_minoWaitTransform));
+                    GhostList.Add(Instantiate(_oMino, _minoWaitTransform));
                     break;
 
                 case MinoTable.SMINO:
                     MinoList.Add(Instantiate(_sMino,_minoWaitTransform));
+                    GhostList.Add(Instantiate(_sMino, _minoWaitTransform));
                     break;
 
                 case MinoTable.ZMINO:
                     MinoList.Add(Instantiate(_zMino, _minoWaitTransform));
+                    GhostList.Add(Instantiate(_zMino, _minoWaitTransform));
                     break;
 
                 case MinoTable.JMINO:
                     MinoList.Add(Instantiate(_jMino, _minoWaitTransform));
+                    GhostList.Add(Instantiate(_jMino, _minoWaitTransform));
                     break;
 
                 case MinoTable.LMINO:
                     MinoList.Add(Instantiate(_lMino, _minoWaitTransform));
+                    GhostList.Add(Instantiate(_lMino, _minoWaitTransform));
                     break;
 
                 case MinoTable.TMINO:
                     MinoList.Add(Instantiate(_tMino, _minoWaitTransform));
+                    GhostList.Add(Instantiate(_tMino, _minoWaitTransform));
                     break;
             }
         }
