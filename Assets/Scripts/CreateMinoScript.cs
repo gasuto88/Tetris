@@ -28,20 +28,28 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
     /// </summary>
     public void NextMinoInstance()
     {
-        Transform tempTransform = _minoSpawnTransform;    
-   
-        if (_iRandomSelectMino.MinoList[0].name == "OMino" || _iRandomSelectMino.MinoList[0].name == "IMino")
+        
+        // OMinoとIMinoじゃなかったら
+        if (_iRandomSelectMino.MinoList[0].tag != "OMino" && _iRandomSelectMino.MinoList[0].tag != "IMino")
         {
-            tempTransform = _oIMinoSpawnTransform;
+            _iRandomSelectMino.MinoList[0].transform.position = _minoSpawnTransform.position;
+
+        }
+        // OMinoとIMInoのとき
+        else
+        {
+            _iRandomSelectMino.MinoList[0].transform.position = _oIMinoSpawnTransform.position;
         }
 
-        // リストの先頭のミノを生成する
-        _playerControllerScript.PlayerMino = Instantiate(
-            _iRandomSelectMino.MinoList[0],
-            tempTransform.position,
-            tempTransform.rotation
-             );
-        
+        _playerControllerScript.PlayerMino = _iRandomSelectMino.MinoList[0];
+
+        //// リストの先頭のミノを生成する
+        //_playerControllerScript.PlayerMino = Instantiate(
+        //    _iRandomSelectMino.MinoList[0],
+        //    tempTransform.position,
+        //    tempTransform.rotation
+        //     );
+
         // リストの中から生成されたミノを削除する
         _iRandomSelectMino.MinoList.RemoveAt(0);
     }

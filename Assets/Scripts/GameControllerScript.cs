@@ -22,9 +22,13 @@ public class GameControllerScript : MonoBehaviour
         END
     }
 
-    public delegate void GameTypeChangeMethod();
+    public delegate void MinoEraseChangeMethod();
 
-    public GameTypeChangeMethod gameTypeChangeMethod = default;
+    public MinoEraseChangeMethod _minoEraseMethod = default;
+
+    public delegate void MinoCreateMethod();
+
+    public MinoCreateMethod _minoCreateMethod = default;
 
     private ICreateMino _iCreateMino = default;
 
@@ -36,19 +40,25 @@ public class GameControllerScript : MonoBehaviour
 
     private GameState _gameState = GameState.START;
 
+    private MinoControllerScript _minoControllerScript = default;
+
     private void Start()
     {
         GameObject g = GameObject.Find("MinoController");
 
         _iCreateMino = g.GetComponent<CreateMinoScript>();
 
-        _iRandomSelectMino = g.GetComponent<RandomSelectMinoScript>();        
+        _iRandomSelectMino = g.GetComponent<RandomSelectMinoScript>();
+
+        _minoControllerScript = g.GetComponent<MinoControllerScript>();
 
         _playerInputScript = GetComponent<PlayerControllerScript>();
 
         _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();
 
-        gameTypeChangeMethod = () => { _gameState = GameState.MINO_ERASE; };
+        _minoEraseMethod = () => { _gameState = GameState.MINO_ERASE; };
+
+        _minoCreateMethod = () => {_gameState = GameState.MINO_CREATE; };
     }
 
     private void Update()
@@ -75,13 +85,17 @@ public class GameControllerScript : MonoBehaviour
 
                 _iCreateMino.NextMinoInstance();
 
+                _minoControllerScript.NextDisplay();
+
+                _minoControllerScript.HoldCount();
+
                 _gameState = GameState.MINO_MOVE;
 
                 break;
             // É~ÉmÇ™ëÄçÏÇ≈Ç´ÇÈÇ∆Ç´
             case GameState.MINO_MOVE:
 
-                _playerInputScript.PlayerController(gameTypeChangeMethod);
+                _playerInputScript.PlayerController(_minoEraseMethod,_minoCreateMethod);
 
                 break;
             

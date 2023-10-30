@@ -16,11 +16,19 @@ public class MinoControllerScript : MonoBehaviour
 
     private Transform _nextPositionFive = default;
 
-    private Transform[] _nextData = new Transform[3];
-
     private Transform[] _nextPositions = new Transform[4];
 
+    private GameObject[] _holdObject = new GameObject[1];
+
+    private Transform _holdTransform = default;
+
     private ICreateMino _iCreateMino = default;
+
+    private bool isHold = default;
+
+    private int _holdCount = default;
+
+    public GameObject[] HoldObject { get => _holdObject; set => _holdObject = value; }
 
     private void Start()
     {
@@ -34,7 +42,9 @@ public class MinoControllerScript : MonoBehaviour
 
         _nextPositions = new Transform[] { _nextPositionOne, _nextPositionTwo, _nextPositionThree};
 
-        _iCreateMino = GameObject.Find("MinoController").GetComponent<CreateMinoScript>();
+        _iCreateMino = GetComponent<CreateMinoScript>();
+
+        _holdTransform = GameObject.Find("HoldPosition").transform;
 
     }
     private void Update()
@@ -53,15 +63,48 @@ public class MinoControllerScript : MonoBehaviour
         }
     }
 
-    private void NextDisplay()
+    public void NextDisplay()
     {
-        //for (int i = 2; i > -1; i--)
-        //{
-        //    if ()
-        //    {
+        for (int i = 0; i < 3; i++)
+        {
+            _iRandomSelectMino.MinoList[i].transform.position = _nextPositions[i].transform.position;
+        }
+    }
+    /// <summary>
+    /// ホールドの中身を出し入れする処理
+    /// </summary>
+    /// <param name="_holdMino"></param>
+    /// <param name="_minoCreateMethod"></param>
+    public void HoldController(GameObject _holdMino,GameControllerScript.MinoCreateMethod _minoCreateMethod)
+    {
+        if (!isHold)
+        {
+            isHold = true;
 
-        //    }
-        //    _iRandomSelectMino.MinoList[0].transform.position = _nextPositions[i].transform.position;
-        //}
+            if (HoldObject[0] != null)
+            {
+                // ホールドに入ってるミノをリストの先頭に追加
+                _iRandomSelectMino.MinoList.Insert(0, HoldObject[0]);
+            }
+            _holdObject[0] = _holdMino;
+
+            _holdObject[0].transform.position = _holdTransform.position;
+
+            _holdCount = 0;
+
+            _minoCreateMethod();
+        }
+        else
+        {
+            if(_holdCount > 1)
+            {
+                isHold = false;
+            }
+        }
+    }
+
+    public void HoldCount()
+    {
+        _holdCount++;
     }
 }

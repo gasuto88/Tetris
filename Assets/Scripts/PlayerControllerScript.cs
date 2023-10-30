@@ -41,15 +41,20 @@ public class PlayerControllerScript : MonoBehaviour
     private float _beforeTime = default;
 
     private float _beforeCoolTime = 0.3f;
+
+    private MinoControllerScript _minoControllerScript = default;
     
     private void Start()
     {
         _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();
         
         _defaultMinoLifeTime = _minoLifeTime;
+
+        _minoControllerScript = GameObject.Find("MinoController").GetComponent<MinoControllerScript>();
     }
 
-    public void PlayerController(GameControllerScript.GameTypeChangeMethod _gameTypeChangeMethod)
+    public void PlayerController(
+        GameControllerScript.MinoEraseChangeMethod _minoEraseMethod,GameControllerScript.MinoCreateMethod _minoCreateMethod)
     {
         _horizontalInput = Input.GetAxisRaw("Horizontal");
         _verticalInput = Input.GetAxisRaw("Vertical");    
@@ -79,9 +84,18 @@ public class PlayerControllerScript : MonoBehaviour
             }
         }
         // 上入力されたとき
-        if (_verticalInput > 0)
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
+            while (!BeforeMoving())
+            {
+                PlayerMino.transform.Translate(0f, -1f, 0f, Space.World);
+            }
+            PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
 
+            AddMinoToField();         
+
+            CutParentMino();
+            _minoEraseMethod();
         }
         // 下入力されたとき
         else if (_verticalInput < 0 && (Time.time - _inputTime) > _inputCoolTime)
@@ -95,10 +109,9 @@ public class PlayerControllerScript : MonoBehaviour
                 PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
 
                 AddMinoToField();
-                //Debug.LogError("ミノが置かれた");
-
+                
                 CutParentMino();
-                _gameTypeChangeMethod();               
+                _minoEraseMethod();               
             }
         }
 
@@ -113,9 +126,9 @@ public class PlayerControllerScript : MonoBehaviour
                 PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
 
                 AddMinoToField();
-                //Debug.LogError("ミノが置かれた");
+                
                 CutParentMino();
-                _gameTypeChangeMethod();            
+                _minoEraseMethod();            
             }
         }
 
@@ -126,8 +139,7 @@ public class PlayerControllerScript : MonoBehaviour
 
             if ( BeforeMoving())
             {
-                PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);
-                //PutInside();
+                PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);              
             }
         }
         else if (Input.GetKeyDown(KeyCode.E))
@@ -137,29 +149,17 @@ public class PlayerControllerScript : MonoBehaviour
 
             if (BeforeMoving())
             {
-                PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
-                //PutInside();
+                PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);              
             }
         }
 
+        // ホールド
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-
+            _minoControllerScript.HoldController(PlayerMino,_minoCreateMethod);          
         }
 
-        // デバック用
-        //for (int j = 0; j < 20; j++)
-        //{
-        //    string unti = "";
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        unti += _fieldDataScript.FieldData[j, i];
-               
-        //    }
-        //    Debug.LogWarning(unti);
-        //}
-
-
+     
         //if (-17.5f >= PlayerMino.transform.position.y)
         //{
         //    _minoFloorTime += Time.deltaTime;
@@ -223,30 +223,60 @@ public class PlayerControllerScript : MonoBehaviour
         return false;
     }
 
-    private void PutInside()
+    private int FloorLocation()
     {
+        int _leastPosY = default;
         foreach (Transform _children in PlayerMino.GetComponentInChildren<Transform>())
         {
+            int _playerPosY = Mathf.RoundToInt(PlayerMino.transform.position.y);
             int _posX = Mathf.RoundToInt(_children.transform.position.x);
             int _posY = Mathf.RoundToInt(_children.transform.position.y);
+            
 
-            // ミノがステージの範囲外だったら
-            if ( _posX <= -1)
+            for (int i = _posY;i > -20;i--)
             {
-                PlayerMino.transform.Translate(1f, 0f, 0f, Space.World);
+                if (_fieldDataScript.FieldData[-i, _posX] != null && _leastPosY < (i + 1) - (_playerPosY - _posY))
+                {
+                    _leastPosY = (i + 1) - (_playerPosY - _posY);
+                }                              
             }
-            else if ( 10 <= _posX)
-            {
-                PlayerMino.transform.Translate(-1f, 0f, 0f, Space.World);
-            }
-            if(_posY <= -20)
-            {
-                PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
-            }
-           
+
+            //if (_leastPosY == 0)
+            //{
+            //    _leastPosY = -_fieldDataScript.Height + (_posY - (_playerPosY - _posY));
+            //}          
         }
+       
+        return _leastPosY;
     }
 
+    //private void PutInside()
+    //{
+    //    foreach (Transform _children in PlayerMino.GetComponentInChildren<Transform>())
+    //    {
+    //        int _posX = Mathf.RoundToInt(_children.transform.position.x);
+    //        int _posY = Mathf.RoundToInt(_children.transform.position.y);
+
+    //        // ミノがステージの範囲外だったら
+    //        if ( _posX <= -1)
+    //        {
+    //            PlayerMino.transform.Translate(1f, 0f, 0f, Space.World);
+    //        }
+    //        else if ( 10 <= _posX)
+    //        {
+    //            PlayerMino.transform.Translate(-1f, 0f, 0f, Space.World);
+    //        }
+    //        if(_posY <= -20)
+    //        {
+    //            PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
+    //        }
+
+    //    }
+    //}
+
+    /// <summary>
+    /// フィールドデータに置いたミノを反映させる処理
+    /// </summary>
     private void AddMinoToField()
     {
         foreach (Transform _children in PlayerMino.GetComponentInChildren<Transform>())
@@ -258,7 +288,9 @@ public class PlayerControllerScript : MonoBehaviour
             _fieldDataScript.FieldData[-_posY, _posX] = _children.gameObject;
         }
     }
-    
+    /// <summary>
+    /// ミノの親オブジェクト（回転軸）を消す処理
+    /// </summary>
     private void CutParentMino()
     {
         PlayerMino.transform.DetachChildren();

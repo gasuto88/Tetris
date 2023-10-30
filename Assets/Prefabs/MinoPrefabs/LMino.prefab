@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 2411457913633969938}
   m_Layer: 0
   m_Name: LMino
-  m_TagString: Untagged
+  m_TagString: LMino
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

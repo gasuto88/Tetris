@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 8640092935568501699}
   m_Layer: 0
   m_Name: JMino
-  m_TagString: Untagged
+  m_TagString: JMino
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

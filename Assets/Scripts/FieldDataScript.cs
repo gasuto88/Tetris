@@ -13,6 +13,10 @@ public class FieldDataScript : MonoBehaviour
 
     // フィールドデータ
     private GameObject[,] _fieldData = new GameObject[20,10];
+
+    private int _height = 19;
+
+    private int _width = 9;
     //{
     //    {0,0,0,0,0,0,0,0,0,0},
     //    {0,0,0,0,0,0,0,0,0,0},
@@ -38,6 +42,8 @@ public class FieldDataScript : MonoBehaviour
     //};
 
     public GameObject[,] FieldData { get => _fieldData; set => _fieldData = value; }
+    public int Height { get => _height; set => _height = value; }
+    public int Width { get => _width; set => _width = value; }
 
     /// <summary>
     /// ミノが横一列埋まったら消す処理
@@ -85,22 +91,22 @@ public class FieldDataScript : MonoBehaviour
             blockCount = 0;
             
         }
-        //デバック用
-        for (int j = 0; j < 20; j++)
-        {
-            string unti = "";
-            for (int i = 0; i < 10; i++)
-            {
-                if (FieldData[j, i] != null)
-                {
-                    unti += 1;
-                }
-                else
-                {
-                    unti += 0;
-                }
-            }
-            Debug.LogWarning(unti);
-        }
+        ////デバック用
+        //for (int j = 0; j < 20; j++)
+        //{
+        //    string unti = "";
+        //    for (int i = 0; i < 10; i++)
+        //    {
+        //        if (FieldData[j, i] != null)
+        //        {
+        //            unti += 1;
+        //        }
+        //        else
+        //        {
+        //            unti += 0;
+        //        }
+        //    }
+        //    Debug.LogWarning(unti);
+        //}
     }
 }
