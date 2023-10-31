@@ -18,11 +18,11 @@ public class MinoControllerScript : MonoBehaviour
 
     private Transform[] _nextPositions = new Transform[4];
 
-    private GameObject[] _holdObject = new GameObject[1];
+    private GameObject _holdObject = default;
 
     private Transform _holdTransform = default;
 
-    private GameObject[] _holdGhostObject = new GameObject[1];
+    private GameObject _holdGhostObject = default;
 
     private ICreateMino _iCreateMino = default;
 
@@ -32,7 +32,8 @@ public class MinoControllerScript : MonoBehaviour
 
     private GhostMinoScript _ghostMinoScript = default;
 
-    public GameObject[] HoldObject { get => _holdObject; set => _holdObject = value; }
+    private Transform _minoWaitTransform = default;
+    public GameObject HoldObject { get => _holdObject; set => _holdObject = value; }
 
     private void Start()
     {
@@ -51,6 +52,8 @@ public class MinoControllerScript : MonoBehaviour
         _ghostMinoScript = GetComponent<GhostMinoScript>();
 
         _holdTransform = GameObject.Find("HoldPosition").transform;
+
+        _minoWaitTransform = GameObject.Find("MinoWaitPosition").transform;
 
     }
     private void Update()
@@ -87,19 +90,19 @@ public class MinoControllerScript : MonoBehaviour
         {
             isHold = true;
 
-            if (HoldObject[0] != null)
+            if (HoldObject != null)
             {
                 // ホールドに入ってるミノをリストの先頭に追加
-                _iRandomSelectMino.MinoList.Insert(0, HoldObject[0]);
-                _iRandomSelectMino.GhostList.Insert(0, _holdGhostObject[0]);
+                _iRandomSelectMino.MinoList.Insert(0, HoldObject);
+                _iRandomSelectMino.GhostList.Insert(0, _holdGhostObject);
             }
-            _holdObject[0] = _holdMino;
+            _holdObject = _holdMino;
 
-            _holdGhostObject[0] = _ghostMinoScript.GhostMino;
+            _holdGhostObject = _ghostMinoScript.GhostMino;
 
-            _holdObject[0].transform.position = _holdTransform.position;
+            _holdObject.transform.position = _holdTransform.position;
 
-            _holdGhostObject[0].transform.position = _holdTransform.position;
+            _holdGhostObject.transform.position = _minoWaitTransform.position;
             
             _holdCount = 0;
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class GameControllerScript : MonoBehaviour
@@ -12,7 +13,7 @@ public class GameControllerScript : MonoBehaviour
     // STOP          ゲームが一時停止されている状態
     // END　　　　　 ゲームが終わったときの処理
 
-    private enum GameState
+    public enum GameState
     {
         START,     
         MINO_CREATE,
@@ -21,7 +22,6 @@ public class GameControllerScript : MonoBehaviour
         STOP,
         END
     }
-
     public delegate void MinoEraseChangeMethod();
 
     public MinoEraseChangeMethod _minoEraseMethod = default;
@@ -44,7 +44,8 @@ public class GameControllerScript : MonoBehaviour
 
     private GhostMinoScript _ghostMinoScript = default;
 
-    //public GameState GameState { get => _gameState; set => _gameState = value; }
+     public GameState GameType { get => _gameState; set => _gameState = value; }
+
 
     private void Start()
     {
@@ -62,14 +63,14 @@ public class GameControllerScript : MonoBehaviour
 
         _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();
 
-        _minoEraseMethod = () => { _gameState = GameState.MINO_ERASE; };
+        _minoEraseMethod = () => { GameType = GameState.MINO_ERASE; };
 
-        _minoCreateMethod = () => {_gameState = GameState.MINO_CREATE; };
+        _minoCreateMethod = () => {GameType = GameState.MINO_CREATE; };
     }
 
     private void Update()
     {
-        GameController();
+        GameController();       
     }
 
     /// <summary>
@@ -77,13 +78,13 @@ public class GameControllerScript : MonoBehaviour
     /// </summary>
     public void GameController()
     {
-        switch (_gameState)
+        switch (GameType)
         {
             case GameState.START:
 
                 _iRandomSelectMino.RandomSelectMino();
 
-                _gameState = GameState.MINO_CREATE;
+                GameType = GameState.MINO_CREATE;
 
                 break;
             // ミノが生成されたとき
@@ -93,11 +94,9 @@ public class GameControllerScript : MonoBehaviour
 
                 _minoControllerScript.NextDisplay();
 
-                _minoControllerScript.HoldCount();
+                _minoControllerScript.HoldCount();              
 
-                //_ghostMinoScript.ghost
-
-                _gameState = GameState.MINO_MOVE;
+                GameType = GameState.MINO_MOVE;
 
                 break;
             // ミノが操作できるとき
@@ -105,7 +104,10 @@ public class GameControllerScript : MonoBehaviour
 
                 _playerInputScript.PlayerController(_minoEraseMethod,_minoCreateMethod);
 
-                _ghostMinoScript.GhostController();
+                if (GameType == GameState.MINO_MOVE)
+                {
+                    _ghostMinoScript.GhostController();
+                }
 
                 break;
             
@@ -115,7 +117,7 @@ public class GameControllerScript : MonoBehaviour
 
                 Destroy(_ghostMinoScript.GhostMino);
 
-                _gameState = GameState.MINO_CREATE;
+                GameType = GameState.MINO_CREATE;
 
                 break;
             case GameState.STOP:
@@ -123,6 +125,9 @@ public class GameControllerScript : MonoBehaviour
                 break;
 
             case GameState.END:
+
+                //Debug.LogError("シーン繊維");
+                //SceneManager.LoadScene("GameOverScene");
 
                 break;
 

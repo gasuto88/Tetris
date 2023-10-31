@@ -11,6 +11,10 @@ public class FieldDataScript : MonoBehaviour
     private const int NO_BLOCK = 0;
     private const int STATIC_MINO = 1;
 
+    private int _scoreCount = default;
+
+    private ScoreScript _scoreScript = default;
+
     // フィールドデータ
     private GameObject[,] _fieldData = new GameObject[20,10];
 
@@ -45,6 +49,11 @@ public class FieldDataScript : MonoBehaviour
     public int Height { get => _height; set => _height = value; }
     public int Width { get => _width; set => _width = value; }
 
+    private void Start()
+    {
+        _scoreScript = GameObject.Find("Canvas").GetComponent<ScoreScript>();
+    }
+
     /// <summary>
     /// ミノが横一列埋まったら消す処理
     /// </summary>
@@ -61,7 +70,7 @@ public class FieldDataScript : MonoBehaviour
                     blockCount++;
                 }
             }
-
+            // 横一列揃っていたら
             if(blockCount >= 10)
             {
                 for (int k = i; k > -1; k--)
@@ -87,9 +96,13 @@ public class FieldDataScript : MonoBehaviour
                     }               
                 }
                 i++;
+
+                _scoreCount += 100;
+                
             }
             blockCount = 0;
-            
+
+            _scoreScript.ScoreDisplay(_scoreCount);
         }
         ////デバック用
         //for (int j = 0; j < 20; j++)

@@ -56,6 +56,7 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
         _ghostMinoScript.GhostMino.transform.position =
             _playerControllerScript.PlayerMino.transform.position;
 
+        // ゴーストミノの透明度を上げている
         foreach(Transform _children in _ghostMinoScript.GhostMino.GetComponentInChildren<Transform>())
         {
             _children.GetComponent<SpriteRenderer>().color = _ghostColor;
