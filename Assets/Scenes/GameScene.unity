@@ -4849,6 +4849,8 @@ GameObject:
   - component: {fileID: 1964237676}
   - component: {fileID: 1964237678}
   - component: {fileID: 1964237677}
+  - component: {fileID: 1964237680}
+  - component: {fileID: 1964237679}
   m_Layer: 0
   m_Name: MinoController
   m_TagString: Untagged
@@ -4940,6 +4942,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputCoolTime: 0.1
   _fallCoolTime: 0.8
+  _deathTime: 0.5
+--- !u!114 &1964237679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964237672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ab249c412e0354b8893dc6dff62577, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1964237680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964237672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af626fc75f730247b7ab2726ba2a57a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1970694554 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5671083459066336236, guid: 0e9514d5bd8803e4dad7f121addc0f07, type: 3}

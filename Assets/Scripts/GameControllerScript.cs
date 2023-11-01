@@ -94,7 +94,9 @@ public class GameControllerScript : MonoBehaviour
 
                 _minoControllerScript.NextDisplay();
 
-                _minoControllerScript.HoldCount();              
+                _minoControllerScript.HoldCount();
+
+                _playerInputScript.IsGround = false;
 
                 GameType = GameState.MINO_MOVE;
 

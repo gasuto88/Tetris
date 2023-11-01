@@ -46,7 +46,16 @@ public class PlayerControllerScript : MonoBehaviour
 
     private GameControllerScript _gameControllerScript = default;
 
+    private SuperRotationScript _superRotationScript = default;
+
+    private float _groundTime = default;
+    [SerializeField,Header("ミノが死ぬ時間")]
+    private float _deathTime = default;
+
+    private bool isGround = default;
+
     public GameObject PlayerMino { get => _playerMino; set => _playerMino = value; }
+    public bool IsGround { get => isGround; set => isGround = value; }
 
     private void Start()
     {
@@ -57,6 +66,8 @@ public class PlayerControllerScript : MonoBehaviour
         _minoControllerScript = GameObject.Find("MinoController").GetComponent<MinoControllerScript>();
 
         _gameControllerScript = GameObject.Find("GameController").GetComponent<GameControllerScript>();
+
+        _superRotationScript = GetComponent<SuperRotationScript>();
     }
 
     public void PlayerController(
@@ -129,15 +140,16 @@ public class PlayerControllerScript : MonoBehaviour
             {
                 // 上に１マス移動
                 PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
+                
+                    // フィールドに置いたミノを反映させる
+                    AddMinoToField();
 
-                // フィールドに置いたミノを反映させる
-                AddMinoToField();
-
-                // 親オブジェクト（回転軸)と子オブジェクト（ミノ×４）を切り離す
-                CutParentMino();
-                _minoEraseMethod();
-                return;
-            }
+                    // 親オブジェクト（回転軸)と子オブジェクト（ミノ×４）を切り離す
+                    CutParentMino();
+                    _minoEraseMethod();
+                    return;
+               
+            }          
         }
 
         if ((Time.time - _fallTime) > _fallCoolTime)
@@ -153,28 +165,78 @@ public class PlayerControllerScript : MonoBehaviour
                 // １マス戻す
                 PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
 
+                IsGround = true;
+            }         
+        }
+
+        if (IsGround)
+        {
+            _groundTime += Time.deltaTime;
+
+            if (_groundTime > _deathTime)
+            {
                 // フィールドに置いたミノを反映させる
                 AddMinoToField();
 
                 // 親オブジェクト（回転軸)と子オブジェクト（ミノ×４）を切り離す
                 CutParentMino();
+
                 _minoEraseMethod();
+
                 return;
             }
         }
-
+        else if (!IsGround)
+        {
+            _groundTime = 0;
+        }
+        
         if (Input.GetKeyDown(KeyCode.Q))
+        {
+            //// 右回転
+            //PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
+
+            //// プレイヤーが壁にめり込んだら
+            //if (BeforeMoving(PlayerMino))
+            //{
+            //    // 右回転
+            //    PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
+
+            
+            //}
+            _superRotationScript.SuperRotation(PlayerMino, 1);
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            //// 左回転
+            //PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);
+
+            //// プレイヤーが壁にめり込んだら
+            //if (BeforeMoving(PlayerMino))
+            //{
+            //    // 右回転
+            //    PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
+
+            
+            //}
+            _superRotationScript.SuperRotation(PlayerMino, -1);
+        }
+        if (Input.GetKeyDown(KeyCode.T))
         {
             // 右回転
             PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
 
             // プレイヤーが壁にめり込んだら
-            if ( BeforeMoving(PlayerMino))
+            if (BeforeMoving(PlayerMino))
             {
-                PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);              
+                // 右回転
+                PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
+
+
             }
+           
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.R))
         {
             // 左回転
             PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);
@@ -182,8 +244,12 @@ public class PlayerControllerScript : MonoBehaviour
             // プレイヤーが壁にめり込んだら
             if (BeforeMoving(PlayerMino))
             {
-                PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);              
+                // 右回転
+                PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
+
+
             }
+            
         }
 
         // ホールド
