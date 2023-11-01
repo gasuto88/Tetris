@@ -10,6 +10,7 @@ public class TMinoRotationScript : MonoBehaviour
     {
         _playerControllerScript = GetComponent<PlayerControllerScript>();
     }
+
     /// <summary>
     /// Tミノのスーパーローテーション
     /// </summary>
@@ -17,7 +18,10 @@ public class TMinoRotationScript : MonoBehaviour
     /// <param name="_input"></param>
     public void TMinoRotation(GameObject _playerMino, int _input)
     {
-        Transform _playerTransformTemp = _playerMino.transform;
+        Vector3 _playerPositionTemp = _playerMino.transform.position;
+
+        Quaternion _playerRotationTemp = _playerMino.transform.rotation;
+
         // ミノが上をむいているとき
         if (_playerMino.transform.rotation.eulerAngles.z == 0)
         {
@@ -41,8 +45,8 @@ public class TMinoRotationScript : MonoBehaviour
                         _playerMino.transform.Translate(_input, 0f, 0f, Space.World);
                         break;
                     case 6:
-                        _playerMino.transform.position = _playerTransformTemp.position;
-                        _playerMino.transform.rotation = _playerTransformTemp.rotation;
+                        _playerMino.transform.position = _playerPositionTemp;
+                        _playerMino.transform.rotation = _playerRotationTemp;
                         break;
                     
                 }
@@ -82,8 +86,8 @@ public class TMinoRotationScript : MonoBehaviour
                         
                         break;
                     case 6:
-                        _playerMino.transform.position = _playerTransformTemp.position;
-                        _playerMino.transform.rotation = _playerTransformTemp.rotation;
+                        _playerMino.transform.position = _playerPositionTemp;
+                        _playerMino.transform.rotation = _playerRotationTemp;
                         break;
 
                 }
@@ -117,8 +121,8 @@ public class TMinoRotationScript : MonoBehaviour
                         _playerMino.transform.Translate(-_input, 0f, 0f, Space.World);
                         break;
                     case 6:
-                        _playerMino.transform.position = _playerTransformTemp.position;
-                        _playerMino.transform.rotation = _playerTransformTemp.rotation;
+                        _playerMino.transform.position = _playerPositionTemp;
+                        _playerMino.transform.rotation = _playerRotationTemp;
                         break;
 
                 }
@@ -152,8 +156,8 @@ public class TMinoRotationScript : MonoBehaviour
                         _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
                         break;
                     case 6:
-                        _playerMino.transform.position = _playerTransformTemp.position;
-                        _playerMino.transform.rotation = _playerTransformTemp.rotation;
+                        _playerMino.transform.position = _playerPositionTemp;
+                        _playerMino.transform.rotation = _playerRotationTemp;
                         break;
 
                 }

@@ -193,64 +193,42 @@ public class PlayerControllerScript : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            //// 右回転
-            //PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
-
-            //// プレイヤーが壁にめり込んだら
-            //if (BeforeMoving(PlayerMino))
-            //{
-            //    // 右回転
-            //    PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
-
-            
-            //}
             _superRotationScript.SuperRotation(PlayerMino, 1);
         }
         else if (Input.GetKeyDown(KeyCode.E))
-        {
-            //// 左回転
-            //PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);
-
-            //// プレイヤーが壁にめり込んだら
-            //if (BeforeMoving(PlayerMino))
-            //{
-            //    // 右回転
-            //    PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
-
-            
-            //}
+        {          
             _superRotationScript.SuperRotation(PlayerMino, -1);
         }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            // 右回転
-            PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    // 右回転
+        //    PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
 
-            // プレイヤーが壁にめり込んだら
-            if (BeforeMoving(PlayerMino))
-            {
-                // 右回転
-                PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
+        //    // プレイヤーが壁にめり込んだら
+        //    if (BeforeMoving(PlayerMino))
+        //    {
+        //        // 右回転
+        //        PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
 
 
-            }
+        //    }
            
-        }
-        else if (Input.GetKeyDown(KeyCode.R))
-        {
-            // 左回転
-            PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);
+        //}
+        //else if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    // 左回転
+        //    PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);
 
-            // プレイヤーが壁にめり込んだら
-            if (BeforeMoving(PlayerMino))
-            {
-                // 右回転
-                PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
+        //    // プレイヤーが壁にめり込んだら
+        //    if (BeforeMoving(PlayerMino))
+        //    {
+        //        // 右回転
+        //        PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
 
 
-            }
+        //    }
             
-        }
+        //}
 
         // ホールド
         if (Input.GetKeyDown(KeyCode.LeftShift))
