@@ -11,8 +11,6 @@ public class FieldDataScript : MonoBehaviour
     private const int NO_BLOCK = 0;
     private const int STATIC_MINO = 1;
 
-    private int _scoreCount = default;
-
     private ScoreScript _scoreScript = default;
 
     // フィールドデータ
@@ -21,6 +19,18 @@ public class FieldDataScript : MonoBehaviour
     private int _height = 19;
 
     private int _width = 9;
+
+    private const string TETRIS = "TETRIS";
+
+    private const string TSINGLE = "TSPIN - SINGLE";
+
+    private const string TDOUBLE = "TSPIN - DOUBLE";
+
+    private const string TTRIPLE = "TSPIN - TRIPLE";
+
+    private TSpinCheckScript _tSpinCheckScript = default;
+
+    private GameObject _playerMino = default;
     //{
     //    {0,0,0,0,0,0,0,0,0,0},
     //    {0,0,0,0,0,0,0,0,0,0},
@@ -52,6 +62,8 @@ public class FieldDataScript : MonoBehaviour
     private void Start()
     {
         _scoreScript = GameObject.Find("Canvas").GetComponent<ScoreScript>();
+
+        _tSpinCheckScript = GameObject.Find("MinoController").GetComponent<TSpinCheckScript>();
     }
 
     /// <summary>
@@ -59,11 +71,13 @@ public class FieldDataScript : MonoBehaviour
     /// </summary>
     public void FieldMinoErase()
     {
-        int blockCount = default;
+        int blockCount = 0;
+        int _scoreCount = 0;
+        int _eraseCount = 0;
 
         for (int i = 19; i > -1; i--)
         {
-            for(int j = 0;j < 10; j++)
+            for (int j = 0; j < 10; j++)
             {
                 if (FieldData[i, j] != null)
                 {
@@ -71,39 +85,64 @@ public class FieldDataScript : MonoBehaviour
                 }
             }
             // 横一列揃っていたら
-            if(blockCount >= 10)
+            if (blockCount >= 10)
             {
                 for (int k = i; k > -1; k--)
                 {
                     for (int l = 0; l < 10; l++)
-                    {             
-                        if(k == i &&FieldData[i, l] != null)
+                    {
+                        if (k == i && FieldData[i, l] != null)
                         {
                             Destroy(FieldData[i, l].gameObject);
 
                             FieldData[i, l] = null;
-                            
+
                         }
-                        if (k > 0 && FieldData[k-1, l] != null)
-                        {                                                
-                            FieldData[k-1, l].transform.Translate(0f, -1f, 0f,Space.World);
+                        if (k > 0 && FieldData[k - 1, l] != null)
+                        {
+                            FieldData[k - 1, l].transform.Translate(0f, -1f, 0f, Space.World);
 
                             //　消す段に一個上の段を上書きする
                             FieldData[k, l] = FieldData[k - 1, l];
 
                             FieldData[k - 1, l] = null;
-                        }                                        
-                    }               
+                        }
+                    }
                 }
                 i++;
 
+                _eraseCount++;
+                Debug.LogError(_eraseCount);
                 _scoreCount += 100;
-                
+
             }
             blockCount = 0;
+        }
+            // 4段消したら
+            if(_eraseCount >= 4)
+            {
+                _scoreScript.ActionDisplay(TETRIS);
+            }
+           
+            if (_playerMino.tag == "TMino" && _tSpinCheckScript.TSpinCheck(_playerMino))
+            {
+                Debug.LogWarning("消した段数　"+ _eraseCount);
+                if (_eraseCount == 1)
+                {
+                    _scoreScript.ActionDisplay(TSINGLE);
+                }
+                else if (_eraseCount == 2)
+                {
+                    _scoreScript.ActionDisplay(TDOUBLE);
+                }
+                else if (_eraseCount == 3)
+                {
+                    _scoreScript.ActionDisplay(TTRIPLE);
+                }
+            }
 
             _scoreScript.ScoreDisplay(_scoreCount);
-        }
+        
         ////デバック用
         //for (int j = 0; j < 20; j++)
         //{
@@ -121,5 +160,10 @@ public class FieldDataScript : MonoBehaviour
         //    }
         //    Debug.LogWarning(unti);
         //}
+    }
+
+    public void SetPlayerPosition(GameObject _player)
+    {
+        _playerMino = _player;
     }
 }

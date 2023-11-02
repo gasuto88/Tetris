@@ -16,10 +16,15 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
 
     private SpriteRenderer _spriteRenderer = default;
 
-    private Color _ghostColor = new Color(1.0f,1.0f,1.0f,0.3f);
+    [SerializeField, Header("ゴーストミノの色"),Range(0,1)]
+    private float _alpha = 0;
+
+    private Color _ghostColor = default;
 
     private void Start()
     {
+        _ghostColor = new Color(1.0f, 1.0f, 1.0f, _alpha);
+
         _iRandomSelectMino = GetComponent<RandomSelectMinoScript>();
 
         _playerControllerScript = GetComponent<PlayerControllerScript>();
@@ -28,9 +33,7 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
 
         _oIMinoSpawnTransform = GameObject.Find("O_IMinoSpawnPosition").transform;
 
-        _ghostMinoScript = GetComponent<GhostMinoScript>();
-
-        
+        _ghostMinoScript = GetComponent<GhostMinoScript>();    
     }
     
     /// <summary>
@@ -60,13 +63,7 @@ public class CreateMinoScript : MonoBehaviour ,ICreateMino
         foreach(Transform _children in _ghostMinoScript.GhostMino.GetComponentInChildren<Transform>())
         {
             _children.GetComponent<SpriteRenderer>().color = _ghostColor;
-        }
-        // リストの先頭のミノを生成する
-        //_playerControllerScript.PlayerMino = Instantiate(
-        //    _iRandomSelectMino.MinoList[0],
-        //    tempTransform.position,
-        //    tempTransform.rotation
-        //     );
+        }       
 
         // リストの中から生成されたミノを削除する
         _iRandomSelectMino.MinoList.RemoveAt(0);

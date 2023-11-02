@@ -34,7 +34,7 @@ public class GameControllerScript : MonoBehaviour
 
     private IRandomSelectMino _iRandomSelectMino = default;
 
-    private PlayerControllerScript _playerInputScript = default;
+    private PlayerControllerScript _playerControllerScript = default;
 
     private FieldDataScript _fieldDataScript = default;
 
@@ -57,7 +57,7 @@ public class GameControllerScript : MonoBehaviour
 
         _minoControllerScript = g.GetComponent<MinoControllerScript>();
 
-        _playerInputScript = g.GetComponent<PlayerControllerScript>();
+        _playerControllerScript = g.GetComponent<PlayerControllerScript>();
 
         _ghostMinoScript = g.GetComponent<GhostMinoScript>();
 
@@ -96,7 +96,7 @@ public class GameControllerScript : MonoBehaviour
 
                 _minoControllerScript.HoldCount();
 
-                _playerInputScript.IsGround = false;
+                _playerControllerScript.IsGround = false;
 
                 GameType = GameState.MINO_MOVE;
 
@@ -104,7 +104,7 @@ public class GameControllerScript : MonoBehaviour
             // É~ÉmÇ™ëÄçÏÇ≈Ç´ÇÈÇ∆Ç´
             case GameState.MINO_MOVE:
 
-                _playerInputScript.PlayerController(_minoEraseMethod,_minoCreateMethod);
+                _playerControllerScript.PlayerController(_minoEraseMethod,_minoCreateMethod);
 
                 if (GameType == GameState.MINO_MOVE)
                 {
@@ -117,6 +117,7 @@ public class GameControllerScript : MonoBehaviour
 
                 _fieldDataScript.FieldMinoErase();
 
+                Destroy(_playerControllerScript.PlayerMino);
                 Destroy(_ghostMinoScript.GhostMino);
 
                 GameType = GameState.MINO_CREATE;

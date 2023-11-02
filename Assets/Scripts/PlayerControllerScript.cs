@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class PlayerControllerScript : MonoBehaviour
 {
+    /*
+     *ミノが浮いて止まる（スパろて）
+     */
+
+
     private float _horizontalInput = default;
     private float _verticalInput = default;
 
@@ -20,51 +25,36 @@ public class PlayerControllerScript : MonoBehaviour
 
     [SerializeField,Header("ミノが落ちる時間")]
     private float _fallCoolTime = 1f;
-
-    // ミノが床にふれてからの時間
-    private float _minoFloorTime = default;
-
-    private float _minMinoLifeTime = 1.1f;
-    private float _maxMinoLifeTime = 3f;
-
-    // ミノの生存時間
-    private float _minoLifeTime = 0.5f;
-
-    private float _defaultMinoLifeTime = default;
-
-    private float _addDeathTime = 0.5f;
-
-    private Transform _beforeTransform = default;
-
-    private FieldDataScript _fieldDataScript = default;
-
-    private float _beforeTime = default;
-
-    private float _beforeCoolTime = 0.3f;
-
+        
+    private FieldDataScript _fieldDataScript = default;   
     private MinoControllerScript _minoControllerScript = default;
-
     private GameControllerScript _gameControllerScript = default;
-
     private SuperRotationScript _superRotationScript = default;
 
     private float _groundTime = default;
-    [SerializeField,Header("ミノが死ぬ時間")]
+
+    [SerializeField,Header("ミノが死ぬまでの時間")]
     private float _deathTime = default;
 
+    [SerializeField, Header("ミノが死ぬまでの時間（最大）")]
+    private float _maxDeathTime = default;
+    [SerializeField,Header("ミノが死ぬまでの時間（最小）")]
+    private float _minDeathTime = default;
+    [SerializeField,Header("ミノの死ぬまでの時間を延長")]
+    private float _addDeathTime = 0.3f;
+
     private bool isGround = default;
+
+    private Vector3 _beforePlayerPosition = default;
 
     public GameObject PlayerMino { get => _playerMino; set => _playerMino = value; }
     public bool IsGround { get => isGround; set => isGround = value; }
 
     private void Start()
     {
-        _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();
-        
-        _defaultMinoLifeTime = _minoLifeTime;
+        _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();            
 
         _minoControllerScript = GameObject.Find("MinoController").GetComponent<MinoControllerScript>();
-
         _gameControllerScript = GameObject.Find("GameController").GetComponent<GameControllerScript>();
 
         _superRotationScript = GetComponent<SuperRotationScript>();
@@ -109,14 +99,8 @@ public class PlayerControllerScript : MonoBehaviour
         // 上入力されたとき
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
-            // プレイヤーが着地するまで
-            while (!BeforeMoving(PlayerMino))
-            {
-                // 下に１マス移動
-                PlayerMino.transform.Translate(0f, -1f, 0f, Space.World);
-            }
-            // １マス戻す
-            PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
+            // プレイヤーを着地するまで下に落とす
+            GroundFall();
 
             // フィールドに置いたミノを反映させる
             AddMinoToField();         
@@ -125,6 +109,7 @@ public class PlayerControllerScript : MonoBehaviour
             CutParentMino();
            
             _minoEraseMethod();
+
             return;
         }
         // 下入力されたとき
@@ -140,15 +125,8 @@ public class PlayerControllerScript : MonoBehaviour
             {
                 // 上に１マス移動
                 PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
-                
-                    // フィールドに置いたミノを反映させる
-                    AddMinoToField();
 
-                    // 親オブジェクト（回転軸)と子オブジェクト（ミノ×４）を切り離す
-                    CutParentMino();
-                    _minoEraseMethod();
-                    return;
-               
+                IsGround = true;
             }          
         }
 
@@ -169,12 +147,30 @@ public class PlayerControllerScript : MonoBehaviour
             }         
         }
 
+        // プレイヤーが地面に着地したら
         if (IsGround)
         {
+            if (_groundTime <= 0)
+            {
+                _beforePlayerPosition.y = _playerMino.transform.position.y;
+            }
+
             _groundTime += Time.deltaTime;
+
+            _deathTime = Mathf.Clamp(_deathTime,_minDeathTime,_maxDeathTime);
+
+            if (_beforePlayerPosition.y - _playerMino.transform.position.y >= 1)
+            {
+                Debug.Log("リセット");
+                _groundTime = 0;
+
+                IsGround = false;
+            }
 
             if (_groundTime > _deathTime)
             {
+                GroundFall();
+                
                 // フィールドに置いたミノを反映させる
                 AddMinoToField();
 
@@ -190,46 +186,29 @@ public class PlayerControllerScript : MonoBehaviour
         {
             _groundTime = 0;
         }
-        
+
+
+        // 左回転
         if (Input.GetKeyDown(KeyCode.Q))
         {
             _superRotationScript.SuperRotation(PlayerMino, 1);
+
+            if (isGround)
+            {
+                _deathTime += _addDeathTime;
+            }
         }
+        // 右回転
         else if (Input.GetKeyDown(KeyCode.E))
         {          
             _superRotationScript.SuperRotation(PlayerMino, -1);
+
+            if (isGround)
+            {
+                _deathTime += _addDeathTime;
+            }
         }
-        //if (Input.GetKeyDown(KeyCode.T))
-        //{
-        //    // 右回転
-        //    PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
-
-        //    // プレイヤーが壁にめり込んだら
-        //    if (BeforeMoving(PlayerMino))
-        //    {
-        //        // 右回転
-        //        PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
-
-
-        //    }
-           
-        //}
-        //else if (Input.GetKeyDown(KeyCode.R))
-        //{
-        //    // 左回転
-        //    PlayerMino.transform.Rotate(0f, 0f, -90f, Space.World);
-
-        //    // プレイヤーが壁にめり込んだら
-        //    if (BeforeMoving(PlayerMino))
-        //    {
-        //        // 右回転
-        //        PlayerMino.transform.Rotate(0f, 0f, 90f, Space.World);
-
-
-        //    }
-            
-        //}
-
+        
         // ホールド
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
@@ -281,6 +260,8 @@ public class PlayerControllerScript : MonoBehaviour
             }
             // フィールドに置いたミノを反映させる
             _fieldDataScript.FieldData[-_posY, _posX] = _children.gameObject;
+
+            _fieldDataScript.SetPlayerPosition(PlayerMino);
         }
     }
     /// <summary>
@@ -290,6 +271,17 @@ public class PlayerControllerScript : MonoBehaviour
     private void CutParentMino()
     {
         PlayerMino.transform.DetachChildren();
-        Destroy(PlayerMino);
+    }
+
+    private void GroundFall()
+    {
+        // プレイヤーが着地するまで
+        while (!BeforeMoving(PlayerMino))
+        {
+            // 下に１マス移動
+            PlayerMino.transform.Translate(0f, -1f, 0f, Space.World);
+        }
+        // １マス戻す
+        PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
     }
 }

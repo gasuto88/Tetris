@@ -12,7 +12,7 @@ public class OtherMinoRotationScript : MonoBehaviour
     }
 
     /// <summary>
-    /// Tミノのスーパーローテーション
+    /// その他のミノのスーパーローテーション
     /// </summary>
     /// <param name="_playerMino"></param>
     /// <param name="_input"></param>
@@ -70,7 +70,7 @@ public class OtherMinoRotationScript : MonoBehaviour
                         break;
                     case 2:
 
-                        _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
+                        _playerMino.transform.Translate(-1f, 0f, 0f, Space.World);
 
                         break;
                     case 3:
@@ -82,7 +82,7 @@ public class OtherMinoRotationScript : MonoBehaviour
 
                         break;
                     case 5:
-                        _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
+                        _playerMino.transform.Translate(-1f, 0f, 0f, Space.World);
 
                         break;
                     case 6:
@@ -144,7 +144,7 @@ public class OtherMinoRotationScript : MonoBehaviour
                         _playerMino.transform.Rotate(0f, 0f, _input * 90f, Space.World);
                         break;
                     case 2:
-                        _playerMino.transform.Translate(-1f, 0f, 0f, Space.World);
+                        _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
                         break;
                     case 3:
                         _playerMino.transform.Translate(0f, 1f, 0f, Space.World);
@@ -153,7 +153,7 @@ public class OtherMinoRotationScript : MonoBehaviour
                         _playerMino.transform.Translate(0f, -2f, 0f, Space.World);
                         break;
                     case 5:
-                        _playerMino.transform.Translate(-1f, 0f, 0f, Space.World);
+                        _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
                       break;
                     case 6:
                         _playerMino.transform.position = _playerPositionTemp;

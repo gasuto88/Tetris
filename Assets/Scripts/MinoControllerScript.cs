@@ -71,7 +71,9 @@ public class MinoControllerScript : MonoBehaviour
             _iRandomSelectMino.RandomSelectMino();
         }
     }
-
+    /// <summary>
+    /// NEXTƒ~ƒm‚Ì•\Ž¦
+    /// </summary>
     public void NextDisplay()
     {
         for (int i = 0; i < 3; i++)
@@ -86,9 +88,10 @@ public class MinoControllerScript : MonoBehaviour
     /// <param name="_minoCreateMethod"></param>
     public void HoldController(GameObject _holdMino,GameControllerScript.MinoCreateMethod _minoCreateMethod)
     {
-        if (!isHold)
+
+        if (_holdCount <= 0)
         {
-            isHold = true;
+            _holdCount = 2;
 
             if (HoldObject != null)
             {
@@ -104,21 +107,15 @@ public class MinoControllerScript : MonoBehaviour
 
             _holdGhostObject.transform.position = _minoWaitTransform.position;
             
-            _holdCount = 0;
-
             _minoCreateMethod();
         }
-        else
-        {
-            if(_holdCount > 1)
-            {
-                isHold = false;
-            }
-        }
+
+        
+
     }
 
     public void HoldCount()
     {
-        _holdCount++;
+        _holdCount--;
     }
 }

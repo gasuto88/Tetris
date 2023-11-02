@@ -12,7 +12,7 @@ public class IMinoRotationScript : MonoBehaviour
     }
 
     /// <summary>
-    /// Tミノのスーパーローテーション
+    /// Iミノのスーパーローテーション
     /// </summary>
     /// <param name="_playerMino"></param>
     /// <param name="_input"></param>
