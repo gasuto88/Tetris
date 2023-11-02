@@ -33,6 +33,14 @@ public class FieldDataScript : MonoBehaviour
     private TSpinCheckScript _tspinCheckScript = default;
 
     private GameObject _playerMino = default;
+
+    private AudioSource _audioSource = default;
+
+    [SerializeField,Header("横一列を消したときの音")]
+    private AudioClip _eraseSound = default;
+
+    [SerializeField, Header("横一列をたくさん消したときの音")]
+    private AudioClip _manyEraseSound = default;
     //{
     //    {0,0,0,0,0,0,0,0,0,0},
     //    {0,0,0,0,0,0,0,0,0,0},
@@ -54,7 +62,7 @@ public class FieldDataScript : MonoBehaviour
     //    {0,0,0,0,0,0,0,0,0,0},
     //    {0,0,0,0,0,0,0,0,0,0},
     //    {0,0,0,0,0,0,0,0,0,0}
-           
+
     //};
 
     public GameObject[,] FieldData { get => _fieldData; set => _fieldData = value; }
@@ -66,6 +74,8 @@ public class FieldDataScript : MonoBehaviour
         _scoreScript = GameObject.Find("Canvas").GetComponent<ScoreScript>();
 
         _tspinCheckScript = GameObject.Find("MinoController").GetComponent<TSpinCheckScript>();
+
+        _audioSource = GetComponent<AudioSource>();
     }
 
     /// <summary>
@@ -129,28 +139,33 @@ public class FieldDataScript : MonoBehaviour
             }
             blockCount = 0;
         }
-            // 4段消したら
-            if(_eraseCount >= 4)
+        // 4段消したら
+        if (_eraseCount >= 4)
+        {
+            _scoreScript.ActionDisplay(TETRIS);
+            _audioSource.PlayOneShot(_manyEraseSound);
+        }
+        else if (_eraseCount >= 1)
+        {
+            _audioSource.PlayOneShot(_eraseSound);
+        }
+
+        if (isTspin)
+        {
+            Debug.LogWarning("消した段数　" + _eraseCount);
+            if (_eraseCount == 1)
             {
-                _scoreScript.ActionDisplay(TETRIS);
+                _scoreScript.ActionDisplay(TSINGLE);
             }
-           
-            if (isTspin)
+            else if (_eraseCount == 2)
             {
-                Debug.LogWarning("消した段数　"+ _eraseCount);
-                if (_eraseCount == 1)
-                {
-                    _scoreScript.ActionDisplay(TSINGLE);
-                }
-                else if (_eraseCount == 2)
-                {
-                    _scoreScript.ActionDisplay(TDOUBLE);
-                }
-                else if (_eraseCount == 3)
-                {
-                    _scoreScript.ActionDisplay(TTRIPLE);
-                }
+                _scoreScript.ActionDisplay(TDOUBLE);
             }
+            else if (_eraseCount == 3)
+            {
+                _scoreScript.ActionDisplay(TTRIPLE);
+            }
+        }
 
             _scoreScript.ScoreDisplay(_scoreCount);
         ////デバック用

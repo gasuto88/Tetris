@@ -40,12 +40,23 @@ public class PlayerControllerScript : MonoBehaviour
     private float _maxDeathTime = default;
     [SerializeField,Header("ミノが死ぬまでの時間（最小）")]
     private float _minDeathTime = default;
-    [SerializeField,Header("ミノの死ぬまでの時間を延長")]
+    [SerializeField,Header("ミノの死ぬまでの追加時間")]
     private float _addDeathTime = 0.3f;
 
     private bool isGround = default;
 
     private Vector3 _beforePlayerPosition = default;
+
+    private AudioSource _audioSource = default;
+
+    [SerializeField,Header("ミノの回転音")]
+    private AudioClip _rotationSound = default;
+    [SerializeField, Header("ミノの移動音")]
+    private AudioClip _moveSound = default;
+    [SerializeField, Header("ミノのホールド音")]
+    private AudioClip _holdSound = default;
+    [SerializeField, Header("ミノの着地音")]
+    private AudioClip _groundSound = default;
 
     public GameObject PlayerMino { get => _playerMino; set => _playerMino = value; }
     public bool IsGround { get => isGround; set => isGround = value; }
@@ -58,6 +69,8 @@ public class PlayerControllerScript : MonoBehaviour
         _gameControllerScript = GameObject.Find("GameController").GetComponent<GameControllerScript>();
 
         _superRotationScript = GetComponent<SuperRotationScript>();
+
+        _audioSource = GetComponent<AudioSource>();
     }
 
     public void PlayerController(
@@ -69,6 +82,8 @@ public class PlayerControllerScript : MonoBehaviour
         // 右入力されたとき
         if (_horizontalInput > 0 && (Time.time - _inputTime) > _inputCoolTime)
         {
+            _audioSource.PlayOneShot(_moveSound);
+
             // 右に１マス移動
             PlayerMino.transform.Translate(1f, 0f, 0f,Space.World);
 
@@ -84,6 +99,8 @@ public class PlayerControllerScript : MonoBehaviour
         // 左入力されたとき
         else if (_horizontalInput < 0 && (Time.time - _inputTime) > _inputCoolTime)
         {
+            _audioSource.PlayOneShot(_moveSound);
+
             // 左に１マス移動
             PlayerMino.transform.Translate(-1f, 0f, 0f,Space.World);
 
@@ -99,6 +116,8 @@ public class PlayerControllerScript : MonoBehaviour
         // 上入力されたとき
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
+
+            _audioSource.PlayOneShot(_groundSound);
             // プレイヤーを着地するまで下に落とす
             GroundFall();
 
@@ -169,6 +188,8 @@ public class PlayerControllerScript : MonoBehaviour
 
             if (_groundTime > _deathTime)
             {
+                _audioSource.PlayOneShot(_groundSound);
+
                 GroundFall();
                 
                 // フィールドに置いたミノを反映させる
@@ -191,6 +212,8 @@ public class PlayerControllerScript : MonoBehaviour
         // 左回転
         if (Input.GetKeyDown(KeyCode.Q))
         {
+            _audioSource.PlayOneShot(_rotationSound);
+
             _superRotationScript.SuperRotation(PlayerMino, 1);
 
             if (isGround)
@@ -200,7 +223,8 @@ public class PlayerControllerScript : MonoBehaviour
         }
         // 右回転
         else if (Input.GetKeyDown(KeyCode.E))
-        {          
+        {
+            _audioSource.PlayOneShot(_rotationSound);
             _superRotationScript.SuperRotation(PlayerMino, -1);
 
             if (isGround)
@@ -212,6 +236,7 @@ public class PlayerControllerScript : MonoBehaviour
         // ホールド
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            _audioSource.PlayOneShot(_holdSound);
             _minoControllerScript.HoldController(PlayerMino,_minoCreateMethod);          
         }
     }
