@@ -4948,9 +4948,9 @@ MonoBehaviour:
   _inputCoolTime: 0.09
   _fallCoolTime: 0.8
   _deathTime: 0.3
-  _maxDeathTime: 1.5
+  _maxDeathTime: 1.2
   _minDeathTime: 0.3
-  _addDeathTime: 0.3
+  _addDeathTime: 0.15
 --- !u!114 &1964237679
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -28,7 +28,9 @@ public class FieldDataScript : MonoBehaviour
 
     private const string TTRIPLE = "TSPIN - TRIPLE";
 
-    private TSpinCheckScript _tSpinCheckScript = default;
+    private bool isTspin = default;
+
+    private TSpinCheckScript _tspinCheckScript = default;
 
     private GameObject _playerMino = default;
     //{
@@ -63,7 +65,7 @@ public class FieldDataScript : MonoBehaviour
     {
         _scoreScript = GameObject.Find("Canvas").GetComponent<ScoreScript>();
 
-        _tSpinCheckScript = GameObject.Find("MinoController").GetComponent<TSpinCheckScript>();
+        _tspinCheckScript = GameObject.Find("MinoController").GetComponent<TSpinCheckScript>();
     }
 
     /// <summary>
@@ -74,6 +76,15 @@ public class FieldDataScript : MonoBehaviour
         int blockCount = 0;
         int _scoreCount = 0;
         int _eraseCount = 0;
+        Debug.LogWarning(_playerMino);
+        if (_playerMino.tag == "TMino" && _tspinCheckScript.TSpinCheck(_playerMino)) 
+        {
+            isTspin = true;
+        }
+        else
+        {
+            isTspin = false;
+        }
 
         for (int i = 19; i > -1; i--)
         {
@@ -124,7 +135,7 @@ public class FieldDataScript : MonoBehaviour
                 _scoreScript.ActionDisplay(TETRIS);
             }
            
-            if (_playerMino.tag == "TMino" && _tSpinCheckScript.TSpinCheck(_playerMino))
+            if (isTspin)
             {
                 Debug.LogWarning("消した段数　"+ _eraseCount);
                 if (_eraseCount == 1)
@@ -142,7 +153,6 @@ public class FieldDataScript : MonoBehaviour
             }
 
             _scoreScript.ScoreDisplay(_scoreCount);
-        
         ////デバック用
         //for (int j = 0; j < 20; j++)
         //{

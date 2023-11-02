@@ -161,7 +161,7 @@ public class PlayerControllerScript : MonoBehaviour
 
             if (_beforePlayerPosition.y - _playerMino.transform.position.y >= 1)
             {
-                Debug.Log("ƒŠƒZƒbƒg");
+                
                 _groundTime = 0;
 
                 IsGround = false;

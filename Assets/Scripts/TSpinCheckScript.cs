@@ -17,7 +17,7 @@ public class TSpinCheckScript : MonoBehaviour
         int _blockCount = 0;
         
         // ‰ñ“]²‚©‚çŒ©‚Ä¶ã
-        if (_playerPosX <= 0 || _fieldDataScript.FieldData[-_playerPosY + 1,_playerPosX - 1])
+        if (_playerPosX <= 0 || _fieldDataScript.FieldData[-_playerPosY - 1,_playerPosX - 1])
         {
             Debug.LogWarning("¶ã");
             _blockCount++;
@@ -29,7 +29,7 @@ public class TSpinCheckScript : MonoBehaviour
             _blockCount++;
         }
         // ‰ñ“]²‚©‚çŒ©‚Ä¶‰º
-        if (_playerPosX <= 0 || _playerPosY <= -19 || _fieldDataScript.FieldData[-_playerPosY - 1, _playerPosX - 1])
+        if (_playerPosX <= 0 || _playerPosY <= -19 || _fieldDataScript.FieldData[-_playerPosY + 1, _playerPosX - 1])
         {
             Debug.LogWarning("¶‰º");
             _blockCount++;
@@ -40,8 +40,8 @@ public class TSpinCheckScript : MonoBehaviour
             Debug.LogWarning("‰E‰º");
             _blockCount++;
         }
-
-        Debug.LogWarning(_blockCount);
+        
+        
 
         if(_blockCount >= 3)
         {

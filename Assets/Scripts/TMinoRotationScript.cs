@@ -54,7 +54,7 @@ public class TMinoRotationScript : MonoBehaviour
                 {
                     break;
                 }
-                Debug.LogWarning("ue" + i);
+                //Debug.LogWarning("ue" + i);
             }
         }
 
@@ -95,7 +95,7 @@ public class TMinoRotationScript : MonoBehaviour
                 {
                     break;
                 }
-                Debug.LogWarning("左" + i);
+                //Debug.LogWarning("左" + i);
             }
         }
         // ミノが下をむいているとき
@@ -130,7 +130,7 @@ public class TMinoRotationScript : MonoBehaviour
                 {
                     break;
                 }
-                Debug.LogWarning("sita" + i);
+                //Debug.LogWarning("sita" + i);
             }
         }
         // ミノが右をむいているとき
@@ -165,7 +165,7 @@ public class TMinoRotationScript : MonoBehaviour
                 {
                     break;
                 }
-                Debug.LogWarning("右" + i);
+                //Debug.LogWarning("右" + i);
             }
         }
     }

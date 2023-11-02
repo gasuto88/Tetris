@@ -103,10 +103,13 @@ public class MinoControllerScript : MonoBehaviour
 
             _holdGhostObject = _ghostMinoScript.GhostMino;
 
-            _holdObject.transform.position = _holdTransform.position;
+            _holdObject.transform.position = _holdTransform.position;         
 
             _holdGhostObject.transform.position = _minoWaitTransform.position;
-            
+
+            _holdObject.transform.rotation = default;
+            _holdGhostObject.transform.rotation = default;
+
             _minoCreateMethod();
         }
 
