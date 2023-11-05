@@ -4993,7 +4993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a82818c37f97ea447aefbae572f5babf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _alpha: 0.8
+  _alpha: 0.7
 --- !u!4 &1964237675
 Transform:
   m_ObjectHideFlags: 0
@@ -5045,7 +5045,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4360cbd141046fc49a1758e02b072dc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputCoolTime: 0.09
+  _inputCoolTime: 0.1
   _fallCoolTime: 0.7
   _deathTime: 0.3
   _maxDeathTime: 1.2

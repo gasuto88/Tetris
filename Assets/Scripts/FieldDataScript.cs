@@ -13,6 +13,8 @@ public class FieldDataScript : MonoBehaviour
 
     private ScoreScript _scoreScript = default;
 
+    private int _scoreCount = default;
+
     // フィールドデータ
     private GameObject[,] _fieldData = new GameObject[20,10];
 
@@ -84,7 +86,7 @@ public class FieldDataScript : MonoBehaviour
     public void FieldMinoErase()
     {
         int blockCount = 0;
-        int _scoreCount = 0;
+        
         int _eraseCount = 0;
         Debug.LogWarning(_playerMino);
         if (_playerMino.tag == "TMino" && _tspinCheckScript.TSpinCheck(_playerMino)) 
