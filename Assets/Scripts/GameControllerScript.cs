@@ -113,9 +113,6 @@ public class GameControllerScript : MonoBehaviour
             case GameState.STOP:
 
                 break;
-
-            
-
         }
     }
     /// <summary>
