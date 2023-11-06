@@ -4,23 +4,14 @@ using UnityEngine;
 
 public class FieldDataScript : MonoBehaviour
 {
-    // フィールドのオブジェクト
-    // 0 空白
-    // 1 動かないミノ
-   
-    private const int NO_BLOCK = 0;
-    private const int STATIC_MINO = 1;
-
     private ScoreScript _scoreScript = default;
 
     private int _scoreCount = default;
 
     // フィールドデータ
-    private GameObject[,] _fieldData = new GameObject[20,10];
+    private GameObject[,] _fieldData = new GameObject[10,20];
 
     private int _height = 19;
-
-    private int _width = 9;
 
     private const string TETRIS = "TETRIS";
 
@@ -43,33 +34,9 @@ public class FieldDataScript : MonoBehaviour
 
     [SerializeField, Header("横一列をたくさん消したときの音")]
     private AudioClip _manyEraseSound = default;
-    //{
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0},
-    //    {0,0,0,0,0,0,0,0,0,0}
-
-    //};
 
     public GameObject[,] FieldData { get => _fieldData; set => _fieldData = value; }
-    public int Height { get => _height; set => _height = value; }
-    public int Width { get => _width; set => _width = value; }
+    public int Height { get => _height;}
 
     private void Start()
     {
@@ -88,7 +55,7 @@ public class FieldDataScript : MonoBehaviour
         int blockCount = 0;
         
         int _eraseCount = 0;
-        Debug.LogWarning(_playerMino);
+        
         if (_playerMino.tag == "TMino" && _tspinCheckScript.TSpinCheck(_playerMino)) 
         {
             isTspin = true;
@@ -102,7 +69,7 @@ public class FieldDataScript : MonoBehaviour
         {
             for (int j = 0; j < 10; j++)
             {
-                if (FieldData[i, j] != null)
+                if (FieldData[j, i] != null)
                 {
                     blockCount++;
                 }
@@ -114,28 +81,28 @@ public class FieldDataScript : MonoBehaviour
                 {
                     for (int l = 0; l < 10; l++)
                     {
-                        if (k == i && FieldData[i, l] != null)
+                        if (k == i && FieldData[l, i] != null)
                         {
-                            Destroy(FieldData[i, l].gameObject);
+                            Destroy(FieldData[l, i].gameObject);
 
-                            FieldData[i, l] = null;
+                            FieldData[l, i] = null;
 
                         }
-                        if (k > 0 && FieldData[k - 1, l] != null)
+                        if (k > 0 && FieldData[l,k - 1] != null)
                         {
-                            FieldData[k - 1, l].transform.Translate(0f, -1f, 0f, Space.World);
+                            FieldData[l, k - 1].transform.Translate(0f, -1f, 0f, Space.World);
 
                             //　消す段に一個上の段を上書きする
-                            FieldData[k, l] = FieldData[k - 1, l];
+                            FieldData[l,k] = FieldData[l, k - 1];
 
-                            FieldData[k - 1, l] = null;
+                            FieldData[l, k - 1] = null;
                         }
                     }
                 }
                 i++;
 
                 _eraseCount++;
-                Debug.LogError(_eraseCount);
+                
                 _scoreCount += 100;
 
             }
@@ -153,8 +120,7 @@ public class FieldDataScript : MonoBehaviour
         }
 
         if (isTspin)
-        {
-            Debug.LogWarning("消した段数　" + _eraseCount);
+        {  
             if (_eraseCount == 1)
             {
                 _scoreScript.ActionDisplay(TSINGLE);

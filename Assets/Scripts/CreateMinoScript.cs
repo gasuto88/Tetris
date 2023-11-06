@@ -2,71 +2,86 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CreateMinoScript : MonoBehaviour ,ICreateMino
+public class CreateMinoScript : MonoBehaviour
 {
-    private IRandomSelectMino _iRandomSelectMino = default;
+    // ランダム化された7種類のミノテーブルを作成するスクリプト
+    private RandomSelectMinoScript _randomSelectMinoScript = default;
 
+    // プレイヤーの挙動管理するスクリプト
     private PlayerControllerScript _playerControllerScript = default;
 
-    private Transform _minoSpawnTransform = default;
-
-    private Transform _oIMinoSpawnTransform = default;
-
+    // ゴーストミノを動かすスクリプト
     private GhostMinoScript _ghostMinoScript = default;
 
-    private SpriteRenderer _spriteRenderer = default;
+    // ミノを生成する座標
+    private Transform _minoSpawnTransform = default;
+
+    // OとIミノを生成する座標
+    private Transform _oIMinoSpawnTransform = default;
 
     [SerializeField, Header("ゴーストミノの色"),Range(0,1)]
     private float _alpha = 0;
 
+    // ゴーストミノの色
     private Color _ghostColor = default;
 
     private void Start()
     {
+        // ゴーストの色を設定
         _ghostColor = new Color(1.0f, 1.0f, 1.0f, _alpha);
 
-        _iRandomSelectMino = GetComponent<RandomSelectMinoScript>();
+        // RandomSelectMinoScriptを取得
+        _randomSelectMinoScript = GetComponent<RandomSelectMinoScript>();
 
+        // PlayerControllerScriptを取得
         _playerControllerScript = GetComponent<PlayerControllerScript>();
 
+        // ミノを生成する座標を取得
         _minoSpawnTransform = GameObject.Find("MinoSpawnPosition").transform;
 
+        // OとIミノを生成する座標を取得
         _oIMinoSpawnTransform = GameObject.Find("O_IMinoSpawnPosition").transform;
 
+        // GhostMinoScriptを取得
         _ghostMinoScript = GetComponent<GhostMinoScript>();    
     }
     
     /// <summary>
-    /// Nextにあるミノを生成する
+    /// Nextの先頭のミノを取り出す
     /// </summary>
-    public void NextMinoInstance()
-    {   
-        // OMinoとIMinoじゃなかったら
-        if (_iRandomSelectMino.MinoList[0].tag != "OMino" && _iRandomSelectMino.MinoList[0].tag != "IMino")
+    public void NextMinoTakeOut()
+    {
+        // 先頭のミノがOとIミノじゃなかったら
+        if (_randomSelectMinoScript.MinoList[0].tag != "OMino" && _randomSelectMinoScript.MinoList[0].tag != "IMino")
         {
-            _iRandomSelectMino.MinoList[0].transform.position = _minoSpawnTransform.position;
+            // 先頭のミノを生成座標に移動する
+            _randomSelectMinoScript.MinoList[0].transform.position = _minoSpawnTransform.position;
         }
-        // OMinoとIMInoのとき
+        // 先頭のミノがOとIミノのとき
         else
         {
-            _iRandomSelectMino.MinoList[0].transform.position = _oIMinoSpawnTransform.position;
+            // 先頭のミノを生成座標に移動する
+            _randomSelectMinoScript.MinoList[0].transform.position = _oIMinoSpawnTransform.position;
         }
 
-        _playerControllerScript.PlayerMino = _iRandomSelectMino.MinoList[0];
+        // 先頭のミノをプレイヤーミノに設定する 
+        _playerControllerScript.PlayerMino = _randomSelectMinoScript.MinoList[0];
 
-        _ghostMinoScript.GhostMino = _iRandomSelectMino.GhostList[0];
+        // 先頭のミノをゴーストミノに設定する
+        _ghostMinoScript.GhostMino = _randomSelectMinoScript.GhostList[0];
 
+        // ゴーストミノと操作ミノ
         _ghostMinoScript.GhostMino.transform.position =
             _playerControllerScript.PlayerMino.transform.position;
 
-        // ゴーストミノの透明度を上げている
+        // ゴーストミノの透明度を下げて薄くしている
         foreach(Transform _children in _ghostMinoScript.GhostMino.GetComponentInChildren<Transform>())
         {
             _children.GetComponent<SpriteRenderer>().color = _ghostColor;
-        }       
+        }
 
-        // リストの中から生成されたミノを削除する
-        _iRandomSelectMino.MinoList.RemoveAt(0);
-        _iRandomSelectMino.GhostList.RemoveAt(0);
+        // リストの先頭のミノを削除する
+        _randomSelectMinoScript.MinoList.RemoveAt(0);
+        _randomSelectMinoScript.GhostList.RemoveAt(0);
     }
 }

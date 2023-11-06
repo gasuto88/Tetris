@@ -4,40 +4,49 @@ using UnityEngine;
 
 public class MinoControllerScript : MonoBehaviour
 {
-    IRandomSelectMino _iRandomSelectMino = default;
+    #region フィールド変数
 
+    // Nextの一番目の座標
     private Transform _nextPositionOne = default;
-
+    // Nextの二番目の座標
     private Transform _nextPositionTwo = default;
-
+    // Nextの三番目の座標
     private Transform _nextPositionThree = default;
 
-    private Transform _nextPositionFour = default;
-
-    private Transform _nextPositionFive = default;
-
+    // Nextの座標を入れる配列
     private Transform[] _nextPositions = new Transform[4];
 
+    // Holdのゲームオブジェクト
     private GameObject _holdObject = default;
 
+    // Holdの座標
     private Transform _holdTransform = default;
 
+    // Holdのゲームオブジェクト（ゴーストミノ用）
     private GameObject _holdGhostObject = default;
 
-    private ICreateMino _iCreateMino = default;
-
-    private bool isHold = default;
-
+    // Holdをした後のクールタイム
     private int _holdCount = default;
 
+    // ランダム化された7種類のミノテーブルを作成するスクリプト
+    private RandomSelectMinoScript _randomSelectMinoScript = default;
+
+    // ゲームの状態を管理するスクリプト
+    private GameControllerScript _gameControllerScript = default;
+
+    // ゴーストミノを動かすスクリプト
     private GhostMinoScript _ghostMinoScript = default;
 
-    private Transform _minoWaitTransform = default;
-    public GameObject HoldObject { get => _holdObject; set => _holdObject = value; }
+    // ミノを保管する座標
+    private Transform _minoStorageTransform = default;
+
+    #endregion
 
     private void Start()
     {
-        _iRandomSelectMino = GameObject.Find("MinoController").GetComponent<RandomSelectMinoScript>();
+        _gameControllerScript = GameObject.Find("GameController").GetComponent<GameControllerScript>();
+
+        _randomSelectMinoScript = GetComponent<RandomSelectMinoScript>();
 
         _nextPositionOne = GameObject.Find("NextPosition (1)").transform;
 
@@ -47,13 +56,13 @@ public class MinoControllerScript : MonoBehaviour
 
         _nextPositions = new Transform[] { _nextPositionOne, _nextPositionTwo, _nextPositionThree};
 
-        _iCreateMino = GetComponent<CreateMinoScript>();
-
         _ghostMinoScript = GetComponent<GhostMinoScript>();
 
         _holdTransform = GameObject.Find("HoldPosition").transform;
 
-        _minoWaitTransform = GameObject.Find("MinoWaitPosition").transform;
+        _minoStorageTransform = GameObject.Find("MinoStoragePosition").transform;
+
+
 
     }
     private void Update()
@@ -66,9 +75,9 @@ public class MinoControllerScript : MonoBehaviour
     private void AddMino()
     {
         
-        if(_iRandomSelectMino.MinoList.Count <= 7)
+        if(_randomSelectMinoScript.MinoList.Count <= 7)
         {
-            _iRandomSelectMino.RandomSelectMino();
+            _randomSelectMinoScript.RandomSelectMino();
         }
     }
     /// <summary>
@@ -78,26 +87,26 @@ public class MinoControllerScript : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            _iRandomSelectMino.MinoList[i].transform.position = _nextPositions[i].transform.position;
+            _randomSelectMinoScript.MinoList[i].transform.position = _nextPositions[i].transform.position;
         }
     }
     /// <summary>
-    /// ホールドの中身を出し入れする処理
+    /// Holdの中身を出し入れする処理
     /// </summary>
     /// <param name="_holdMino"></param>
     /// <param name="_minoCreateMethod"></param>
-    public void HoldController(GameObject _holdMino,GameControllerScript.MinoCreateMethod _minoCreateMethod)
+    public void HoldController(GameObject _holdMino)
     {
 
         if (_holdCount <= 0)
         {
             _holdCount = 2;
 
-            if (HoldObject != null)
+            if (_holdObject != null)
             {
-                // ホールドに入ってるミノをリストの先頭に追加
-                _iRandomSelectMino.MinoList.Insert(0, HoldObject);
-                _iRandomSelectMino.GhostList.Insert(0, _holdGhostObject);
+                // Holdに入ってるミノをリストの先頭に追加
+                _randomSelectMinoScript.MinoList.Insert(0, _holdObject);
+                _randomSelectMinoScript.GhostList.Insert(0, _holdGhostObject);
             }
             _holdObject = _holdMino;
 
@@ -105,12 +114,12 @@ public class MinoControllerScript : MonoBehaviour
 
             _holdObject.transform.position = _holdTransform.position;         
 
-            _holdGhostObject.transform.position = _minoWaitTransform.position;
+            _holdGhostObject.transform.position = _minoStorageTransform.position;
 
             _holdObject.transform.rotation = default;
             _holdGhostObject.transform.rotation = default;
 
-            _minoCreateMethod();
+            _gameControllerScript.GameType = GameControllerScript.GameState.MINO_CREATE;
         }
 
         

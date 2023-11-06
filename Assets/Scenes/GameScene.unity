@@ -3406,7 +3406,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1261085357}
   m_Layer: 0
-  m_Name: MinoWaitPosition
+  m_Name: MinoStoragePosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

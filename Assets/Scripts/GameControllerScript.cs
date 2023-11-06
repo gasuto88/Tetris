@@ -6,39 +6,30 @@ using UnityEngine.SceneManagement;
 
 public class GameControllerScript : MonoBehaviour
 {
-
-    // START         ゲームが開始される前の処理
     // MINO_CREATE   ミノが生成された瞬間
     // MINO_MOVE     プレイヤーがミノを動かせる状態
+    // MINO_ERASE    ミノを消している状態
     // STOP          ゲームが一時停止されている状態
-    // END　　　　　 ゲームが終わったときの処理
 
     public enum GameState
-    {
-        START,     
+    {      
         MINO_CREATE,
         MINO_MOVE,
         MINO_ERASE,
-        STOP,
-        END
+        STOP        
     }
-    public delegate void MinoEraseChangeMethod();
 
-    public MinoEraseChangeMethod _minoEraseMethod = default;
+    
+    private CreateMinoScript _createMinoScript = default;
 
-    public delegate void MinoCreateMethod();
-
-    public MinoCreateMethod _minoCreateMethod = default;
-
-    private ICreateMino _iCreateMino = default;
-
-    private IRandomSelectMino _iRandomSelectMino = default;
+    // ランダム化された7種類のミノテーブルを作成するスクリプト
+    private RandomSelectMinoScript _randomSelectMinoScript = default;
 
     private PlayerControllerScript _playerControllerScript = default;
 
     private FieldDataScript _fieldDataScript = default;
 
-    private GameState _gameState = GameState.START;
+    private GameState _gameState = GameState.MINO_CREATE;
 
     private MinoControllerScript _minoControllerScript = default;
 
@@ -51,9 +42,9 @@ public class GameControllerScript : MonoBehaviour
     {
         GameObject g = GameObject.Find("MinoController");
 
-        _iCreateMino = g.GetComponent<CreateMinoScript>();
+        _createMinoScript = g.GetComponent<CreateMinoScript>();
 
-        _iRandomSelectMino = g.GetComponent<RandomSelectMinoScript>();
+        _randomSelectMinoScript = g.GetComponent<RandomSelectMinoScript>();
 
         _minoControllerScript = g.GetComponent<MinoControllerScript>();
 
@@ -62,10 +53,6 @@ public class GameControllerScript : MonoBehaviour
         _ghostMinoScript = g.GetComponent<GhostMinoScript>();
 
         _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();
-
-        _minoEraseMethod = () => { GameType = GameState.MINO_ERASE; };
-
-        _minoCreateMethod = () => {GameType = GameState.MINO_CREATE; };
     }
 
     private void Update()
@@ -80,18 +67,16 @@ public class GameControllerScript : MonoBehaviour
     {
         switch (GameType)
         {
-            case GameState.START:
-
-                _iRandomSelectMino.RandomSelectMino();
-
-                GameType = GameState.MINO_CREATE;
-
-                break;
             // ミノが生成されたとき
             case GameState.MINO_CREATE:
 
-                _iCreateMino.NextMinoInstance();
+                // ランダム化された7種類のミノテーブルを作成する
+                _randomSelectMinoScript.RandomSelectMino();
+            　　
+                // Nextの先頭のミノを取り出す
+                _createMinoScript.NextMinoTakeOut();
 
+                // Nextのミノを表示する
                 _minoControllerScript.NextDisplay();
 
                 _minoControllerScript.HoldCount();
@@ -101,10 +86,10 @@ public class GameControllerScript : MonoBehaviour
                 GameType = GameState.MINO_MOVE;
 
                 break;
-            // ミノが操作できるとき
+            // ミノを操作できるとき
             case GameState.MINO_MOVE:
 
-                _playerControllerScript.PlayerController(_minoEraseMethod,_minoCreateMethod);
+                _playerControllerScript.PlayerController();
 
                 if (GameType == GameState.MINO_MOVE)
                 {
@@ -112,14 +97,16 @@ public class GameControllerScript : MonoBehaviour
                 }
 
                 break;
-            
+            // ミノを消す処理
             case GameState.MINO_ERASE:
 
                 _fieldDataScript.FieldMinoErase();
 
+                // プレイヤーミノを消す
                 Destroy(_playerControllerScript.PlayerMino);
+                // ゴーストミノを消す
                 Destroy(_ghostMinoScript.GhostMino);
-
+               
                 GameType = GameState.MINO_CREATE;
 
                 break;
@@ -127,13 +114,15 @@ public class GameControllerScript : MonoBehaviour
 
                 break;
 
-            case GameState.END:
-
-                //Debug.LogError("シーン繊維");
-                //SceneManager.LoadScene("GameOverScene");
-
-                break;
+            
 
         }
+    }
+    /// <summary>
+    /// ゲームオーバーシーンに遷移
+    /// </summary>
+    public void GameOver()
+    {
+        SceneManager.LoadScene("GameOverScene");
     }
 }

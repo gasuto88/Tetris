@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RandomSelectMinoScript : MonoBehaviour,IRandomSelectMino
+public class RandomSelectMinoScript : MonoBehaviour
 {
     [SerializeField]
     private GameObject _iMino = default;
@@ -29,7 +29,7 @@ public class RandomSelectMinoScript : MonoBehaviour,IRandomSelectMino
 
     private int _selectNumber = default;
 
-    private Transform _minoWaitTransform = default;
+    private Transform _minoStrageTransform = default;
 
     private enum MinoTable
     {
@@ -57,7 +57,7 @@ public class RandomSelectMinoScript : MonoBehaviour,IRandomSelectMino
 
     private void Start()
     {
-        _minoWaitTransform = GameObject.Find("MinoWaitPosition").transform;
+        _minoStrageTransform = GameObject.Find("MinoStoragePosition").transform;
     }
 
     /// <summary>
@@ -88,38 +88,38 @@ public class RandomSelectMinoScript : MonoBehaviour,IRandomSelectMino
             switch (_minoTable[_selectNumber])
             {
                 case MinoTable.IMINO:
-                    MinoList.Add(Instantiate(_iMino,_minoWaitTransform.position,_minoWaitTransform.rotation));
-                    GhostList.Add(Instantiate(_iMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
+                    MinoList.Add(Instantiate(_iMino,_minoStrageTransform.position,_minoStrageTransform.rotation));
+                    GhostList.Add(Instantiate(_iMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
                     break;
 
                 case MinoTable.OMINO:
-                    MinoList.Add(Instantiate(_oMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
-                    GhostList.Add(Instantiate(_oMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
+                    MinoList.Add(Instantiate(_oMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
+                    GhostList.Add(Instantiate(_oMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
                     break;
 
                 case MinoTable.SMINO:
-                    MinoList.Add(Instantiate(_sMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
-                    GhostList.Add(Instantiate(_sMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
+                    MinoList.Add(Instantiate(_sMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
+                    GhostList.Add(Instantiate(_sMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
                     break;
 
                 case MinoTable.ZMINO:
-                    MinoList.Add(Instantiate(_zMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
-                    GhostList.Add(Instantiate(_zMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
+                    MinoList.Add(Instantiate(_zMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
+                    GhostList.Add(Instantiate(_zMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
                     break;
 
                 case MinoTable.JMINO:
-                    MinoList.Add(Instantiate(_jMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
-                    GhostList.Add(Instantiate(_jMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
+                    MinoList.Add(Instantiate(_jMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
+                    GhostList.Add(Instantiate(_jMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
                     break;
 
                 case MinoTable.LMINO:
-                    MinoList.Add(Instantiate(_lMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
-                    GhostList.Add(Instantiate(_lMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
+                    MinoList.Add(Instantiate(_lMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
+                    GhostList.Add(Instantiate(_lMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
                     break;
 
                 case MinoTable.TMINO:
-                    MinoList.Add(Instantiate(_tMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
-                    GhostList.Add(Instantiate(_tMino, _minoWaitTransform.position, _minoWaitTransform.rotation));
+                    MinoList.Add(Instantiate(_tMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
+                    GhostList.Add(Instantiate(_tMino, _minoStrageTransform.position, _minoStrageTransform.rotation));
                     break;
             }
         }

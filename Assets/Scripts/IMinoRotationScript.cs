@@ -30,14 +30,14 @@ public class IMinoRotationScript : MonoBehaviour
                 switch (i)
                 {
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, _input * 90f, Space.World);
+                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f, Space.World);
                         break;
                     case 2:
-                        if(_input > 0)
+                        if(_input < 0)
                         {
                             _playerMino.transform.Translate(-2f, 0f, 0f, Space.World);
                         }
-                        else if(_input < 0)
+                        else if(_input > 0)
                         {
                             _playerMino.transform.Translate(-1f, 0f, 0f, Space.World);
                         }
@@ -47,10 +47,10 @@ public class IMinoRotationScript : MonoBehaviour
                         _playerMino.transform.Translate(3f, 0f, 0f, Space.World);
                         break;
                     case 4:
-                        _playerMino.transform.Translate(-3f, _input, 0f, Space.World);
+                        _playerMino.transform.Translate(-3f, -_input, 0f, Space.World);
                         break;
                     case 5:
-                        _playerMino.transform.Translate(3f, -_input * 3f, 0f, Space.World);
+                        _playerMino.transform.Translate(3f, _input * 3f, 0f, Space.World);
                         break;
                     case 6:
                         _playerMino.transform.position = _playerPositionTemp;
@@ -62,10 +62,8 @@ public class IMinoRotationScript : MonoBehaviour
                 {
                     break;
                 }
-                Debug.LogWarning("ue" + i);
             }
         }
-
         // ƒ~ƒm‚ª¶‚ð‚Þ‚¢‚Ä‚¢‚é‚Æ‚«
         else if (_playerMino.transform.rotation.eulerAngles.z == 90)
         {
@@ -74,14 +72,14 @@ public class IMinoRotationScript : MonoBehaviour
                 switch (i)
                 {
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, _input * 90f, Space.World);
+                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f, Space.World);
                         break;
                     case 2:
-                        if (_input > 0)
+                        if (_input < 0)
                         {
                             _playerMino.transform.Translate(-2f, 0f, 0f, Space.World);
                         }
-                        else if(_input < 0)
+                        else if(_input > 0)
                         {
                             _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
                         }
@@ -89,33 +87,33 @@ public class IMinoRotationScript : MonoBehaviour
 
                         break;
                     case 3:
-                        if (_input > 0)
+                        if (_input < 0)
                         {
                             _playerMino.transform.Translate(3f, 0f, 0f, Space.World);
                         }
-                        else if (_input < 0)
+                        else if (_input > 0)
                         {
                             _playerMino.transform.Translate(-3f, 0f, 0f, Space.World);
                         }
                         break;
                     case 4:
 
-                        if (_input > 0)
+                        if (_input < 0)
                         {
                             _playerMino.transform.Translate(0f, -2f, 0f, Space.World);
                         }
-                        else if (_input < 0)
+                        else if (_input > 0)
                         {
                             _playerMino.transform.Translate(0f, -1f, 0f, Space.World);
                         }
 
                         break;
                     case 5:
-                        if (_input > 0)
+                        if (_input < 0)
                         {
                             _playerMino.transform.Translate(-3f, 3f, 0f, Space.World);
                         }
-                        else if (_input < 0)
+                        else if (_input > 0)
                         {
                             _playerMino.transform.Translate(3f, 3f, 0f, Space.World);
                         }
@@ -131,7 +129,6 @@ public class IMinoRotationScript : MonoBehaviour
                 {
                     break;
                 }
-                Debug.LogWarning("¶" + i);
             }
         }
         // ƒ~ƒm‚ª‰º‚ð‚Þ‚¢‚Ä‚¢‚é‚Æ‚«
@@ -142,14 +139,14 @@ public class IMinoRotationScript : MonoBehaviour
                 switch (i)
                 {
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, _input * 90f, Space.World);
+                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f, Space.World);
                         break;
                     case 2:
-                        if(_input > 0)
+                        if(_input < 0)
                         {
                             _playerMino.transform.Translate(2f, 0f, 0f, Space.World);
                         }
-                        else if(_input < 0)
+                        else if(_input > 0)
                         {
                             _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
                         }
@@ -159,21 +156,21 @@ public class IMinoRotationScript : MonoBehaviour
                         _playerMino.transform.Translate(-3f, 0f, 0f, Space.World);
                         break;
                     case 4:
-                        if(_input > 0)
+                        if(_input < 0)
                         {
                             _playerMino.transform.Translate(3f, 1f, 0f, Space.World);
                         }
-                        else if(_input < 0)
+                        else if(_input > 0)
                         {
                             _playerMino.transform.Translate(3f, -2f, 0f, Space.World);
                         }                       
                         break;
                     case 5:
-                        if (_input > 0)
+                        if (_input < 0)
                         {
                             _playerMino.transform.Translate(-3f, 1f, 0f, Space.World);
                         }
-                        else if (_input < 0)
+                        else if (_input > 0)
                         {
                             _playerMino.transform.Translate(3f, 3f, 0f, Space.World);
                         }
@@ -187,7 +184,6 @@ public class IMinoRotationScript : MonoBehaviour
                 {
                     break;
                 }
-                Debug.LogWarning("sita" + i);
             }
         }
         // ƒ~ƒm‚ª‰E‚ð‚Þ‚¢‚Ä‚¢‚é‚Æ‚«
@@ -198,45 +194,45 @@ public class IMinoRotationScript : MonoBehaviour
                 switch (i)
                 {
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, _input * 90f, Space.World);
+                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f, Space.World);
                         break;
                     case 2:
-                        if (_input > 0)
+                        if (_input < 0)
                         {
                             _playerMino.transform.Translate(-1f, 0f, 0f, Space.World);
                         }
-                        else if (_input < 0)
+                        else if (_input > 0)
                         {
                             _playerMino.transform.Translate(2f, 0f, 0f, Space.World);
                         }
                         break;
                     case 3:
-                        if (_input > 0)
+                        if (_input < 0)
                         {
                             _playerMino.transform.Translate(3f, 0f, 0f, Space.World);
                         }
-                        else if (_input < 0)
+                        else if (_input > 0)
                         {
                             _playerMino.transform.Translate(-3f, 0f, 0f, Space.World);
                         }
                         break;
                     case 4:
-                        if (_input > 0)
+                        if (_input < 0)
                         {
                             _playerMino.transform.Translate(-3f, 2f, 0f, Space.World);
                         }
-                        else if (_input < 0)
+                        else if (_input > 0)
                         {
                             _playerMino.transform.Translate(3f, 1f, 0f, Space.World);
                         }
                         
                         break;
                     case 5:
-                        if (_input > 0)
+                        if (_input < 0)
                         {
                             _playerMino.transform.Translate(3f, -3f, 0f, Space.World);
                         }
-                        else if (_input < 0)
+                        else if (_input > 0)
                         {
                             _playerMino.transform.Translate(-3f, -3f, 0f, Space.World);
                         }
@@ -251,7 +247,6 @@ public class IMinoRotationScript : MonoBehaviour
                 {
                     break;
                 }
-                Debug.LogWarning("‰E" + i);
             }
         }
     }

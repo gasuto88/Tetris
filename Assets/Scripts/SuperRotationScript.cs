@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class SuperRotationScript : MonoBehaviour
 {
-
     private TMinoRotationScript _tMinoRotationScript = default;
 
-    private OtherMinoRotationScript _otherMinoRotationScript = default;
+    private NormalMinoRotationScript _normalMinoRotationScript = default;
 
     private IMinoRotationScript _iMinoRotationScript = default;
 
@@ -15,7 +14,7 @@ public class SuperRotationScript : MonoBehaviour
     {
         _tMinoRotationScript = GetComponent<TMinoRotationScript>();
 
-        _otherMinoRotationScript = GetComponent<OtherMinoRotationScript>();
+        _normalMinoRotationScript = GetComponent<NormalMinoRotationScript>();
 
         _iMinoRotationScript = GetComponent<IMinoRotationScript>();
     }
@@ -25,7 +24,7 @@ public class SuperRotationScript : MonoBehaviour
         // プレイヤーがTミノとIミノ以外だったら
         if (_playerMino.tag != "TMino" && _playerMino.tag != "IMino")
         {
-            _otherMinoRotationScript.OtherMinoRotation(_playerMino, _input);
+            _normalMinoRotationScript.OtherMinoRotation(_playerMino, _input);
         }
         // プレイヤーがTミノだったら
         else if(_playerMino.tag == "TMino")

@@ -30,19 +30,19 @@ public class TMinoRotationScript : MonoBehaviour
                 switch (i)
                 {
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, _input * 90f,Space.World);
+                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f,Space.World);
                         break;
                     case 2:
-                        _playerMino.transform.Translate(_input,0f, 0f,Space.World);
+                        _playerMino.transform.Translate(-_input,0f, 0f,Space.World);
                         break;
                     case 3:
                         _playerMino.transform.Translate(0f, 1f, 0f, Space.World);
                         break;
                     case 4:
-                        _playerMino.transform.Translate(-_input, -3f, 0f, Space.World);
+                        _playerMino.transform.Translate(_input, -3f, 0f, Space.World);
                         break;
                     case 5:
-                        _playerMino.transform.Translate(_input, 0f, 0f, Space.World);
+                        _playerMino.transform.Translate(-_input, 0f, 0f, Space.World);
                         break;
                     case 6:
                         _playerMino.transform.position = _playerPositionTemp;
@@ -54,7 +54,6 @@ public class TMinoRotationScript : MonoBehaviour
                 {
                     break;
                 }
-                //Debug.LogWarning("ue" + i);
             }
         }
 
@@ -66,7 +65,7 @@ public class TMinoRotationScript : MonoBehaviour
                 switch (i)
                 {
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, _input * 90f,Space.World);
+                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f,Space.World);
                         break;
                     case 2:
                         
@@ -95,7 +94,6 @@ public class TMinoRotationScript : MonoBehaviour
                 {
                     break;
                 }
-                //Debug.LogWarning("左" + i);
             }
         }
         // ミノが下をむいているとき
@@ -106,19 +104,19 @@ public class TMinoRotationScript : MonoBehaviour
                 switch (i)
                 {
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, _input * 90f,Space.World);
+                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f,Space.World);
                         break;
                     case 2:
-                        _playerMino.transform.Translate(-_input, 0f, 0f, Space.World);
+                        _playerMino.transform.Translate(_input, 0f, 0f, Space.World);
                         break;
                     case 3:
                         _playerMino.transform.Translate(0, 1f, 0f, Space.World);
                         break;
                     case 4:
-                        _playerMino.transform.Translate(_input,-3f, 0f, Space.World);
+                        _playerMino.transform.Translate(-_input,-3f, 0f, Space.World);
                         break;
                     case 5:
-                        _playerMino.transform.Translate(-_input, 0f, 0f, Space.World);
+                        _playerMino.transform.Translate(_input, 0f, 0f, Space.World);
                         break;
                     case 6:
                         _playerMino.transform.position = _playerPositionTemp;
@@ -129,8 +127,7 @@ public class TMinoRotationScript : MonoBehaviour
                 if (!_playerControllerScript.BeforeMoving(_playerMino))
                 {
                     break;
-                }
-                //Debug.LogWarning("sita" + i);
+                }             
             }
         }
         // ミノが右をむいているとき
@@ -141,7 +138,7 @@ public class TMinoRotationScript : MonoBehaviour
                 switch (i)
                 {
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, _input * 90f,Space.World);
+                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f,Space.World);
                         break;
                     case 2:
                         _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
@@ -164,8 +161,7 @@ public class TMinoRotationScript : MonoBehaviour
                 if (!_playerControllerScript.BeforeMoving(_playerMino))
                 {
                     break;
-                }
-                //Debug.LogWarning("右" + i);
+                }              
             }
         }
     }

@@ -17,32 +17,27 @@ public class TSpinCheckScript : MonoBehaviour
         int _blockCount = 0;
         
         // ‰ñ“]²‚©‚çŒ©‚Ä¶ã
-        if (_playerPosX <= 0 || _fieldDataScript.FieldData[-_playerPosY - 1,_playerPosX - 1])
+        if (_playerPosX <= 0 || _fieldDataScript.FieldData[_playerPosX - 1, -_playerPosY - 1])
         {
-            Debug.LogWarning("¶ã");
             _blockCount++;
         }
         // ‰ñ“]²‚©‚çŒ©‚Ä‰Eã
-        if (_playerPosX >= 9 || _fieldDataScript.FieldData[-_playerPosY - 1, _playerPosX + 1])
+        if (_playerPosX >= 9 || _fieldDataScript.FieldData[_playerPosX + 1, - _playerPosY - 1])
         {
-            Debug.LogWarning("‰Eã");
             _blockCount++;
         }
         // ‰ñ“]²‚©‚çŒ©‚Ä¶‰º
-        if (_playerPosX <= 0 || _playerPosY <= -19 || _fieldDataScript.FieldData[-_playerPosY + 1, _playerPosX - 1])
+        if (_playerPosX <= 0 || _playerPosY <= -19 || _fieldDataScript.FieldData[_playerPosX - 1, -_playerPosY + 1])
         {
-            Debug.LogWarning("¶‰º");
             _blockCount++;
         }
         // ‰ñ“]²‚©‚çŒ©‚Ä‰E‰º
-        if (_playerPosX >= 9 || _playerPosY <= -19 || _fieldDataScript.FieldData[-_playerPosY + 1, _playerPosX + 1])
-        {
-            Debug.LogWarning("‰E‰º");
+        if (_playerPosX >= 9 || _playerPosY <= -19 || _fieldDataScript.FieldData[_playerPosX + 1, -_playerPosY + 1])
+        {           
             _blockCount++;
         }
-        
-        
 
+        // 3ŒÂˆÈã‚¾‚Á‚½‚ç
         if(_blockCount >= 3)
         {
             return true;
