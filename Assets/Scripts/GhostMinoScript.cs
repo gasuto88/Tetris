@@ -39,28 +39,8 @@ public class GhostMinoScript : MonoBehaviour
     public void GhostController()
     {
         FloorMino();
-        //    switch (_ghostState)
-        //    {
-        //        case GhostState.START:
-
-        //            _ghostPosition = _playerControllerScript.PlayerMino.transform.position;
-
-        //            FloorMino();
-
-        //            _ghostState = GhostState.MOVE;
-        //            break;
-
-        //        case GhostState.MOVE:
-
-        //            if (Mathf.RoundToInt(GhostMino.transform.position.x) 
-        //                != Mathf.RoundToInt(_playerControllerScript.PlayerMino.transform.position.x))
-        //            {
-
-        //                FloorMino();
-        //            }
-        //            break;
-        //    }
-        }
+        
+    }
 
     private void FloorMino()
     {
@@ -71,7 +51,6 @@ public class GhostMinoScript : MonoBehaviour
         while (!_playerControllerScript.BeforeMoving(_ghostMino) &&
             _heightCount <= _fieldDataScript.Height)
         {
-            //_ghostPosition += Vector2.down;
             _ghostMino.transform.Translate(0f, -1f, 0f, Space.World);
             _heightCount++;
             
@@ -79,7 +58,7 @@ public class GhostMinoScript : MonoBehaviour
         
         _ghostMino.transform.Translate(0f, 1f, 0f, Space.World);
 
-        //GhostMino.transform.position = _ghostPosition;
+        
 
         GhostMino.transform.rotation = _playerControllerScript.PlayerMino.transform.rotation;
 
