@@ -5045,11 +5045,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputCoolTime: 0.1
-  _fallCoolTime: 0.7
-  _deathTime: 0.3
-  _maxDeathTime: 1.2
-  _minDeathTime: 0.3
-  _addDeathTime: 0.15
+  _fallCoolTime: 1
   _rotationSound: {fileID: 8300000, guid: bc4e44a4272355b4d928be5d197f1607, type: 3}
   _moveSound: {fileID: 8300000, guid: 8491fa2ececdc1a4a9145c7c7295ce18, type: 3}
   _holdSound: {fileID: 8300000, guid: e496243daeb9f454f96b61e878ed2362, type: 3}

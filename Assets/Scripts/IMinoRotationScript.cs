@@ -58,7 +58,7 @@ public class IMinoRotationScript : MonoBehaviour
                         break;
 
                 }
-                if (!_playerControllerScript.BeforeMoving(_playerMino))
+                if (!_playerControllerScript.CheckCollision(_playerMino))
                 {
                     break;
                 }
@@ -125,7 +125,7 @@ public class IMinoRotationScript : MonoBehaviour
                         break;
 
                 }
-                if (!_playerControllerScript.BeforeMoving(_playerMino))
+                if (!_playerControllerScript.CheckCollision(_playerMino))
                 {
                     break;
                 }
@@ -180,7 +180,7 @@ public class IMinoRotationScript : MonoBehaviour
                         _playerMino.transform.rotation = _playerRotationTemp;
                         break;
                 }
-                if (!_playerControllerScript.BeforeMoving(_playerMino))
+                if (!_playerControllerScript.CheckCollision(_playerMino))
                 {
                     break;
                 }
@@ -243,7 +243,7 @@ public class IMinoRotationScript : MonoBehaviour
                         break;
 
                 }
-                if (!_playerControllerScript.BeforeMoving(_playerMino))
+                if (!_playerControllerScript.CheckCollision(_playerMino))
                 {
                     break;
                 }

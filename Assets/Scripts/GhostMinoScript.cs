@@ -45,7 +45,7 @@ public class GhostMinoScript : MonoBehaviour
         _heightCount = default;
 
         // プレイヤーが壁に重なってない　かつ　ゴーストミノが下に移動した回数がフィールドの高さより少ないとき
-        while (!_playerControllerScript.BeforeMoving(_ghostMino) &&
+        while (!_playerControllerScript.CheckCollision(_ghostMino) &&
             _heightCount <= _fieldDataScript.Height)
         {
             // ゴーストミノを下に１マス移動

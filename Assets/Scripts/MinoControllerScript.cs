@@ -40,6 +40,8 @@ public class MinoControllerScript : MonoBehaviour
     // ミノを保管する座標
     private Transform _minoStorageTransform = default;
 
+    private AudioSource _audioSource = default;
+
     #endregion
 
     private void Start()
@@ -62,7 +64,7 @@ public class MinoControllerScript : MonoBehaviour
 
         _minoStorageTransform = GameObject.Find("MinoStoragePosition").transform;
 
-
+        _audioSource = GetComponent<AudioSource>();
 
     }
     private void Update()
@@ -93,13 +95,15 @@ public class MinoControllerScript : MonoBehaviour
     /// <summary>
     /// Holdの中身を出し入れする処理
     /// </summary>
-    /// <param name="_holdMino"></param>
-    /// <param name="_minoCreateMethod"></param>
-    public void HoldController(GameObject _holdMino)
+    /// <param name="holdMino"></param>
+    public void HoldController(GameObject holdMino,AudioClip holdSound)
     {
 
         if (_holdCount <= 0)
         {
+            // Hold音を再生
+            _audioSource.PlayOneShot(holdSound);
+
             _holdCount = 2;
 
             if (_holdObject != null)
@@ -108,7 +112,7 @@ public class MinoControllerScript : MonoBehaviour
                 _randomSelectMinoScript.MinoList.Insert(0, _holdObject);
                 _randomSelectMinoScript.GhostList.Insert(0, _holdGhostObject);
             }
-            _holdObject = _holdMino;
+            _holdObject = holdMino;
 
             _holdGhostObject = _ghostMinoScript.GhostMino;
 

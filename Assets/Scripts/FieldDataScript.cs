@@ -189,7 +189,7 @@ public class FieldDataScript : MonoBehaviour
     /// ‘€ì‚µ‚Ä‚¢‚éƒ~ƒm‚ğó‚¯æ‚é
     /// </summary>
     /// <param name="_player">‘€ì‚µ‚Ä‚¢‚éƒ~ƒm</param>
-    public void SetPlayerPosition(GameObject _player)
+    public void SetPlayerInfo(GameObject _player)
     {
         _playerMino = _player;
     }

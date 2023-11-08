@@ -18,7 +18,7 @@ public class SuperRotationScript : MonoBehaviour
     public void SuperRotation(GameObject _playerMino,int _input)
     {
         // プレイヤーがTミノとIミノ以外だったら
-        if (_playerMino.tag != "IMino")
+        if (_playerMino.tag != "IMino" && _playerMino.tag != "OMino")
         {
             _normalMinoRotationScript.NormalMinoRotation(_playerMino, _input);
         }
@@ -26,6 +26,6 @@ public class SuperRotationScript : MonoBehaviour
         else if(_playerMino.tag == "IMino")
         {
             _iMinoRotationScript.IMinoRotation(_playerMino,_input);
-        }      
+        }
     }
 }
