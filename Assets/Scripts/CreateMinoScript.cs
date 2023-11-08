@@ -7,7 +7,7 @@ public class CreateMinoScript : MonoBehaviour
     // ランダム化された7種類のミノテーブルを作成するスクリプト
     private RandomSelectMinoScript _randomSelectMinoScript = default;
 
-    // プレイヤーの挙動管理するスクリプト
+    // プレイヤーを動かすスクリプト
     private PlayerControllerScript _playerControllerScript = default;
 
     // ゴーストミノを動かすスクリプト
@@ -65,14 +65,14 @@ public class CreateMinoScript : MonoBehaviour
         }
 
         // 先頭のミノをプレイヤーミノに設定する 
-        _playerControllerScript.PlayerMino = _randomSelectMinoScript.MinoList[0];
+        _playerControllerScript.PlayerableMino = _randomSelectMinoScript.MinoList[0];
 
         // 先頭のミノをゴーストミノに設定する
         _ghostMinoScript.GhostMino = _randomSelectMinoScript.GhostList[0];
 
         // ゴーストミノと操作ミノ
         _ghostMinoScript.GhostMino.transform.position =
-            _playerControllerScript.PlayerMino.transform.position;
+            _playerControllerScript.PlayerableMino.transform.position;
 
         // ゴーストミノの透明度を下げて薄くしている
         foreach(Transform _children in _ghostMinoScript.GhostMino.GetComponentInChildren<Transform>())

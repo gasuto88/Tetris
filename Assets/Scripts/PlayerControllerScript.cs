@@ -2,41 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+/*----------------------------------------------------------
 
+更新日　11月8日　18時
+
+制作者　本木　大地
+----------------------------------------------------------*/
 public class PlayerControllerScript : MonoBehaviour
 {
     #region フィールド変数
 
+    // 左右入力
     private float _horizontalInput = default;
+
+    // 上下入力
     private float _verticalInput = default;
 
     // 操作できるミノ
-    private GameObject _playerMino = default;
+    private GameObject _playerableMino = default;
+
+    private readonly Vector3 _vectorRight = Vector3.right;
+
+    private readonly Vector3 _vectorUp = Vector3.up;
+
+    private readonly Vector3 _vectorForward = Vector3.forward;
 
     // プレイヤーが地面に着いたときの座標
-    private Vector3 _playerGroundPosition = default;
+    private Vector3 _groundPosition = default;
 
     // 入力されてからの経過時間
-    private float _inputTime = default;
+    private float _inputTime = 0f;
 
     [SerializeField, Header("入力時のクールタイム")]
     private float _inputCoolTime = 0.1f;
 
     // 左右入力（回転）
-    private const int LEFT_INPUT = -1;
-    private const int RIGHT_INPUT = 1;
+    private const int INPUT_LEFT = -1;
+    private const int INPUT_RIGHT = 1;
 
     // プレイヤーが落下してからの経過時間
-    private float _fallTime = default;
+    private float _fallTime = 0f;
 
     [SerializeField,Header("ミノが落ちる時間")]
     private float _fallCoolTime = 0.7f;
 
     // プレイヤーが着地してからの経過時間
-    private float _groundTime = default;
+    private float _groundTime = 0f;
 
     // プレイヤーが地面にいるかどうか
-    private bool isGround = default;
+    private bool isGround = false;
 
     [SerializeField,Header("ミノが死ぬまでの時間")]
     private float _deathTime = 0.3f;
@@ -50,7 +64,7 @@ public class PlayerControllerScript : MonoBehaviour
     [SerializeField,Header("ミノの死ぬまでの追加時間")]
     private float _addDeathTime = 0.15f;
 
-    //------------------効果音--------------------
+    // 効果音-------------------------------------
 
     [Space(20),Header("効果音")]
 
@@ -68,7 +82,7 @@ public class PlayerControllerScript : MonoBehaviour
     [SerializeField, Header("ミノの着地音")]
     private AudioClip _groundSound = default;
 
-    //---------------------------------------------
+    // -------------------------------------------
 
     // フィールドを管理するスクリプト
     private FieldDataScript _fieldDataScript = default;
@@ -85,13 +99,17 @@ public class PlayerControllerScript : MonoBehaviour
     #endregion
 
     #region プロパティ
+    // 操作できるミノ
+    public GameObject PlayerableMino { get => _playerableMino; set => _playerableMino = value; }
 
-    public GameObject PlayerMino { get => _playerMino; set => _playerMino = value; }
-
+    // 着地判定
     public bool IsGround { get => isGround; set => isGround = value; }
 
     #endregion
 
+    /// <summary>
+    /// <para>更新前処理</para>
+    /// </summary>
     private void Start()
     {
         // FieldDataScriptを取得
@@ -109,102 +127,55 @@ public class PlayerControllerScript : MonoBehaviour
         // AudioSourceを取得
         _audioSource = GetComponent<AudioSource>();
     }
+
     /// <summary>
-    /// プレイヤーの挙動
+    /// <para>PlayerController</para>
+    /// <para>プレイヤーの挙動を制御する</para>
     /// </summary>
     public void PlayerController()
     {
+        //入力取得
         _horizontalInput = Input.GetAxisRaw("Horizontal");
-        _verticalInput = Input.GetAxisRaw("Vertical");    
+        _verticalInput = Input.GetAxisRaw("Vertical");
         
-        // 右入力されたとき
-        if (_horizontalInput > 0 && (Time.time - _inputTime) > _inputCoolTime)
+        // 左入力されたら
+        if(_horizontalInput < 0)
         {
-            // プレイヤーの移動音を再生
-            _audioSource.PlayOneShot(_moveSound);
-
-            // 右に１マス移動
-            PlayerMino.transform.Translate(1f, 0f, 0f,Space.World);
-
-            _inputTime = Time.time;
-
-            // プレイヤーが壁にめり込んだら
-            if (BeforeMoving(PlayerMino))
-            {
-                // １マス戻す
-                PlayerMino.transform.Translate(-1f, 0f, 0f, Space.World);
-            }
+            // 左に１マス移動する
+            HorizontalMove(INPUT_LEFT);
         }
-        // 左入力されたとき
-        else if (_horizontalInput < 0 && (Time.time - _inputTime) > _inputCoolTime)
+        // 右入力されたら
+        else if(0 < _horizontalInput)
         {
-            // プレイヤーの移動音を再生
-            _audioSource.PlayOneShot(_moveSound);
-
-            // 左に１マス移動
-            PlayerMino.transform.Translate(-1f, 0f, 0f,Space.World);
-
-            _inputTime = Time.time;
-
-            // プレイヤーが壁にめり込んだら
-            if (BeforeMoving(PlayerMino))
-            {
-                // １マス戻す
-                PlayerMino.transform.Translate(1f, 0f, 0f, Space.World);
-            }
+            // 右に１マス移動する
+            HorizontalMove(INPUT_RIGHT);
         }
         // 上入力されたとき
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
-            // プレイヤーの着地音
-            _audioSource.PlayOneShot(_groundSound);
-
-            // プレイヤーを着地するまで下に落とす
-            GroundFall();
-
-            // 置いたミノをフィールドデータに反映させる処理
-            AddMinoToField();         
-
-            // 親オブジェクト（回転軸)と子オブジェクト（ミノ×４）を切り離す
-            CutParentMino();
-
-            // ゲームの状態を置いたミノを消す処理に切り替える
-            _gameControllerScript.GameType = GameControllerScript.GameState.MINO_ERASE;
-
-            return;
+            // ミノを地面まで落とす
+            HardDrop();
         }
         // 下入力されたとき
-        else if (_verticalInput < 0 && (Time.time - _inputTime) > _inputCoolTime)
+        if (_verticalInput < 0)
         {
-            // 下に１マス移動
-            PlayerMino.transform.Translate(0f, -1f, 0f,Space.World);
-
-            _inputTime = Time.time;
-
-            // プレイヤーが壁にめり込んだら
-            if (BeforeMoving(PlayerMino))
-            {
-                // 上に１マス移動
-                PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
-
-                // プレイヤーが地面に着地した
-                IsGround = true;
-            }          
+            // 下に１マス移動する
+            SoftDrop();
         }
 
         // プレイヤーの自動落下
         if ((Time.time - _fallTime) > _fallCoolTime)
         {
             // 下に１マス移動
-            PlayerMino.transform.Translate(0f, -1f, 0f,Space.World);
+            PlayerableMino.transform.Translate(0f, -1f, 0f,Space.World);
 
             _fallTime = Time.time;
 
-            // プレイヤーが壁にめり込んだら
-            if (BeforeMoving(PlayerMino))
+            // プレイヤーが壁に重なったら
+            if (BeforeMoving(PlayerableMino))
             {
                 // １マス戻す
-                PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
+                PlayerableMino.transform.Translate(0f, 1f, 0f, Space.World);
 
                 // プレイヤーが地面に着地した
                 IsGround = true;
@@ -217,19 +188,20 @@ public class PlayerControllerScript : MonoBehaviour
             if (_groundTime <= 0)
             {
                 // プレイヤーが地面に着地したときの座標を代入
-                _playerGroundPosition.y = _playerMino.transform.position.y;
+                _groundPosition.y = _playerableMino.transform.position.y;
             }
 
+            //タイマー加算
             _groundTime += Time.deltaTime;
 
             _deathTime = Mathf.Clamp(_deathTime,_minDeathTime,_maxDeathTime);
 
             // プレイヤーの現在の座標が着地した座標よりも１以上低かったら
-            if (_playerGroundPosition.y - _playerMino.transform.position.y >= 1)
+            if (_groundPosition.y - _playerableMino.transform.position.y >= 1)
             {
                 // タイマーリセット
                 _groundTime = 0;
-
+                
                 IsGround = false;
             }
 
@@ -243,7 +215,7 @@ public class PlayerControllerScript : MonoBehaviour
                 GroundFall();
 
                 // 置いたミノをフィールドデータに反映させる処理
-                AddMinoToField();
+                UpdateMinoToField();
 
                 // 親オブジェクト（回転軸)と子オブジェクト（ミノ×４）を切り離す
                 CutParentMino();
@@ -266,7 +238,7 @@ public class PlayerControllerScript : MonoBehaviour
             _audioSource.PlayOneShot(_rotationSound);
 
             // スーパーローテーションをしてくれる処理（プレイヤーミノ、左入力）
-            _superRotationScript.SuperRotation(PlayerMino, LEFT_INPUT);
+            _superRotationScript.SuperRotation(PlayerableMino, INPUT_LEFT);
 
             // プレイヤーが着地していたら
             if (isGround)
@@ -282,7 +254,7 @@ public class PlayerControllerScript : MonoBehaviour
             _audioSource.PlayOneShot(_rotationSound);
 
             // スーパーローテーションをしてくれる処理（プレイヤーミノ、右入力）
-            _superRotationScript.SuperRotation(PlayerMino, RIGHT_INPUT);
+            _superRotationScript.SuperRotation(PlayerableMino, INPUT_RIGHT);
 
             // プレイヤーが着地していたら
             if (isGround)
@@ -299,30 +271,105 @@ public class PlayerControllerScript : MonoBehaviour
             _audioSource.PlayOneShot(_holdSound);
 
             // ホールドの中身を出し入れする処理
-            _minoControllerScript.HoldController(PlayerMino);          
+            _minoControllerScript.HoldController(PlayerableMino);          
         }
     }
     /// <summary>
-    /// プレイヤーが壁にめり込んでるかを調べる処理
+    /// <para>HorizontalMove</para>
+    /// <para>左右に移動する</para>
     /// </summary>
-    /// <param name="_mino">調べるミノ</param>
-    /// <returns>プレイヤーが壁にめり込んでるかどうか</returns>
-    public bool BeforeMoving(GameObject _mino)
+    /// <param name="input">左右の入力</param>
+    private void HorizontalMove(int input)
+    {
+        // 時間が経過したら
+        if ((Time.time - _inputTime) > _inputCoolTime)
+        {
+            // 移動音を再生
+            _audioSource.PlayOneShot(_moveSound);
+
+            // １マス移動
+            PlayerableMino.transform.Translate(_vectorRight * input, Space.World);
+
+            // 現在の時間を設定
+            _inputTime = Time.time;
+
+            // 壁と重なったら
+            if (BeforeMoving(PlayerableMino))
+            {
+                // １マス戻す
+                PlayerableMino.transform.Translate(_vectorRight * -input, Space.World);
+            }
+        }     
+    }
+    /// <summary>
+    /// <para>HardDrop</para>
+    /// <para>ミノを地面まで落とす</para>
+    /// </summary>
+    private void HardDrop()
+    {
+        // 着地音
+        _audioSource.PlayOneShot(_groundSound);
+
+        // 着地するまで下に落とす
+        GroundFall();
+
+        // 置いたミノをフィールドに反映させる処理
+        UpdateMinoToField();
+
+        // 親オブジェ（回転軸)と子オブジェ（ミノ）の親子関係を解除する
+        CutParentMino();
+
+        // ゲームの状態を置いたミノを消す処理に切り替える
+        _gameControllerScript.GameType = GameControllerScript.GameState.MINO_ERASE;
+    }
+    /// <summary>
+    /// <para>SoftDrop</para>
+    /// <para>下に１マス移動する</para>
+    /// </summary>
+    private void SoftDrop()
+    {
+        // 時間が経過したら
+        if ((Time.time - _inputTime) > _inputCoolTime)
+        {
+            // 下に１マス移動
+            PlayerableMino.transform.Translate(0f, -1f, 0f, Space.World);
+
+            // 現在の時間を設定
+            _inputTime = Time.time;
+
+            // 壁に重なったら
+            if (BeforeMoving(PlayerableMino))
+            {
+                // 上に１マス移動
+                PlayerableMino.transform.Translate(0f, 1f, 0f, Space.World);
+
+                // 着地判定を設定
+                IsGround = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーが壁に重なっているかを調べる処理
+    /// </summary>
+    /// <param name="mino">調べるミノ</param>
+    /// <returns>プレイヤーが壁に重なっているか</returns>
+    public bool BeforeMoving(GameObject mino)
     {
         // ミノのすべてのブロックを調べる
-        foreach(Transform _children in _mino.GetComponentInChildren<Transform>())
+        foreach(Transform children in mino.GetComponentInChildren<Transform>())
         {
             // 整数化
-            int _posX = Mathf.RoundToInt(_children.transform.position.x);
-            int _posY = Mathf.RoundToInt(_children.transform.position.y);
+            int posX = Mathf.RoundToInt(children.transform.position.x);
+            int posY = Mathf.RoundToInt(children.transform.position.y);
          
             // ミノがステージの範囲外だったら
-            if (_posX <= -1 || 10 <= _posX || _posY <= -20)
+            if (posX <= -1 || 10 <= posX || posY <= -20)
             {
                 return true;
             }
-            // 置いてるミノにめり込んだら
-            if (_posY < 0 && _fieldDataScript.FieldData[_posX, -_posY] != null)
+            // 置いてるミノに重なったら
+            if (posY < 0 && _fieldDataScript.FieldData[posX, -posY] != null)
             {
                 return true;
             }
@@ -331,12 +378,12 @@ public class PlayerControllerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// 置いたミノをフィールドデータに反映させる処理
+    /// 置いたミノをフィールドに反映させる処理
     /// </summary>
-    private void AddMinoToField()
+    private void UpdateMinoToField()
     {
         // ミノのすべてのブロックを調べる
-        foreach (Transform _children in PlayerMino.GetComponentInChildren<Transform>())
+        foreach (Transform _children in PlayerableMino.GetComponentInChildren<Transform>())
         {
             // 整数化
             int _posX = Mathf.RoundToInt(_children.transform.position.x);
@@ -346,14 +393,14 @@ public class PlayerControllerScript : MonoBehaviour
             if(_posY >= 0)
             {
                 // ゲームオーバー
-                _gameControllerScript.GameOver();
+                _gameControllerScript.GameOverScene();
                 return;
             }
             // 置いたミノをフィールドデータに反映させる
             _fieldDataScript.FieldData[_posX, -_posY] = _children.gameObject;
 
             // フィールドデータに置いたミノの情報を送る
-            _fieldDataScript.SetPlayerPosition(PlayerMino);
+            _fieldDataScript.SetPlayerPosition(PlayerableMino);
         }
     }
     /// <summary>
@@ -362,7 +409,7 @@ public class PlayerControllerScript : MonoBehaviour
     private void CutParentMino()
     {
         // 親についてる子オブジェクトを切り離す
-        PlayerMino.transform.DetachChildren();
+        PlayerableMino.transform.DetachChildren();
     }
     /// <summary>
     /// ミノを着地するまで落とす処理
@@ -370,12 +417,12 @@ public class PlayerControllerScript : MonoBehaviour
     private void GroundFall()
     {
         // プレイヤーが着地するまで
-        while (!BeforeMoving(PlayerMino))
+        while (!BeforeMoving(PlayerableMino))
         {
             // 下に１マス移動
-            PlayerMino.transform.Translate(0f, -1f, 0f, Space.World);
+            PlayerableMino.transform.Translate(0f, -1f, 0f, Space.World);
         }
         // １マス戻す
-        PlayerMino.transform.Translate(0f, 1f, 0f, Space.World);
+        PlayerableMino.transform.Translate(0f, 1f, 0f, Space.World);
     }
 }

@@ -11,6 +11,9 @@ public class GameControllerScript : MonoBehaviour
     // MINO_ERASE    ミノを消している状態
     // STOP          ゲームが一時停止されている状態
 
+    /// <summary>
+    /// ゲームの状態
+    /// </summary>
     public enum GameState
     {      
         MINO_CREATE,
@@ -19,20 +22,24 @@ public class GameControllerScript : MonoBehaviour
         STOP        
     }
 
-    
+    private GameState _gameState = GameState.MINO_CREATE;
+
+    // Nextの先頭のミノを取り出すスクリプト
     private CreateMinoScript _createMinoScript = default;
 
     // ランダム化された7種類のミノテーブルを作成するスクリプト
     private RandomSelectMinoScript _randomSelectMinoScript = default;
 
+    // プレイヤーを動かすスクリプト
     private PlayerControllerScript _playerControllerScript = default;
 
-    private FieldDataScript _fieldDataScript = default;
+    // フィールドを管理するスクリプト
+    private FieldDataScript _fieldDataScript = default; 
 
-    private GameState _gameState = GameState.MINO_CREATE;
-
+    // ミノを管理するスクリプト
     private MinoControllerScript _minoControllerScript = default;
 
+    // ゴーストミノを動かすスクリプト
     private GhostMinoScript _ghostMinoScript = default;
 
      public GameState GameType { get => _gameState; set => _gameState = value; }
@@ -40,18 +47,25 @@ public class GameControllerScript : MonoBehaviour
 
     private void Start()
     {
+        // MinoControllerを取得
         GameObject g = GameObject.Find("MinoController");
 
+        // CreateMinoScriptを取得
         _createMinoScript = g.GetComponent<CreateMinoScript>();
 
+        // RandomSelectMinoScriptを取得
         _randomSelectMinoScript = g.GetComponent<RandomSelectMinoScript>();
 
+        // MinoControllerScriptを取得
         _minoControllerScript = g.GetComponent<MinoControllerScript>();
 
+        // PlayerControllerScriptを取得
         _playerControllerScript = g.GetComponent<PlayerControllerScript>();
 
+        // GhostMinoScriptを取得
         _ghostMinoScript = g.GetComponent<GhostMinoScript>();
 
+        // FieldDataScriptを取得
         _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();
     }
 
@@ -79,13 +93,17 @@ public class GameControllerScript : MonoBehaviour
                 // Nextのミノを表示する
                 _minoControllerScript.NextDisplay();
 
+                // Holdをした後のクールタイム 
                 _minoControllerScript.HoldCount();
 
+                
                 _playerControllerScript.IsGround = false;
 
+                // ゲームの状態をミノを操作できる状態に変更する
                 GameType = GameState.MINO_MOVE;
 
                 break;
+
             // ミノを操作できるとき
             case GameState.MINO_MOVE:
 
@@ -93,23 +111,25 @@ public class GameControllerScript : MonoBehaviour
 
                 if (GameType == GameState.MINO_MOVE)
                 {
-                    _ghostMinoScript.GhostController();
+                    _ghostMinoScript.GhostMinoController();
                 }
 
                 break;
+
             // ミノを消す処理
             case GameState.MINO_ERASE:
 
                 _fieldDataScript.FieldMinoErase();
 
                 // プレイヤーミノを消す
-                Destroy(_playerControllerScript.PlayerMino);
+                Destroy(_playerControllerScript.PlayerableMino);
                 // ゴーストミノを消す
                 Destroy(_ghostMinoScript.GhostMino);
                
                 GameType = GameState.MINO_CREATE;
 
                 break;
+
             case GameState.STOP:
 
                 break;
@@ -118,7 +138,7 @@ public class GameControllerScript : MonoBehaviour
     /// <summary>
     /// ゲームオーバーシーンに遷移
     /// </summary>
-    public void GameOver()
+    public void GameOverScene()
     {
         SceneManager.LoadScene("GameOverScene");
     }
