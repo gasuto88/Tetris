@@ -1,8 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+/*----------------------------------------------------
+ * 
+ * 更新日　11月9日
+ * 
+ * 制作者　本木　大地
+ ---------------------------------------------------*/
 using UnityEngine;
 
-public class FieldDataScript : MonoBehaviour
+public class FieldManagerScript : MonoBehaviour
 {
     // スコアを表示するスクリプト
     private ScoreScript _scoreScript = default;
@@ -37,9 +41,13 @@ public class FieldDataScript : MonoBehaviour
     [SerializeField, Header("横一列をたくさん消したときの音")]
     private AudioClip _manyEraseSound = default;
 
+    //フィールドの情報
     public GameObject[,] FieldData { get => _fieldData; set => _fieldData = value; }
+    // フィールドの高さ
     public int Height { get => _height;}
-
+    /// <summary>
+    /// <para>更新前処理</para>
+    /// </summary>
     private void Start()
     {
         // ScoreScriptを取得
@@ -53,22 +61,25 @@ public class FieldDataScript : MonoBehaviour
     }
 
     /// <summary>
-    /// ミノが横一列埋まったら消す処理
+    /// <para>DeleteFieldMino</para>
+    /// <para>フィールドのミノを消す</para>
     /// </summary>
-    public void FieldMinoErase()
+    public void DeleteFieldMino()
     {
         // 横一列のブロック数
         int blockCount = 0;
         
         // 消した段数
-        int _eraseCount = 0;
+        int eraseCount = 0;
         // 操作しているミノがTミノ　かつ　Tスピンだったら
         if (_playerMino.tag == "TMino" && _tspinCheckScript.TSpinCheck(_playerMino)) 
         {
+            // Tスピンしている
             isTspin = true;
         }
         else
         {
+            // Tスピンしていない
             isTspin = false;
         }
 
@@ -122,13 +133,13 @@ public class FieldDataScript : MonoBehaviour
                 i++;
 
                 // 消した段数
-                _eraseCount++;
+                eraseCount++;
             }
             // 横一列のブロック数を初期化
             blockCount = 0;
         }
         // 4段消したら
-        if (_eraseCount >= 4)
+        if (eraseCount >= 4)
         {
             // TETRIS（技）を画面に表示する
             _scoreScript.ActionDisplay(TETRIS);
@@ -136,7 +147,7 @@ public class FieldDataScript : MonoBehaviour
             // 横一列をたくさん消したときの音
             _audioSource.PlayOneShot(_manyEraseSound);
         }
-        else if (_eraseCount >= 1)
+        else if (eraseCount >= 1)
         {
             // 横一列を消したときの音
             _audioSource.PlayOneShot(_eraseSound);
@@ -146,51 +157,35 @@ public class FieldDataScript : MonoBehaviour
         if (isTspin)
         {  
             // 消した段数が一段だったら
-            if (_eraseCount == 1)
+            if (eraseCount == 1)
             {
                 // TSINGLE（技）を画面に表示する
                 _scoreScript.ActionDisplay(TSINGLE);
             }
             // 消した段数が二段だったら
-            else if (_eraseCount == 2)
+            else if (eraseCount == 2)
             {
                 // TDOUBLE（技）を画面に表示する
                 _scoreScript.ActionDisplay(TDOUBLE);
             }
             // 消した段数が三段だったら
-            else if (_eraseCount == 3)
+            else if (eraseCount == 3)
             {
                 // TTRIPLE（技）を画面に表示する
                 _scoreScript.ActionDisplay(TTRIPLE);
             }
         }
-        //　スコアを画面に表示
-        _scoreScript.ScoreDisplay(_eraseCount);
-
-        ////デバック用
-        //for (int j = 0; j < 20; j++)
-        //{
-        //    string unti = "";
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        if (FieldData[j, i] != null)
-        //        {
-        //            unti += 1;
-        //        }
-        //        else
-        //        {
-        //            unti += 0;
-        //        }
-        //    }
-        //    Debug.LogWarning(unti);
-        //}
+        //　消した段数を送る
+        _scoreScript.ScoreDisplay(eraseCount);
     }
+
     /// <summary>
-    /// 操作しているミノを受け取る
+    /// <para>SetPlayerInfo</para>
+    /// <para>操作しているミノを受け取る</para>
     /// </summary>
-    /// <param name="_player">操作しているミノ</param>
-    public void SetPlayerInfo(GameObject _player)
+    /// <param name="player">操作しているミノ</param>
+    public void SetPlayerInfo(GameObject player)
     {
-        _playerMino = _player;
+        _playerMino = player;
     }
 }

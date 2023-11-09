@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 /*----------------------------------------------------------
 
-更新日　11月9日　0時
+更新日　11月9日
 
 制作者　本木　大地
 ----------------------------------------------------------*/
+using UnityEngine;
+
 public class PlayerControllerScript : MonoBehaviour
 {
     #region フィールド変数
@@ -34,6 +32,12 @@ public class PlayerControllerScript : MonoBehaviour
 
     // ミノの設置時間
     private const float SET_UP_TIME = 0.5f;
+
+    // フィールドの縦幅と横幅-------------------
+    private const int MIN_FIELD_WIDTH = -1;
+    private const int MAX_FIELD_WIDTH = 10;
+    private const int MAX_FIELD_HEIGHT = -20;
+    //----------------------------------------
 
     // 入力された回数
     private int _inputCount = 0;
@@ -86,7 +90,7 @@ public class PlayerControllerScript : MonoBehaviour
     // -------------------------------------------
 
     // フィールドを管理するスクリプト
-    private FieldDataScript _fieldDataScript = default;
+    private FieldManagerScript _fieldManagerScript = default;
 
     // ミノを管理するスクリプト
     private MinoControllerScript _minoControllerScript = default;
@@ -114,7 +118,7 @@ public class PlayerControllerScript : MonoBehaviour
     private void Start()
     {
         // FieldDataScriptを取得
-        _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();
+        _fieldManagerScript = GameObject.Find("Stage").GetComponent<FieldManagerScript>();
 
         // MinoControllerScriptを取得
         _minoControllerScript = GetComponent<MinoControllerScript>();
@@ -223,7 +227,7 @@ public class PlayerControllerScript : MonoBehaviour
     /// </summary>
     private void HardDrop()
     {
-        // 着地音
+        // 着地音を再生
         _audioSource.PlayOneShot(_groundSound);
 
         // 着地するまで下に落とす
@@ -235,8 +239,8 @@ public class PlayerControllerScript : MonoBehaviour
         // 親オブジェ（回転軸)と子オブジェ（ミノ）の親子関係を解除する
         CutParentMino();
 
-        // ゲームの状態を置いたミノを消す処理に切り替える
-        _gameControllerScript.GameType = GameControllerScript.GameState.MINO_ERASE;
+        // ゲームの状態をミノを消している状態に変更する
+        _gameControllerScript.GameType = GameControllerScript.GameState.MINO_DELETE;
     }
 
     /// <summary>
@@ -300,7 +304,7 @@ public class PlayerControllerScript : MonoBehaviour
     /// <param name="input">左右入力</param>
     private void RotationMove(int input)
     {
-        // プレイヤーの回転音
+        // 回転音を再生
         _audioSource.PlayOneShot(_rotationSound);
 
         // スーパーローテーションをしてくれる処理（プレイヤーミノ、左入力）
@@ -313,7 +317,7 @@ public class PlayerControllerScript : MonoBehaviour
     /// </summary>
     private void Hold()
     {
-        // Hold音
+        // Hold音を再生
         _audioSource.PlayOneShot(_holdSound);
 
         // Holdの中身を出し入れする（操作できるミノ、Hold音）
@@ -329,7 +333,6 @@ public class PlayerControllerScript : MonoBehaviour
         // 着地している
         if (IsGround)
         {
-            Debug.LogWarning(_inputCount);
             // 着地した瞬間
             if (_groundTime <= 0)
             {
@@ -380,14 +383,13 @@ public class PlayerControllerScript : MonoBehaviour
                     _groundTime = 0;
                 }
             }
-            // 一定時間地面に着地していたら
+            // 時間が経過したら
             if (_groundTime >= SET_UP_TIME)
             {
-                Debug.LogWarning(_groundTime);
-                // プレイヤーの着地音
+                // 着地音を再生
                 _audioSource.PlayOneShot(_groundSound);
 
-                // プレイヤーを着地するまで下に落とす
+                // 着地するまで下に落とす
                 GroundFall();
 
                 // 置いたミノをフィールドデータに反映させる処理
@@ -396,8 +398,8 @@ public class PlayerControllerScript : MonoBehaviour
                 // 親オブジェ（回転軸)と子オブジェ（ミノ）の親子関係を解除する
                 CutParentMino();
 
-                // ゲームの状態を置いたミノを消す処理に切り替える
-                _gameControllerScript.GameType = GameControllerScript.GameState.MINO_ERASE;
+                // ゲームの状態をミノを消している状態に変更する
+                _gameControllerScript.GameType = GameControllerScript.GameState.MINO_DELETE;
 
                 return;
             }
@@ -431,13 +433,13 @@ public class PlayerControllerScript : MonoBehaviour
             int posY = Mathf.RoundToInt(children.transform.position.y);
          
             // ミノがステージの範囲外だったら
-            if (posX <= -1 || 10 <= posX || posY <= -20)
+            if (posX <= MIN_FIELD_WIDTH || MAX_FIELD_WIDTH <= posX || posY <= MAX_FIELD_HEIGHT)
             {
                 // 重なっている
                 return true;
             }
             // 置いてるミノに重なったら
-            if (posY < 0 && _fieldDataScript.FieldData[posX, -posY] != null)
+            if (posY < 0 && _fieldManagerScript.FieldData[posX, -posY] != null)
             {
                 // 重なっている
                 return true;
@@ -468,10 +470,10 @@ public class PlayerControllerScript : MonoBehaviour
                 return;
             }
             // 置いたミノをフィールドに反映させる
-            _fieldDataScript.FieldData[posX, -posY] = children.gameObject;            
+            _fieldManagerScript.FieldData[posX, -posY] = children.gameObject;            
         }
         // フィールドに置いたミノを送る
-        _fieldDataScript.SetPlayerInfo(PlayerableMino);
+        _fieldManagerScript.SetPlayerInfo(PlayerableMino);
     }
 
     /// <summary>

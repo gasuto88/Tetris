@@ -1,30 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
+/*----------------------------------------------------------
+
+更新日　11月9日
+
+制作者　本木　大地
+----------------------------------------------------------*/
 using UnityEngine;
 
 public class SuperRotationScript : MonoBehaviour
 {
+    // 通常のミノを回転するスクリプト
     private NormalMinoRotationScript _normalMinoRotationScript = default;
 
+    // Iミノを回転するスクリプト
     private IMinoRotationScript _iMinoRotationScript = default;
 
+    /// <summary>
+    /// <para>更新前処理</para>
+    /// </summary>
     private void Start()
     {
+        // NormalMinoRotationScriptを取得
         _normalMinoRotationScript = GetComponent<NormalMinoRotationScript>();
 
+        // IMinoRotationScriptを取得
         _iMinoRotationScript = GetComponent<IMinoRotationScript>();
     }
 
+    /// <summary>
+    /// <para>SuperRotation</para>
+    /// <para>スーパーローテーションをする</para>
+    /// </summary>
+    /// <param name="_playerMino">操作できるミノ</param>
+    /// <param name="_input">左右の入力</param>
     public void SuperRotation(GameObject _playerMino,int _input)
     {
-        // プレイヤーがTミノとIミノ以外だったら
+        // プレイヤーがIミノとOミノ以外だったら
         if (_playerMino.tag != "IMino" && _playerMino.tag != "OMino")
         {
+            // 通常のミノを回転する
             _normalMinoRotationScript.NormalMinoRotation(_playerMino, _input);
         }
         // プレイヤーがIミノだったら
         else if(_playerMino.tag == "IMino")
         {
+            // Iミノを回転する
             _iMinoRotationScript.IMinoRotation(_playerMino,_input);
         }
     }

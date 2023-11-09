@@ -1,3 +1,9 @@
+/*--------------------------------------------
+ *
+ * 更新日 11月9日
+ * 
+ * 制作者　本木　大地
+ -------------------------------------------*/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +20,12 @@ public class ScoreScript : MonoBehaviour
     // 現在のスコア
     private int _scoreCount = default;
 
+    // ポイントの増える倍率
+    private const int UP_POINT = 100;
+
+    /// <summary>
+    /// <para>更新前処理</para>
+    /// </summary>
     private void Start()
     {
         // TextMeshProUGUIを取得
@@ -23,18 +35,21 @@ public class ScoreScript : MonoBehaviour
         _actionText = GameObject.Find("ActionText").GetComponent<TextMeshProUGUI>();
     }
     /// <summary>
-    /// スコアを画面に表示する処理
+    /// <para>ScoreDisplay</para>
+    /// <para>スコアを画面に表示する</para>
     /// </summary>
     /// <param name="_scoreCount">消した段数</param>
     public void ScoreDisplay(int _eraseCount)
     {
-        _scoreCount += _eraseCount * 100;
+        // 消した段数分のポイントを加算
+        _scoreCount += _eraseCount * UP_POINT;
 
         // スコアを画面に表示
         _scoreText.text = "SCORE : " + _scoreCount.ToString();        
     }
     /// <summary>
-    /// 技（TETRIS、TSPINなど）を画面に表示する処理
+    /// <para>ActionDisplay</para>
+    /// <para>技（TETRIS、TSPINなど）を画面に表示する</para>
     /// </summary>
     /// <param name="_action">技の名前</param>
     public void ActionDisplay(string _action)
@@ -46,7 +61,8 @@ public class ScoreScript : MonoBehaviour
         StartCoroutine(ActionCoroutine());
     }
     /// <summary>
-    /// テキストの表示を消す処理
+    /// <para>ActionCoroutine</para>
+    /// <para>テキストの表示を消す</para>
     /// </summary>
     /// <returns></returns>
     private IEnumerator ActionCoroutine()

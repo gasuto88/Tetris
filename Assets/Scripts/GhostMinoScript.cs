@@ -1,3 +1,9 @@
+/*----------------------------------------------------------
+
+更新日　11月9日
+
+制作者　本木　大地
+----------------------------------------------------------*/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,14 +20,17 @@ public class GhostMinoScript : MonoBehaviour
     private PlayerControllerScript _playerControllerScript = default;
 
     // フィールドを管理するスクリプト
-    private FieldDataScript _fieldDataScript = default;
+    private FieldManagerScript _fieldDataScript = default;
 
     // ゲームの状態を管理するスクリプト
     private GameControllerScript _gameControllerScript = default;
 
+    // ゴーストミノ
     public GameObject GhostMino { get => _ghostMino; set => _ghostMino = value; }
 
-   
+   /// <summary>
+   /// <para>更新前処理</para>
+   /// </summary>
     private void Start()
     {
         // PlayerControllerScriptを取得
@@ -31,34 +40,35 @@ public class GhostMinoScript : MonoBehaviour
         _gameControllerScript = GameObject.Find("GameController").GetComponent<GameControllerScript>();
 
         // FieldDataScriptを取得
-        _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldDataScript>();
+        _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldManagerScript>();
     }
     /// <summary>
-    /// ゴーストミノの挙動
+    /// <para>GhostMinoMove</para>
+    /// <para>ゴーストミノを動かす</para>
     /// </summary>
-    public void GhostMinoController()
+    public void GhostMinoMove()
     {
-        // ゴーストミノの座標をプレイヤーミノと同じにする
+        // プレイヤーの座標を設定
         GhostMino.transform.position = _playerControllerScript.PlayerableMino.transform.position;
 
-        // ゴーストミノが下に移動した回数を初期化
+        // 下に移動した回数を初期化
         _heightCount = default;
 
-        // プレイヤーが壁に重なってない　かつ　ゴーストミノが下に移動した回数がフィールドの高さより少ないとき
+        // プレイヤーが壁に重なってない　かつ　下に移動した回数がフィールドの高さより少ないとき
         while (!_playerControllerScript.CheckCollision(_ghostMino) &&
             _heightCount <= _fieldDataScript.Height)
         {
             // ゴーストミノを下に１マス移動
             _ghostMino.transform.Translate(0f, -1f, 0f, Space.World);
 
-            // ゴーストミノが下に移動した回数を１増やす
+            //下に移動した回数を加算
             _heightCount++;
             
         }
         // ゴーストミノを上に１マス移動
         _ghostMino.transform.Translate(0f, 1f, 0f, Space.World);
 
-        // ゴーストミノの回転をプレイヤーミノと同じにする
+        // プレイヤーの角度を設定
         GhostMino.transform.rotation = _playerControllerScript.PlayerableMino.transform.rotation;
 
     }

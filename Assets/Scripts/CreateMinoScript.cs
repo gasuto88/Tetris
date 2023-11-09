@@ -1,7 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*---------------------------------------------------
+ * 
+ * 更新日　11月9日
+ * 制作者　本木　大地
+-------------------------------------------------- */
 public class CreateMinoScript : MonoBehaviour
 {
     // ランダム化された7種類のミノテーブルを作成するスクリプト
@@ -25,6 +29,9 @@ public class CreateMinoScript : MonoBehaviour
     // ゴーストミノの色
     private Color _ghostColor = default;
 
+    /// <summary>
+    /// <para>更新前処理</para>
+    /// </summary>
     private void Start()
     {
         // ゴーストの色を設定
@@ -45,32 +52,33 @@ public class CreateMinoScript : MonoBehaviour
         // GhostMinoScriptを取得
         _ghostMinoScript = GetComponent<GhostMinoScript>();    
     }
-    
+
     /// <summary>
-    /// Nextの先頭のミノを取り出す
+    /// <para>FetchNextMino</para>
+    /// <para>Nextの先頭のミノを取り出す</para>
     /// </summary>
-    public void NextMinoTakeOut()
+    public void FetchNextMino()
     {
-        // 先頭のミノがOとIミノじゃなかったら
+        // OとIミノじゃなかったら
         if (_randomSelectMinoScript.MinoList[0].tag != "OMino" && _randomSelectMinoScript.MinoList[0].tag != "IMino")
         {
-            // 先頭のミノを生成座標に移動する
+            // 生成座標に移動する
             _randomSelectMinoScript.MinoList[0].transform.position = _minoSpawnTransform.position;
         }
-        // 先頭のミノがOとIミノのとき
+        // OとIミノのとき
         else
         {
-            // 先頭のミノを生成座標に移動する
+            // 生成座標に移動する
             _randomSelectMinoScript.MinoList[0].transform.position = _oIMinoSpawnTransform.position;
         }
 
-        // 先頭のミノをプレイヤーミノに設定する 
+        // 操作できるミノに設定する 
         _playerControllerScript.PlayerableMino = _randomSelectMinoScript.MinoList[0];
 
-        // 先頭のミノをゴーストミノに設定する
+        // ゴーストミノに設定する
         _ghostMinoScript.GhostMino = _randomSelectMinoScript.GhostList[0];
 
-        // ゴーストミノと操作ミノ
+        // ゴーストミノに操作できるミノの座標を設定する
         _ghostMinoScript.GhostMino.transform.position =
             _playerControllerScript.PlayerableMino.transform.position;
 
