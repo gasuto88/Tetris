@@ -87,7 +87,6 @@ public class IMinoRotationScript : MonoBehaviour
                         _playerMino.transform.rotation = _playerRotationTemp;
                         break;
                     // -----------------------------------------------------------------
-
                 }
                 // ƒ~ƒm‚ªƒuƒƒbƒN‚Éd‚È‚Á‚Ä‚¢‚È‚¯‚ê‚Î
                 if (!_playerControllerScript.CheckCollision(_playerMino))
@@ -152,7 +151,6 @@ public class IMinoRotationScript : MonoBehaviour
                         {
                             _playerMino.transform.Translate(0f, -1f, 0f, Space.World);
                         }
-
                         break;
                     // -----------------------------------------------------------------
 
@@ -179,7 +177,6 @@ public class IMinoRotationScript : MonoBehaviour
                         _playerMino.transform.rotation = _playerRotationTemp;
                         break;
                     // -----------------------------------------------------------------
-
                 }
                 // ƒ~ƒm‚ªƒuƒƒbƒN‚Éd‚È‚Á‚Ä‚¢‚È‚¯‚ê‚Î
                 if (!_playerControllerScript.CheckCollision(_playerMino))
@@ -213,8 +210,7 @@ public class IMinoRotationScript : MonoBehaviour
                         else if (_input > 0)
                         {
                             _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
-                        }
-                        
+                        }                    
                         break;
                     // -----------------------------------------------------------------
 
@@ -224,7 +220,7 @@ public class IMinoRotationScript : MonoBehaviour
                         break;
                     // -----------------------------------------------------------------
 
-                    // ‘æ‚PğŒ---------------------------------------------------------
+                    // ‘æ‚SğŒ---------------------------------------------------------
                     case 4:
                         // ¶“ü—Í‚ğ‚µ‚Ä‚¢‚½‚ç
                         if (_input < 0)
@@ -239,7 +235,7 @@ public class IMinoRotationScript : MonoBehaviour
                         break;
                     // -----------------------------------------------------------------
 
-                    // ‘æ‚PğŒ---------------------------------------------------------
+                    // ‘æ‚TğŒ---------------------------------------------------------
                     case 5:
                         // ¶“ü—Í‚ğ‚µ‚Ä‚¢‚½‚ç
                         if (_input < 0)
@@ -254,7 +250,7 @@ public class IMinoRotationScript : MonoBehaviour
                         break;
                     // ----------------------------------------------------------------
 
-                    // ‘æ‚PğŒ---------------------------------------------------------
+                    // ÅIˆ—---------------------------------------------------------
                     case 6:
                         // ƒ~ƒm‚ğ‰Šú‚Ìó‘Ô‚É–ß‚·
                         _playerMino.transform.position = _playerPositionTemp;
@@ -283,7 +279,7 @@ public class IMinoRotationScript : MonoBehaviour
                         break;
                     // -----------------------------------------------------------------
 
-                    // ‘æ‚PğŒ---------------------------------------------------------
+                    // ‘æ‚QğŒ---------------------------------------------------------
                     case 2:
                         // ¶“ü—Í‚ğ‚µ‚Ä‚¢‚½‚ç
                         if (_input < 0)
@@ -298,7 +294,7 @@ public class IMinoRotationScript : MonoBehaviour
                         break;
                     // -----------------------------------------------------------------
 
-                    // ‘æ‚PğŒ---------------------------------------------------------
+                    // ‘æ‚RğŒ---------------------------------------------------------
                     case 3:
                         // ¶“ü—Í‚ğ‚µ‚Ä‚¢‚½‚ç
                         if (_input < 0)
@@ -313,7 +309,7 @@ public class IMinoRotationScript : MonoBehaviour
                         break;
                     // -----------------------------------------------------------------
 
-                    // ‘æ‚PğŒ---------------------------------------------------------
+                    // ‘æ‚SğŒ---------------------------------------------------------
                     case 4:
                         // ¶“ü—Í‚ğ‚µ‚Ä‚¢‚½‚ç
                         if (_input < 0)
@@ -324,12 +320,11 @@ public class IMinoRotationScript : MonoBehaviour
                         else if (_input > 0)
                         {
                             _playerMino.transform.Translate(3f, 1f, 0f, Space.World);
-                        }
-                        
+                        }                       
                         break;
                     // -----------------------------------------------------------------
 
-                    // ‘æ‚PğŒ---------------------------------------------------------
+                    // ‘æ‚TğŒ---------------------------------------------------------
                     case 5:
                         // ¶“ü—Í‚ğ‚µ‚Ä‚¢‚½‚ç
                         if (_input < 0)
@@ -344,14 +339,13 @@ public class IMinoRotationScript : MonoBehaviour
                         break;
                     // -----------------------------------------------------------------
 
-                    // ‘æ‚PğŒ---------------------------------------------------------
+                    // ÅIˆ—---------------------------------------------------------
                     case 6:
                         // ƒ~ƒm‚ğ‰Šú‚Ìó‘Ô‚É–ß‚·
                         _playerMino.transform.position = _playerPositionTemp;
                         _playerMino.transform.rotation = _playerRotationTemp;
                         break;
                     // -----------------------------------------------------------------
-
                 }
                 // ƒ~ƒm‚ªƒuƒƒbƒN‚Éd‚È‚Á‚Ä‚¢‚È‚¯‚ê‚Î
                 if (!_playerControllerScript.CheckCollision(_playerMino))
