@@ -24,18 +24,18 @@ public class IMinoRotationScript : MonoBehaviour
     /// <para>IMinoRotation</para>
     /// <para>Iミノのスーパーローテーションをする</para>
     /// </summary>
-    /// <param name="_playerMino">操作できるミノ</param>
-    /// <param name="_input">左右の入力</param>
-    public void IMinoRotation(GameObject _playerMino, int _input)
+    /// <param name="playerMino">操作できるミノ</param>
+    /// <param name="input">左右の入力</param>
+    public void IMinoRotation(GameObject playerMino, int input)
     {
         // 操作できるミノの座標を保管
-        Vector3 _playerPositionTemp = _playerMino.transform.position;
+        Vector3 playerPositionTemp = playerMino.transform.position;
 
         // 操作できるミノの角度を保管
-        Quaternion _playerRotationTemp = _playerMino.transform.rotation;
+        Quaternion playerRotationTemp = playerMino.transform.rotation;
 
         // ミノが上をむいているとき
-        if (_playerMino.transform.rotation.eulerAngles.z == 0)
+        if (playerMino.transform.rotation.eulerAngles.z == 0)
         {
             for (int i = 1; i <= 6; i++)
             {
@@ -43,53 +43,53 @@ public class IMinoRotationScript : MonoBehaviour
                 {
                     // 第１条件---------------------------------------------------------
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f, Space.World);
+                        playerMino.transform.Rotate(0f, 0f, -input * 90f, Space.World);
                         break;
                     // -----------------------------------------------------------------
 
                     // 第２条件---------------------------------------------------------
                     case 2:
                         // 左入力をしていたら
-                        if(_input < 0)
+                        if(input < 0)
                         {
-                            _playerMino.transform.Translate(-2f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(-2f, 0f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(-1f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(-1f, 0f, 0f, Space.World);
                         }                        
                         break;
                     // -----------------------------------------------------------------
 
                     // 第３条件---------------------------------------------------------
                     case 3:
-                        _playerMino.transform.Translate(3f, 0f, 0f, Space.World);
+                        playerMino.transform.Translate(3f, 0f, 0f, Space.World);
                         break;
                     // -----------------------------------------------------------------
 
                     // 第４条件---------------------------------------------------------
                     case 4:
-                        _playerMino.transform.Translate(-3f, -_input, 0f, Space.World);
+                        playerMino.transform.Translate(-3f, -input, 0f, Space.World);
                         break;
                     // -----------------------------------------------------------------
 
                     // 第５条件---------------------------------------------------------
                     case 5:
-                        _playerMino.transform.Translate(3f, _input * 3f, 0f, Space.World);
+                        playerMino.transform.Translate(3f, input * 3f, 0f, Space.World);
                         break;
                     // -----------------------------------------------------------------
 
                     // 最終処理---------------------------------------------------------
                     case 6:
                         // ミノを初期の状態に戻す
-                        _playerMino.transform.position = _playerPositionTemp;
-                        _playerMino.transform.rotation = _playerRotationTemp;
+                        playerMino.transform.position = playerPositionTemp;
+                        playerMino.transform.rotation = playerRotationTemp;
                         break;
                     // -----------------------------------------------------------------
                 }
                 // ミノがブロックに重なっていなければ
-                if (!_playerControllerScript.CheckCollision(_playerMino))
+                if (!_playerControllerScript.CheckCollision(playerMino))
                 {
                     // 処理を終了する
                     break;
@@ -97,7 +97,7 @@ public class IMinoRotationScript : MonoBehaviour
             }
         }
         // ミノが左をむいているとき
-        else if (_playerMino.transform.rotation.eulerAngles.z == 90)
+        else if (playerMino.transform.rotation.eulerAngles.z == 90)
         {
             for (int i = 1; i <= 6; i++)
             {
@@ -105,21 +105,21 @@ public class IMinoRotationScript : MonoBehaviour
                 {
                     // 第１条件---------------------------------------------------------
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f, Space.World);
+                        playerMino.transform.Rotate(0f, 0f, -input * 90f, Space.World);
                         break;
                     // -----------------------------------------------------------------
 
                     // 第２条件---------------------------------------------------------
                     case 2:
                         // 左入力をしていたら
-                        if (_input < 0)
+                        if (input < 0)
                         {
-                            _playerMino.transform.Translate(-2f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(-2f, 0f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(1f, 0f, 0f, Space.World);
                         }
                         break;
                     // -----------------------------------------------------------------
@@ -127,14 +127,14 @@ public class IMinoRotationScript : MonoBehaviour
                     // 第３条件---------------------------------------------------------
                     case 3:
                         // 左入力をしていたら
-                        if (_input < 0)
+                        if (input < 0)
                         {
-                            _playerMino.transform.Translate(3f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(3f, 0f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(-3f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(-3f, 0f, 0f, Space.World);
                         }
                         break;
                     // -----------------------------------------------------------------
@@ -142,14 +142,14 @@ public class IMinoRotationScript : MonoBehaviour
                     // 第４条件---------------------------------------------------------
                     case 4:
                         // 左入力をしていたら
-                        if (_input < 0)
+                        if (input < 0)
                         {
-                            _playerMino.transform.Translate(0f, -2f, 0f, Space.World);
+                            playerMino.transform.Translate(0f, -2f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(0f, -1f, 0f, Space.World);
+                            playerMino.transform.Translate(0f, -1f, 0f, Space.World);
                         }
                         break;
                     // -----------------------------------------------------------------
@@ -157,14 +157,14 @@ public class IMinoRotationScript : MonoBehaviour
                     // 第５条件---------------------------------------------------------
                     case 5:
                         // 左入力をしていたら
-                        if (_input < 0)
+                        if (input < 0)
                         {
-                            _playerMino.transform.Translate(-3f, 3f, 0f, Space.World);
+                            playerMino.transform.Translate(-3f, 3f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(3f, 3f, 0f, Space.World);
+                            playerMino.transform.Translate(3f, 3f, 0f, Space.World);
                         }
 
                         break;
@@ -173,13 +173,13 @@ public class IMinoRotationScript : MonoBehaviour
                     //最終処理---------------------------------------------------------
                     case 6:
                         // ミノを初期の状態に戻す
-                        _playerMino.transform.position = _playerPositionTemp;
-                        _playerMino.transform.rotation = _playerRotationTemp;
+                        playerMino.transform.position = playerPositionTemp;
+                        playerMino.transform.rotation = playerRotationTemp;
                         break;
                     // -----------------------------------------------------------------
                 }
                 // ミノがブロックに重なっていなければ
-                if (!_playerControllerScript.CheckCollision(_playerMino))
+                if (!_playerControllerScript.CheckCollision(playerMino))
                 {
                     // 処理を終了する
                     break;
@@ -187,7 +187,7 @@ public class IMinoRotationScript : MonoBehaviour
             }
         }
         // ミノが下をむいているとき
-        else if (_playerMino.transform.rotation.eulerAngles.z == 180)
+        else if (playerMino.transform.rotation.eulerAngles.z == 180)
         {
             for (int i = 1; i <= 6; i++)
             {
@@ -195,42 +195,42 @@ public class IMinoRotationScript : MonoBehaviour
                 {
                     // 第１条件---------------------------------------------------------
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f, Space.World);
+                        playerMino.transform.Rotate(0f, 0f, -input * 90f, Space.World);
                         break;
                     // -----------------------------------------------------------------
 
                     // 第２条件---------------------------------------------------------
                     case 2:
                         // 左入力をしていたら
-                        if (_input < 0)
+                        if (input < 0)
                         {
-                            _playerMino.transform.Translate(2f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(2f, 0f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(1f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(1f, 0f, 0f, Space.World);
                         }                    
                         break;
                     // -----------------------------------------------------------------
 
                     // 第３条件---------------------------------------------------------
                     case 3:
-                        _playerMino.transform.Translate(-3f, 0f, 0f, Space.World);
+                        playerMino.transform.Translate(-3f, 0f, 0f, Space.World);
                         break;
                     // -----------------------------------------------------------------
 
                     // 第４条件---------------------------------------------------------
                     case 4:
                         // 左入力をしていたら
-                        if (_input < 0)
+                        if (input < 0)
                         {
-                            _playerMino.transform.Translate(3f, 1f, 0f, Space.World);
+                            playerMino.transform.Translate(3f, 1f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(3f, -2f, 0f, Space.World);
+                            playerMino.transform.Translate(3f, -2f, 0f, Space.World);
                         }                       
                         break;
                     // -----------------------------------------------------------------
@@ -238,14 +238,14 @@ public class IMinoRotationScript : MonoBehaviour
                     // 第５条件---------------------------------------------------------
                     case 5:
                         // 左入力をしていたら
-                        if (_input < 0)
+                        if (input < 0)
                         {
-                            _playerMino.transform.Translate(-3f, 1f, 0f, Space.World);
+                            playerMino.transform.Translate(-3f, 1f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(3f, 3f, 0f, Space.World);
+                            playerMino.transform.Translate(3f, 3f, 0f, Space.World);
                         }
                         break;
                     // ----------------------------------------------------------------
@@ -253,13 +253,13 @@ public class IMinoRotationScript : MonoBehaviour
                     // 最終処理---------------------------------------------------------
                     case 6:
                         // ミノを初期の状態に戻す
-                        _playerMino.transform.position = _playerPositionTemp;
-                        _playerMino.transform.rotation = _playerRotationTemp;
+                        playerMino.transform.position = playerPositionTemp;
+                        playerMino.transform.rotation = playerRotationTemp;
                         break;
                     // -----------------------------------------------------------------
                 }
                 // ミノがブロックに重なっていなければ
-                if (!_playerControllerScript.CheckCollision(_playerMino))
+                if (!_playerControllerScript.CheckCollision(playerMino))
                 {
                     // 処理を終了する
                     break;
@@ -267,7 +267,7 @@ public class IMinoRotationScript : MonoBehaviour
             }
         }
         // ミノが右をむいているとき
-        else if (_playerMino.transform.rotation.eulerAngles.z == 270)
+        else if (playerMino.transform.rotation.eulerAngles.z == 270)
         {
             for (int i = 1; i <= 6; i++)
             {
@@ -275,21 +275,21 @@ public class IMinoRotationScript : MonoBehaviour
                 {
                     // 第１条件---------------------------------------------------------
                     case 1:
-                        _playerMino.transform.Rotate(0f, 0f, -_input * 90f, Space.World);
+                        playerMino.transform.Rotate(0f, 0f, -input * 90f, Space.World);
                         break;
                     // -----------------------------------------------------------------
 
                     // 第２条件---------------------------------------------------------
                     case 2:
                         // 左入力をしていたら
-                        if (_input < 0)
+                        if (input < 0)
                         {
-                            _playerMino.transform.Translate(-1f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(-1f, 0f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(2f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(2f, 0f, 0f, Space.World);
                         }
                         break;
                     // -----------------------------------------------------------------
@@ -297,14 +297,14 @@ public class IMinoRotationScript : MonoBehaviour
                     // 第３条件---------------------------------------------------------
                     case 3:
                         // 左入力をしていたら
-                        if (_input < 0)
+                        if (input < 0)
                         {
-                            _playerMino.transform.Translate(3f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(3f, 0f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(-3f, 0f, 0f, Space.World);
+                            playerMino.transform.Translate(-3f, 0f, 0f, Space.World);
                         }
                         break;
                     // -----------------------------------------------------------------
@@ -312,14 +312,14 @@ public class IMinoRotationScript : MonoBehaviour
                     // 第４条件---------------------------------------------------------
                     case 4:
                         // 左入力をしていたら
-                        if (_input < 0)
+                        if (input < 0)
                         {
-                            _playerMino.transform.Translate(-3f, 2f, 0f, Space.World);
+                            playerMino.transform.Translate(-3f, 2f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(3f, 1f, 0f, Space.World);
+                            playerMino.transform.Translate(3f, 1f, 0f, Space.World);
                         }                       
                         break;
                     // -----------------------------------------------------------------
@@ -327,14 +327,14 @@ public class IMinoRotationScript : MonoBehaviour
                     // 第５条件---------------------------------------------------------
                     case 5:
                         // 左入力をしていたら
-                        if (_input < 0)
+                        if (input < 0)
                         {
-                            _playerMino.transform.Translate(3f, -3f, 0f, Space.World);
+                            playerMino.transform.Translate(3f, -3f, 0f, Space.World);
                         }
                         // 右入力をしていたら
-                        else if (_input > 0)
+                        else if (input > 0)
                         {
-                            _playerMino.transform.Translate(-3f, -3f, 0f, Space.World);
+                            playerMino.transform.Translate(-3f, -3f, 0f, Space.World);
                         }
                         break;
                     // -----------------------------------------------------------------
@@ -342,13 +342,13 @@ public class IMinoRotationScript : MonoBehaviour
                     // 最終処理---------------------------------------------------------
                     case 6:
                         // ミノを初期の状態に戻す
-                        _playerMino.transform.position = _playerPositionTemp;
-                        _playerMino.transform.rotation = _playerRotationTemp;
+                        playerMino.transform.position = playerPositionTemp;
+                        playerMino.transform.rotation = playerRotationTemp;
                         break;
                     // -----------------------------------------------------------------
                 }
                 // ミノがブロックに重なっていなければ
-                if (!_playerControllerScript.CheckCollision(_playerMino))
+                if (!_playerControllerScript.CheckCollision(playerMino))
                 {
                     // 処理を終了する
                     break;

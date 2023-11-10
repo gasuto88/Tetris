@@ -1,6 +1,8 @@
 /*----------------------------------------------------
+ * FieldManagerScript.cs
+ * フィールドを管理する
  * 
- * 更新日　11月9日
+ * 作成日　11月10日
  * 
  * 制作者　本木　大地
  ---------------------------------------------------*/
@@ -15,13 +17,21 @@ public class FieldManagerScript : MonoBehaviour
     private GameObject[,] _fieldData = new GameObject[10,20];
 
     // フィールドの高さ
-    private int _height = 19;
+    private const int HEIGHT = 19;
 
-    // 技の名前--------------------------------------
+    //private const int
+
+    // 特殊消しの名前 -------------------------------
     private const string TETRIS = "TETRIS";
     private const string TSINGLE = "TSPIN - SINGLE";
     private const string TDOUBLE = "TSPIN - DOUBLE";
     private const string TTRIPLE = "TSPIN - TRIPLE";
+    // ----------------------------------------------
+
+    // 消した段数 -----------------------------------
+    private const int DELETE_ONE = 1;
+    private const int DELETE_TWO = 2;
+    private const int DELETE_THREE = 3;
     // ----------------------------------------------
 
     // Tスピンかどうか
@@ -44,7 +54,7 @@ public class FieldManagerScript : MonoBehaviour
     //フィールドの情報
     public GameObject[,] FieldData { get => _fieldData; set => _fieldData = value; }
     // フィールドの高さ
-    public int Height { get => _height;}
+    public int Height { get => HEIGHT;}
     /// <summary>
     /// <para>更新前処理</para>
     /// </summary>
@@ -70,7 +80,8 @@ public class FieldManagerScript : MonoBehaviour
         int blockCount = 0;
         
         // 消した段数
-        int eraseCount = 0;
+        int deleteCount = 0;
+
         // 操作しているミノがTミノ　かつ　Tスピンだったら
         if (_playerMino.tag == "TMino" && _tspinCheckScript.TSpinCheck(_playerMino)) 
         {
@@ -84,7 +95,7 @@ public class FieldManagerScript : MonoBehaviour
         }
 
         // フィールドの一番下から一つずつ上に進む
-        for (int i = 19; i > -1; i--)
+        for (int i = HEIGHT; i >= 0; i--)
         {
             // フィールドの一番左から一つずつ右に進む
             for (int j = 0; j < 10; j++)
@@ -133,13 +144,13 @@ public class FieldManagerScript : MonoBehaviour
                 i++;
 
                 // 消した段数
-                eraseCount++;
+                deleteCount++;
             }
             // 横一列のブロック数を初期化
             blockCount = 0;
         }
         // 4段消したら
-        if (eraseCount >= 4)
+        if (deleteCount >= 4)
         {
             // TETRIS（技）を画面に表示する
             _scoreScript.ActionDisplay(TETRIS);
@@ -147,7 +158,7 @@ public class FieldManagerScript : MonoBehaviour
             // 横一列をたくさん消したときの音
             _audioSource.PlayOneShot(_manyEraseSound);
         }
-        else if (eraseCount >= 1)
+        else if (deleteCount >= 1)
         {
             // 横一列を消したときの音
             _audioSource.PlayOneShot(_eraseSound);
@@ -155,28 +166,36 @@ public class FieldManagerScript : MonoBehaviour
 
         // Ｔスピンだったら
         if (isTspin)
-        {  
-            // 消した段数が一段だったら
-            if (eraseCount == 1)
+        {
+            // 消した段数によって分ける
+            switch (deleteCount)
             {
-                // TSINGLE（技）を画面に表示する
-                _scoreScript.ActionDisplay(TSINGLE);
-            }
-            // 消した段数が二段だったら
-            else if (eraseCount == 2)
-            {
-                // TDOUBLE（技）を画面に表示する
-                _scoreScript.ActionDisplay(TDOUBLE);
-            }
-            // 消した段数が三段だったら
-            else if (eraseCount == 3)
-            {
-                // TTRIPLE（技）を画面に表示する
-                _scoreScript.ActionDisplay(TTRIPLE);
+                // 1段
+                case DELETE_ONE:
+
+                    // TSINGLEを画面に表示する
+                    _scoreScript.ActionDisplay(TSINGLE);
+
+                    break;
+
+                // 2段
+                case DELETE_TWO:
+
+                    // TDOUBLEを画面に表示する
+                    _scoreScript.ActionDisplay(TDOUBLE);
+
+                    break;
+                // 3段
+                case DELETE_THREE:
+
+                    // TTRIPLEを画面に表示する
+                    _scoreScript.ActionDisplay(TTRIPLE);
+
+                    break;
             }
         }
         //　消した段数を送る
-        _scoreScript.ScoreDisplay(eraseCount);
+        _scoreScript.ScoreDisplay(deleteCount);
     }
 
     /// <summary>

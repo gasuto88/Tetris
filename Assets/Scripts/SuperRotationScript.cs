@@ -30,21 +30,21 @@ public class SuperRotationScript : MonoBehaviour
     /// <para>SuperRotation</para>
     /// <para>スーパーローテーションをする</para>
     /// </summary>
-    /// <param name="_playerMino">操作できるミノ</param>
-    /// <param name="_input">左右の入力</param>
-    public void SuperRotation(GameObject _playerMino,int _input)
+    /// <param name="playerMino">操作できるミノ</param>
+    /// <param name="input">左右の入力</param>
+    public void SuperRotation(GameObject playerMino,int input)
     {
         // プレイヤーがIミノとOミノ以外だったら
-        if (_playerMino.tag != "IMino" && _playerMino.tag != "OMino")
+        if (playerMino.tag != "IMino" && playerMino.tag != "OMino")
         {
             // 通常のミノを回転する
-            _normalMinoRotationScript.NormalMinoRotation(_playerMino, _input);
+            _normalMinoRotationScript.NormalMinoRotation(playerMino, input);
         }
         // プレイヤーがIミノだったら
-        else if(_playerMino.tag == "IMino")
+        else if(playerMino.tag == "IMino")
         {
             // Iミノを回転する
-            _iMinoRotationScript.IMinoRotation(_playerMino,_input);
+            _iMinoRotationScript.IMinoRotation(playerMino,input);
         }
     }
 }

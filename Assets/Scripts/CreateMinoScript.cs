@@ -83,9 +83,9 @@ public class CreateMinoScript : MonoBehaviour
             _playerControllerScript.PlayerableMino.transform.position;
 
         // ゴーストミノの透明度を下げて薄くしている
-        foreach(Transform _children in _ghostMinoScript.GhostMino.GetComponentInChildren<Transform>())
+        foreach(Transform children in _ghostMinoScript.GhostMino.GetComponentInChildren<Transform>())
         {
-            _children.GetComponent<SpriteRenderer>().color = _ghostColor;
+            children.GetComponent<SpriteRenderer>().color = _ghostColor;
         }
 
         // リストの先頭のミノを削除する

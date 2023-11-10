@@ -14,7 +14,7 @@ public class ScoreScript : MonoBehaviour
 　　// スコアを表示するテキスト
     private TextMeshProUGUI _scoreText = default;
 
-    // 技（TETRIS、TSPINなど）を表示するテキスト
+    // 特殊消し（TETRIS、TSPINなど）を表示するテキスト
     private TextMeshProUGUI _actionText = default;
 
     // 現在のスコア
@@ -39,23 +39,23 @@ public class ScoreScript : MonoBehaviour
     /// <para>スコアを画面に表示する</para>
     /// </summary>
     /// <param name="_scoreCount">消した段数</param>
-    public void ScoreDisplay(int _eraseCount)
+    public void ScoreDisplay(int eraseCount)
     {
         // 消した段数分のポイントを加算
-        _scoreCount += _eraseCount * UP_POINT;
+        _scoreCount += eraseCount * UP_POINT;
 
         // スコアを画面に表示
         _scoreText.text = "SCORE : " + _scoreCount.ToString();        
     }
     /// <summary>
     /// <para>ActionDisplay</para>
-    /// <para>技（TETRIS、TSPINなど）を画面に表示する</para>
+    /// <para>特殊消し（TETRIS、TSPINなど）を画面に表示する</para>
     /// </summary>
-    /// <param name="_action">技の名前</param>
-    public void ActionDisplay(string _action)
+    /// <param name="action">技の名前</param>
+    public void ActionDisplay(string action)
     {
-        // 技を画面に表示
-        _actionText.text = _action;
+        // 特殊消しを画面に表示
+        _actionText.text = action;
 
         // 時間差でテキストの表示を消す
         StartCoroutine(ActionCoroutine());
