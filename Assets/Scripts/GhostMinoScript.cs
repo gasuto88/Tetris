@@ -25,6 +25,11 @@ public class GhostMinoScript : MonoBehaviour
     // ゲームの状態を管理するスクリプト
     private GameControllerScript _gameControllerScript = default;
 
+    // プレイヤーの移動方向
+    private readonly Vector3 _vectorRight = Vector3.right;
+    private readonly Vector3 _vectorUp = Vector3.up;
+    private readonly Vector3 _vectorForward = Vector3.forward;
+
     // ゴーストミノ
     public GameObject GhostMino { get => _ghostMino; set => _ghostMino = value; }
 
@@ -59,14 +64,14 @@ public class GhostMinoScript : MonoBehaviour
             _heightCount <= _fieldDataScript.Height)
         {
             // ゴーストミノを下に１マス移動
-            _ghostMino.transform.Translate(0f, -1f, 0f, Space.World);
+            _ghostMino.transform.Translate(-_vectorUp, Space.World);
 
             //下に移動した回数を加算
             _heightCount++;
             
         }
         // ゴーストミノを上に１マス移動
-        _ghostMino.transform.Translate(0f, 1f, 0f, Space.World);
+        _ghostMino.transform.Translate(_vectorUp, Space.World);
 
         // プレイヤーの角度を設定
         GhostMino.transform.rotation = _playerControllerScript.PlayerableMino.transform.rotation;

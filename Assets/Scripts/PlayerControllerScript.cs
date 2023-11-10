@@ -1,6 +1,8 @@
 /*----------------------------------------------------------
+PlayerControllerScript.cs
+プレイヤーを動かす
 
-更新日　11月9日
+更新日　11月10日
 
 制作者　本木　大地
 ----------------------------------------------------------*/
@@ -21,7 +23,6 @@ public class PlayerControllerScript : MonoBehaviour
     // プレイヤーの移動方向
     private readonly Vector3 _vectorRight = Vector3.right;
     private readonly Vector3 _vectorUp = Vector3.up;
-    private readonly Vector3 _vectorForward = Vector3.forward;
 
     // 左右入力
     private const int INPUT_LEFT = -1;
@@ -139,6 +140,7 @@ public class PlayerControllerScript : MonoBehaviour
     /// </summary>
     public void PlayerController()
     {
+        
         //入力取得
         _horizontalInput = Input.GetAxisRaw("Horizontal");
         _verticalInput = Input.GetAxisRaw("Vertical");
