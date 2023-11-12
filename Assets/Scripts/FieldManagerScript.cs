@@ -107,7 +107,7 @@ public class FieldManagerScript : MonoBehaviour
                 // フィールドにブロックが置いてなかったら
                 if (FieldData[j, i] == null)
                 {
-                    // 次の段に進む
+                    // 
                     break;
                 }
 
