@@ -10,8 +10,19 @@ using UnityEngine;
 
 public class FieldManagerScript : MonoBehaviour
 {
+    #region フィールド変数
+
+    [SerializeField, Header("横一列を消したときの音")]
+    private AudioClip _eraseSound = default;
+
+    [SerializeField, Header("横一列をたくさん消したときの音")]
+    private AudioClip _manyEraseSound = default;
+
     // スコアを表示するスクリプト
     private ScoreScript _scoreScript = default;
+
+    // Tスピンかを調べるスクリプト
+    private TSpinCheckScript _tspinCheckScript = default;
 
     // フィールドデータ
     private GameObject[,] _fieldData = new GameObject[10,20];
@@ -37,19 +48,12 @@ public class FieldManagerScript : MonoBehaviour
     // Tスピンかどうか
     private bool isTspin = default;
 
-    // Tスピンかを調べるスクリプト
-    private TSpinCheckScript _tspinCheckScript = default;
-
     // 操作しているミノ
     private GameObject _playerMino = default;
 
     private AudioSource _audioSource = default;
 
-    [SerializeField,Header("横一列を消したときの音")]
-    private AudioClip _eraseSound = default;
-
-    [SerializeField, Header("横一列をたくさん消したときの音")]
-    private AudioClip _manyEraseSound = default;
+    #endregion
 
     //フィールドの情報
     public GameObject[,] FieldData { get => _fieldData; set => _fieldData = value; }
@@ -100,12 +104,15 @@ public class FieldManagerScript : MonoBehaviour
             // フィールドの一番左から一つずつ右に進む
             for (int j = 0; j < 10; j++)
             {
-                // フィールドにブロックが置いてあったら
-                if (FieldData[j, i] != null)
+                // フィールドにブロックが置いてなかったら
+                if (FieldData[j, i] == null)
                 {
-                    // 横一列のブロック数を一つ増やす
-                    blockCount++;
+                    // 次の段に進む
+                    break;
                 }
+
+                // 横一列のブロック数を一つ増やす
+                blockCount++;
             }
             // 横一列にブロックが全部埋まっていたら
             if (blockCount >= 10)
