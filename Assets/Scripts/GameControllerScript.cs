@@ -7,7 +7,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
+/// <summary>
+/// ゲームの状態を管理する
+/// </summary>
 public class GameControllerScript : MonoBehaviour
 {
     // MINO_CREATE   ミノを生成している状態
@@ -15,7 +17,7 @@ public class GameControllerScript : MonoBehaviour
     // MINO_DELETE   ミノを消している状態
 
     /// <summary>
-    /// <para>ゲームの状態</para>
+    /// ゲームの状態
     /// </summary>
     public enum GameState
     {      
@@ -49,7 +51,7 @@ public class GameControllerScript : MonoBehaviour
      public GameState GameType { get => _gameState; set => _gameState = value; }
 
     /// <summary>
-    /// <para>更新前処理</para>
+    /// 更新前処理
     /// </summary>
     private void Start()
     {
@@ -83,8 +85,8 @@ public class GameControllerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>GameController</para>
-    /// <para>ゲームの状態を管理</para>
+    /// GameController
+    /// ゲームの状態を管理
     /// </summary>
     public void GameController()
     {
@@ -132,7 +134,7 @@ public class GameControllerScript : MonoBehaviour
             case GameState.MINO_DELETE:
 
                 // フィールドのミノを消す
-                _fieldManagerScript.DeleteFieldMino();
+                _fieldManagerScript.CheckFieldMino();
 
                 // プレイヤーミノを消す
                 Destroy(_playerControllerScript.PlayerableMino);
@@ -147,8 +149,8 @@ public class GameControllerScript : MonoBehaviour
         }
     }
     /// <summary>
-    /// <para>GameOverScene</para>
-    /// <para>ゲームオーバーシーンに遷移</para>
+    /// GameOverScene
+    /// ゲームオーバーシーンに遷移
     /// </summary>
     public void GameOverScene()
     {

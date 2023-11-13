@@ -11,8 +11,8 @@ using UnityEngine.SceneManagement;
 public class StartScript : MonoBehaviour
 {
     /// <summary>
-    /// <para>OnButtonStart</para>
-    /// <para>ゲームシーンに遷移する</para>
+    /// OnButtonStart
+    /// ゲームシーンに遷移する
     /// </summary>
     public void OnButtonStart()
     {

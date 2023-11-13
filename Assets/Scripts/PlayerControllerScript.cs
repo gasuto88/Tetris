@@ -1,13 +1,14 @@
 /*----------------------------------------------------------
-PlayerControllerScript.cs
-プレイヤーを動かす
+　PlayerControllerScript.cs
 
-更新日　11月10日
+　更新日　11月10日
 
-制作者　本木　大地
+　制作者　本木　大地
 ----------------------------------------------------------*/
 using UnityEngine;
-
+/// <summary>
+/// プレイヤーを動かす
+/// </summary>
 public class PlayerControllerScript : MonoBehaviour
 {
     #region フィールド変数
@@ -18,11 +19,7 @@ public class PlayerControllerScript : MonoBehaviour
     private float _verticalInput = default;
 
     // 操作できるミノ
-    private GameObject _playerableMino = default;
-
-    // プレイヤーの移動方向
-    private readonly Vector3 _vectorRight = Vector3.right;
-    private readonly Vector3 _vectorUp = Vector3.up;
+    private GameObject _playerableMino = default;    
 
     // 左右入力
     private const int INPUT_LEFT = -1;
@@ -99,8 +96,11 @@ public class PlayerControllerScript : MonoBehaviour
     // ゲームの状態を管理するスクリプト
     private GameControllerScript _gameControllerScript = default;
 
-    // スーパーローテーションをしてくれるスクリプト
+    // スーパーローテーションをするスクリプト
     private SuperRotationScript _superRotationScript = default;
+
+    // Tスピンを判定するスクリプト
+    private TSpinCheckScript _tSpinCheckScript = default;
 
     #endregion
 
@@ -114,7 +114,7 @@ public class PlayerControllerScript : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// <para>更新前処理</para>
+    /// 更新前処理
     /// </summary>
     private void Start()
     {
@@ -130,13 +130,16 @@ public class PlayerControllerScript : MonoBehaviour
         // SuperRotationScriptを取得
         _superRotationScript = GetComponent<SuperRotationScript>();
 
+        // TSpinCheckScriptを取得
+        _tSpinCheckScript = GetComponent<TSpinCheckScript>();
+
         // AudioSourceを取得
         _audioSource = GetComponent<AudioSource>();
     }
 
     /// <summary>
-    /// <para>PlayerController</para>
-    /// <para>プレイヤーの挙動を制御する</para>
+    /// PlayerController
+    /// プレイヤーの挙動を制御する
     /// </summary>
     public void PlayerController()
     {
@@ -196,8 +199,8 @@ public class PlayerControllerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>HorizontalMove</para>
-    /// <para>ミノを左右に移動する</para>
+    /// HorizontalMove
+    /// ミノを左右に移動する
     /// </summary>
     /// <param name="input">左右の入力</param>
     private void HorizontalMove(int input)
@@ -209,7 +212,7 @@ public class PlayerControllerScript : MonoBehaviour
             _audioSource.PlayOneShot(_moveSound);
 
             // １マス移動
-            PlayerableMino.transform.Translate(_vectorRight * input, Space.World);
+            PlayerableMino.transform.Translate(Vector3.right * input, Space.World);
 
             // 現在のタイマーを設定
             _inputTime = Time.time;
@@ -218,14 +221,14 @@ public class PlayerControllerScript : MonoBehaviour
             if (CheckCollision(PlayerableMino))
             {
                 // １マス戻す
-                PlayerableMino.transform.Translate(_vectorRight * -input, Space.World);
+                PlayerableMino.transform.Translate(Vector3.right * -input, Space.World);
             }
         }     
     }
 
     /// <summary>
-    /// <para>HardDrop</para>
-    /// <para>ミノを高速落下する</para>
+    /// HardDro
+    /// ミノを高速落下する
     /// </summary>
     private void HardDrop()
     {
@@ -246,8 +249,8 @@ public class PlayerControllerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>SoftDrop</para>
-    /// <para>ミノを下に１マス移動する</para>
+    /// SoftDrop
+    /// ミノを下に１マス移動する
     /// </summary>
     private void SoftDrop()
     {
@@ -255,7 +258,7 @@ public class PlayerControllerScript : MonoBehaviour
         if ((Time.time - _inputTime) > _inputCoolTime)
         {
             // 下に１マス移動
-            PlayerableMino.transform.Translate(-_vectorUp, Space.World);
+            PlayerableMino.transform.Translate(-Vector3.up, Space.World);
 
             // 現在のタイマーを設定
             _inputTime = Time.time;
@@ -264,7 +267,7 @@ public class PlayerControllerScript : MonoBehaviour
             if (CheckCollision(PlayerableMino))
             {
                 // 上に１マス移動
-                PlayerableMino.transform.Translate(_vectorUp, Space.World);
+                PlayerableMino.transform.Translate(Vector3.up, Space.World);
 
                 // 着地判定を設定
                 IsGround = true;
@@ -273,8 +276,8 @@ public class PlayerControllerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>NaturalFall</para>
-    /// <para>ミノを自然落下させる</para>
+    /// NaturalFall
+    /// ミノを自然落下させる
     /// </summary>
     private void NaturalFall()
     {
@@ -282,7 +285,7 @@ public class PlayerControllerScript : MonoBehaviour
         if ((Time.time - _fallTime) > _fallCoolTime)
         {
             // 下に１マス移動
-            PlayerableMino.transform.Translate(-_vectorUp, Space.World);
+            PlayerableMino.transform.Translate(-Vector3.up, Space.World);
 
             // 現在の時間を設定
             _fallTime = Time.time;
@@ -291,7 +294,7 @@ public class PlayerControllerScript : MonoBehaviour
             if (CheckCollision(PlayerableMino))
             {
                 // １マス戻す
-                PlayerableMino.transform.Translate(_vectorUp, Space.World);
+                PlayerableMino.transform.Translate(Vector3.up, Space.World);
 
                 // 着地判定を設定
                 IsGround = true;
@@ -300,8 +303,8 @@ public class PlayerControllerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>RotationMove</para>
-    /// <para>ミノを回転する</para>
+    /// RotationMove
+    /// ミノを回転する
     /// </summary>
     /// <param name="input">左右入力</param>
     private void RotationMove(int input)
@@ -314,8 +317,8 @@ public class PlayerControllerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>Hold</para>
-    /// <para>ミノをHoldする</para>
+    /// Hold
+    /// ミノをHoldする
     /// </summary>
     private void Hold()
     {
@@ -327,8 +330,8 @@ public class PlayerControllerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>LockDown</para>
-    /// <para>ミノの設置判定をする</para>
+    /// LockDown
+    /// ミノの設置判定をする
     /// </summary>
     private void LockDown()
     {      
@@ -420,8 +423,8 @@ public class PlayerControllerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>CheckCollision</para>
-    /// <para>ミノが壁に重なっているか判定する</para>
+    /// CheckCollision
+    /// ミノが壁に重なっているか判定する
     /// </summary>
     /// <param name="mino">調べるミノ</param>
     /// <returns>壁に重なっているか</returns>
@@ -452,8 +455,8 @@ public class PlayerControllerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>UpdateMinoToField</para>
-    /// <para>置いたミノをフィールドに反映させる</para>
+    /// UpdateMinoToField
+    /// 置いたミノをフィールドに反映させる
     /// </summary>
     private void UpdateMinoToField()
     {
@@ -474,13 +477,14 @@ public class PlayerControllerScript : MonoBehaviour
             // 置いたミノをフィールドに反映させる
             _fieldManagerScript.FieldData[posX, -posY] = children.gameObject;            
         }
-        // フィールドに置いたミノを送る
-        _fieldManagerScript.SetPlayerInfo(PlayerableMino);
+
+        // Tスピンを判定
+        _tSpinCheckScript.IsTSpin = _tSpinCheckScript.TSpinCheck(PlayerableMino);
     }
 
     /// <summary>
-    /// <para>CutParentMino</para>
-    /// <para>親オブジェ（回転軸)と子オブジェ（ミノ）の親子関係を解除する</para>
+    /// CutParentMino
+    /// 親オブジェ（回転軸)と子オブジェ（ミノ）の親子関係を解除する
     /// </summary>
     private void CutParentMino()
     {
@@ -489,8 +493,8 @@ public class PlayerControllerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>GroundFall</para>
-    /// <para>ミノを地面まで落とす</para>
+    /// GroundFall
+    /// ミノを地面まで落とす
     /// </summary>
     private void GroundFall()
     {
@@ -498,9 +502,9 @@ public class PlayerControllerScript : MonoBehaviour
         while (!CheckCollision(PlayerableMino))
         {
             // 下に１マス移動
-            PlayerableMino.transform.Translate(-_vectorUp, Space.World);
+            PlayerableMino.transform.Translate(-Vector3.up, Space.World);
         }
         // 上に１マス戻す
-        PlayerableMino.transform.Translate(_vectorUp, Space.World);
+        PlayerableMino.transform.Translate(Vector3.up, Space.World);
     }
 }

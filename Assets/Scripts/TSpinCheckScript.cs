@@ -1,4 +1,5 @@
 /*----------------------------------------------------------
+TSpinCheckScript.cs
 
 更新日　11月9日
 
@@ -6,13 +7,22 @@
 ----------------------------------------------------------*/
 using UnityEngine;
 
+/// <summary>
+/// Tスピンを判定する
+/// </summary>
 public class TSpinCheckScript : MonoBehaviour
 {
     // フィールドを管理するスクリプト
     private FieldManagerScript _fieldManagerScript = default;
 
+    // Tスピン判定
+    private bool isTspin = default;
+
+    // Tスピン判定
+    public bool IsTSpin { get => isTspin; set => isTspin = value; }
+
     /// <summary>
-    /// <para>更新前処理</para>
+    /// 更新前処理
     /// </summary>
     private void Start()
     {
@@ -21,13 +31,20 @@ public class TSpinCheckScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>TSpinCheck</para>
-    /// <para>Tスピン判定を調べる</para>
+    /// TSpinCheck
+    /// Tスピン判定を調べる
     /// </summary>
     /// <param name="playerMino">操作できるミノ</param>
     /// <returns>Tスピンしているか</returns>
     public bool TSpinCheck(GameObject playerMino)
     {
+        // Tミノじゃなかったら
+        if(playerMino.tag != "TMino")
+        {
+            // Tスピンしていない
+            return false;
+        }
+
         // 整数化
         int playerPosX = Mathf.RoundToInt(playerMino.transform.position.x);
         int playerPosY = Mathf.RoundToInt(playerMino.transform.position.y);

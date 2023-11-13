@@ -1,11 +1,14 @@
 /*----------------------------------------------------------
+MinoControllerScript.cs
 
-更新日　11月9日
+ 更新日　11月9日
 
-制作者　本木　大地
+ 制作者　本木　大地
 ----------------------------------------------------------*/
 using UnityEngine;
-
+/// <summary>
+/// // ミノを管理する
+/// </summary>
 public class MinoControllerScript : MonoBehaviour
 {
     #region フィールド変数
@@ -49,7 +52,7 @@ public class MinoControllerScript : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// <para>更新前処理</para>
+    /// 更新前処理
     /// </summary>
     private void Start()
     {
@@ -81,15 +84,15 @@ public class MinoControllerScript : MonoBehaviour
 
     }
     /// <summary>
-    /// <para>更新処理</para>
+    /// 更新処理
     /// </summary>
     private void Update()
     {
         AddMino();       
     }
     /// <summary>
-    /// <para>AddMino</para>
-    /// <para>リストのミノの個数を増やす</para>
+    /// AddMino
+    /// リストのミノの個数を増やす
     /// </summary>
     private void AddMino()
     {    
@@ -101,8 +104,8 @@ public class MinoControllerScript : MonoBehaviour
         }
     }
     /// <summary>
-    /// <para>NextDisplay</para>
-    /// <para>NEXTミノの表示</para>
+    /// NextDisplay
+    /// NEXTミノの表示
     /// </summary>
     public void NextDisplay()
     {
@@ -113,8 +116,8 @@ public class MinoControllerScript : MonoBehaviour
         }
     }
     /// <summary>
-    /// <para>HoldController</para>
-    /// <para>Holdの中身を出し入れする処理</para>
+    /// HoldController
+    /// Holdの中身を出し入れする処理
     /// </summary>
     /// <param name="playerableMino">操作できるミノ</param>
     public void HoldController(GameObject playerableMino,AudioClip holdSound)
@@ -160,8 +163,8 @@ public class MinoControllerScript : MonoBehaviour
 
     }
     /// <summary>
-    /// <para>DownCoolTime</para>
-    /// <para>Holdのクールタイムを減らす</para>
+    /// DownCoolTime
+    /// Holdのクールタイムを減らす
     /// </summary>
     public void DownCoolTime()
     {

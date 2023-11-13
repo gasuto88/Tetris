@@ -1,57 +1,50 @@
 /*----------------------------------------------------
- * FieldManagerScript.cs
- * フィールドを管理する
- * 
- * 作成日　11月10日
- * 
- * 制作者　本木　大地
+  FieldManagerScript.cs
+  
+  作成日　11月10日
+  
+  作成者　本木　大地
  ---------------------------------------------------*/
 using UnityEngine;
 
+/// <summary>
+/// フィールドを管理する
+/// </summary>
 public class FieldManagerScript : MonoBehaviour
 {
-    #region フィールド変数
+    #region 定数
 
-    [SerializeField, Header("横一列を消したときの音")]
-    private AudioClip _eraseSound = default;
-
-    [SerializeField, Header("横一列をたくさん消したときの音")]
-    private AudioClip _manyEraseSound = default;
-
-    // スコアを表示するスクリプト
-    private ScoreScript _scoreScript = default;
-
-    // Tスピンかを調べるスクリプト
-    private TSpinCheckScript _tspinCheckScript = default;
-
-    // フィールドデータ
-    private GameObject[,] _fieldData = new GameObject[10,20];
-
-    // フィールドの高さ
+    // フィールドの縦幅と横幅
     private const int HEIGHT = 19;
+    private const int WIDTH = 10;
 
-    //private const int
-
-    // 特殊消しの名前 -------------------------------
+    // 特殊消しの名前 ----------------------------------------
     private const string TETRIS = "TETRIS";
     private const string TSINGLE = "TSPIN - SINGLE";
     private const string TDOUBLE = "TSPIN - DOUBLE";
     private const string TTRIPLE = "TSPIN - TRIPLE";
-    // ----------------------------------------------
+    // -------------------------------------------------------
 
-    // 消した段数 -----------------------------------
-    private const int DELETE_ONE = 1;
-    private const int DELETE_TWO = 2;
-    private const int DELETE_THREE = 3;
-    // ----------------------------------------------
+    // オブジェクトのタグの名前 ------------------------------
+    private const string SCORE_CANVAS = "ScoreCanvas";
+    private const string MINO_CONTROLLER = "MinoController";
+    private const string GAME_CONTROLLER = "GameController";
+    // -------------------------------------------------------
+    #endregion
 
-    // Tスピンかどうか
-    private bool isTspin = default;
+    #region フィールド変数
 
-    // 操作しているミノ
-    private GameObject _playerMino = default;
+    // スコアを表示するスクリプト
+    private ScoreManagerScript _scoreScript = default;
 
-    private AudioSource _audioSource = default;
+    // Tスピンかを調べるスクリプト
+    private TSpinCheckScript _tspinCheckScript = default;
+
+    // 音を再生するスクリプト
+    private AudioManagerScript _audioManagerScript = default;
+
+    // フィールドデータ
+    private GameObject[,] _fieldData = new GameObject[10,20];
 
     #endregion
 
@@ -59,126 +52,89 @@ public class FieldManagerScript : MonoBehaviour
     public GameObject[,] FieldData { get => _fieldData; set => _fieldData = value; }
     // フィールドの高さ
     public int Height { get => HEIGHT;}
+
     /// <summary>
-    /// <para>更新前処理</para>
+    /// 更新前処理
     /// </summary>
     private void Start()
     {
         // ScoreScriptを取得
-        _scoreScript = GameObject.Find("Canvas").GetComponent<ScoreScript>();
+        _scoreScript = GameObject.FindGameObjectWithTag(SCORE_CANVAS).GetComponent<ScoreManagerScript>();
 
         // TSpinCheckScriptを取得
-        _tspinCheckScript = GameObject.Find("MinoController").GetComponent<TSpinCheckScript>();
+        _tspinCheckScript = GameObject.FindGameObjectWithTag(MINO_CONTROLLER).GetComponent<TSpinCheckScript>();
 
-        // AudioSourceを取得
-        _audioSource = GetComponent<AudioSource>();
+        // AudioManagerScriptを取得
+        _audioManagerScript = GameObject.FindGameObjectWithTag(GAME_CONTROLLER).GetComponent<AudioManagerScript>();
     }
 
     /// <summary>
-    /// <para>DeleteFieldMino</para>
-    /// <para>フィールドのミノを消す</para>
+    /// DeleteFieldMino
+    /// フィールドで消せるミノがないかを判定する
     /// </summary>
-    public void DeleteFieldMino()
+    public void CheckFieldMino()
     {
-        // 横一列のブロック数
+        // 横1列のブロック数
         int blockCount = 0;
         
         // 消した段数
         int deleteCount = 0;
 
-        // 操作しているミノがTミノ　かつ　Tスピンだったら
-        if (_playerMino.tag == "TMino" && _tspinCheckScript.TSpinCheck(_playerMino)) 
-        {
-            // Tスピンしている
-            isTspin = true;
-        }
-        else
-        {
-            // Tスピンしていない
-            isTspin = false;
-        }
-
-        // フィールドの一番下から一つずつ上に進む
+        // フィールドの1番下から1番上まで進む
         for (int i = HEIGHT; i >= 0; i--)
         {
-            // フィールドの一番左から一つずつ右に進む
-            for (int j = 0; j < 10; j++)
+            // フィールドの1番左から1番右まで進む
+            for (int j = 0; j < WIDTH; j++)
             {
-                // フィールドにブロックが置いてなかったら
+                // フィールドにブロックが置いていなかったら
                 if (FieldData[j, i] == null)
                 {
-                    // 
+                    // この段を終了する
                     break;
                 }
 
-                // 横一列のブロック数を一つ増やす
+                // 横1列のブロック数を1つ増やす
                 blockCount++;
             }
-            // 横一列にブロックが全部埋まっていたら
-            if (blockCount >= 10)
-            {　
-                // ブロックの埋まった高さから一つずつ上に進む
-                for (int k = i; k > -1; k--)
-                {
-                    // フィールドの一番左から一つずつ右に進む
-                    for (int l = 0; l < 10; l++)
-                    {
-                        // 現在の高さがブロックの埋まった高さと同じ　かつ　フィールドにブロックが置いてあったら
-                        if (k == i && FieldData[l, i] != null)
-                        {
-                            // 置いてあるブロックを削除する
-                            Destroy(FieldData[l, i].gameObject);
+            // 横1列にブロックが全部埋まっていたら
+            if (blockCount >= WIDTH)
+            {
+                // フィールドのミノを消す
+                DeleteFieldMino(i);
 
-                            // そのブロックのフィールドデータを空にする
-                            FieldData[l, i] = null;
-
-                        }
-                        // 一番上の段より下　かつ　一つ上の段にブロックが置いてあったら　
-                        if (k > 0 && FieldData[l,k - 1] != null)
-                        {
-                            // 置いてあるブロックを一つ下に移動
-                            FieldData[l, k - 1].transform.Translate(0f, -1f, 0f, Space.World);
-
-                            //　一つ上の段のデータを現在のデータに上書きする
-                            FieldData[l,k] = FieldData[l, k - 1];
-
-                            // 一つ上の段のフィールドデータを空にする
-                            FieldData[l, k - 1] = null;
-                        }
-                    }
-                }
-                // 次に調べる段を一つ下に下げる
+                // 次に調べる段を1つ下に下げる
                 i++;
 
                 // 消した段数
                 deleteCount++;
             }
-            // 横一列のブロック数を初期化
+            // 横1列のブロック数を初期化
             blockCount = 0;
         }
         // 4段消したら
         if (deleteCount >= 4)
         {
-            // TETRIS（技）を画面に表示する
+            // TETRISを画面に表示する
             _scoreScript.ActionDisplay(TETRIS);
 
-            // 横一列をたくさん消したときの音
-            _audioSource.PlayOneShot(_manyEraseSound);
+            // ミノを４段消した時の音を再生
+            _audioManagerScript.ManyDeleteSound();
         }
+        // 1段以上消したら
         else if (deleteCount >= 1)
         {
-            // 横一列を消したときの音
-            _audioSource.PlayOneShot(_eraseSound);
+            // ミノを消した時の音を再生
+            _audioManagerScript.DeleteSound();
         }
 
         // Ｔスピンだったら
-        if (isTspin)
+        if (_tspinCheckScript.IsTSpin)
         {
             // 消した段数によって分ける
             switch (deleteCount)
             {
                 // 1段
-                case DELETE_ONE:
+                case 1:
 
                     // TSINGLEを画面に表示する
                     _scoreScript.ActionDisplay(TSINGLE);
@@ -186,14 +142,14 @@ public class FieldManagerScript : MonoBehaviour
                     break;
 
                 // 2段
-                case DELETE_TWO:
+                case 2:
 
                     // TDOUBLEを画面に表示する
                     _scoreScript.ActionDisplay(TDOUBLE);
 
                     break;
                 // 3段
-                case DELETE_THREE:
+                case 3:
 
                     // TTRIPLEを画面に表示する
                     _scoreScript.ActionDisplay(TTRIPLE);
@@ -204,14 +160,41 @@ public class FieldManagerScript : MonoBehaviour
         //　消した段数を送る
         _scoreScript.ScoreDisplay(deleteCount);
     }
-
     /// <summary>
-    /// <para>SetPlayerInfo</para>
-    /// <para>操作しているミノを受け取る</para>
+    /// フィールドのミノを消す
     /// </summary>
-    /// <param name="player">操作しているミノ</param>
-    public void SetPlayerInfo(GameObject player)
+    /// <param name="i">消す段</param>
+    private void DeleteFieldMino(int i)
     {
-        _playerMino = player;
+        // ブロックの埋まった段から1番上まで進む
+        for (int k = i; k >= 0; k--)
+        {
+            // フィールドの1番左から1番右まで進む
+            for (int l = 0; l < WIDTH; l++)
+            {
+                // 現在の高さがブロックの埋まった高さと同じ　かつ　フィールドにブロックが置いてあったら
+                if (k == i && FieldData[l, i] != null)
+                {
+                    // ブロックを削除する
+                    Destroy(FieldData[l, i].gameObject);
+
+                    // そのブロックのフィールドデータを初期化
+                    FieldData[l, i] = null;
+
+                }
+                // 1番上の段より下　かつ　1つ上の段にブロックが置いてあったら　
+                if (k > 0 && FieldData[l, k - 1] != null)
+                {
+                    // ブロックを1つ下に移動
+                    FieldData[l, k - 1].transform.Translate(-Vector3.up, Space.World);
+
+                    //　1つ上の段のデータを現在のデータに上書きする
+                    FieldData[l, k] = FieldData[l, k - 1];
+
+                    // 1つ上の段のフィールドデータを初期化
+                    FieldData[l, k - 1] = null;
+                }
+            }
+        }
     }
 }

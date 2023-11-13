@@ -11,6 +11,10 @@ TagManager:
   - LMino
   - JMino
   - TMino
+  - ScoreCanvas
+  - MinoController
+  - ScoreText
+  - ActionText
   layers:
   - Default
   - TransparentFX

@@ -9,9 +9,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ScoreScript : MonoBehaviour
+public class ScoreManagerScript : MonoBehaviour
 {
-　　// スコアを表示するテキスト
+    #region 定数
+
+    // ポイントの増える倍率
+    private const int UP_POINT = 100;
+
+    // Tagの名前 -----------------------------------
+    private const string SCORE_TEXT = "ScoreText";
+    private const string ACTION_TEXT = "ActionText";
+    // ---------------------------------------------
+
+    #endregion
+
+
+    // スコアを表示するテキスト
     private TextMeshProUGUI _scoreText = default;
 
     // 特殊消し（TETRIS、TSPINなど）を表示するテキスト
@@ -20,23 +33,20 @@ public class ScoreScript : MonoBehaviour
     // 現在のスコア
     private int _scoreCount = default;
 
-    // ポイントの増える倍率
-    private const int UP_POINT = 100;
-
     /// <summary>
-    /// <para>更新前処理</para>
+    /// 更新前処理
     /// </summary>
     private void Start()
     {
         // TextMeshProUGUIを取得
-        _scoreText = GameObject.Find("ScoreText").GetComponent<TextMeshProUGUI>();
+        _scoreText = GameObject.FindGameObjectWithTag(SCORE_TEXT).GetComponent<TextMeshProUGUI>();
 
         // TextMeshProUGUIを取得
-        _actionText = GameObject.Find("ActionText").GetComponent<TextMeshProUGUI>();
+        _actionText = GameObject.FindGameObjectWithTag(ACTION_TEXT).GetComponent<TextMeshProUGUI>();
     }
     /// <summary>
-    /// <para>ScoreDisplay</para>
-    /// <para>スコアを画面に表示する</para>
+    /// ScoreDisplay
+    /// スコアを画面に表示する
     /// </summary>
     /// <param name="_scoreCount">消した段数</param>
     public void ScoreDisplay(int eraseCount)
@@ -47,9 +57,10 @@ public class ScoreScript : MonoBehaviour
         // スコアを画面に表示
         _scoreText.text = "SCORE : " + _scoreCount.ToString();        
     }
+
     /// <summary>
-    /// <para>ActionDisplay</para>
-    /// <para>特殊消し（TETRIS、TSPINなど）を画面に表示する</para>
+    /// ActionDisplay
+    /// 特殊消し（TETRIS、TSPINなど）を画面に表示する
     /// </summary>
     /// <param name="action">技の名前</param>
     public void ActionDisplay(string action)
@@ -60,9 +71,10 @@ public class ScoreScript : MonoBehaviour
         // 時間差でテキストの表示を消す
         StartCoroutine(ActionCoroutine());
     }
+
     /// <summary>
-    /// <para>ActionCoroutine</para>
-    /// <para>テキストの表示を消す</para>
+    /// ActionCoroutine
+    /// テキストの表示を消す
     /// </summary>
     /// <returns></returns>
     private IEnumerator ActionCoroutine()

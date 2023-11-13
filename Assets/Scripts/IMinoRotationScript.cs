@@ -12,7 +12,7 @@ public class IMinoRotationScript : MonoBehaviour
     private PlayerControllerScript _playerControllerScript = default;
 
     /// <summary>
-    /// <para>更新前処理</para>
+    /// 更新前処理
     /// </summary>
     private void Start()
     {
@@ -21,8 +21,8 @@ public class IMinoRotationScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>IMinoRotation</para>
-    /// <para>Iミノのスーパーローテーションをする</para>
+    /// IMinoRotation
+    /// Iミノのスーパーローテーションをする
     /// </summary>
     /// <param name="playerMino">操作できるミノ</param>
     /// <param name="input">左右の入力</param>

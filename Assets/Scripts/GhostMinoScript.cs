@@ -34,7 +34,7 @@ public class GhostMinoScript : MonoBehaviour
     public GameObject GhostMino { get => _ghostMino; set => _ghostMino = value; }
 
    /// <summary>
-   /// <para>更新前処理</para>
+   /// 更新前処理
    /// </summary>
     private void Start()
     {
@@ -48,8 +48,8 @@ public class GhostMinoScript : MonoBehaviour
         _fieldDataScript = GameObject.Find("Stage").GetComponent<FieldManagerScript>();
     }
     /// <summary>
-    /// <para>GhostMinoMove</para>
-    /// <para>ゴーストミノを動かす</para>
+    /// GhostMinoMove
+    /// ゴーストミノを動かす
     /// </summary>
     public void GhostMinoMove()
     {

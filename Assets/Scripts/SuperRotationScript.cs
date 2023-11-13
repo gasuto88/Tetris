@@ -1,11 +1,14 @@
 /*----------------------------------------------------------
+ SuperRotationScript.cs
 
-更新日　11月9日
+ 更新日　11月9日
 
-制作者　本木　大地
+ 制作者　本木　大地
 ----------------------------------------------------------*/
 using UnityEngine;
-
+/// <summary>
+/// スーパーローテーションをする
+/// </summary>
 public class SuperRotationScript : MonoBehaviour
 {
     // 通常のミノを回転するスクリプト
@@ -15,7 +18,7 @@ public class SuperRotationScript : MonoBehaviour
     private IMinoRotationScript _iMinoRotationScript = default;
 
     /// <summary>
-    /// <para>更新前処理</para>
+    /// 更新前処理
     /// </summary>
     private void Start()
     {
@@ -27,8 +30,8 @@ public class SuperRotationScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>SuperRotation</para>
-    /// <para>スーパーローテーションをする</para>
+    /// SuperRotation
+    /// スーパーローテーションをする
     /// </summary>
     /// <param name="playerMino">操作できるミノ</param>
     /// <param name="input">左右の入力</param>
