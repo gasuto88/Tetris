@@ -69,48 +69,100 @@ public class FieldManagerScript : MonoBehaviour
     }
 
     /// <summary>
-    /// DeleteFieldMino
-    /// フィールドで消せるミノがないかを判定する
+    /// DeleteMino
+    /// フィールドのミノを消す
     /// </summary>
-    public void CheckFieldMino()
-    {
-        // 横1列のブロック数
-        int blockCount = 0;
-        
+    public void DeleteMino()
+    {       
         // 消した段数
         int deleteCount = 0;
 
         // フィールドの1番下から1番上まで進む
         for (int i = HEIGHT; i >= 0; i--)
-        {
-            // フィールドの1番左から1番右まで進む
-            for (int j = 0; j < WIDTH; j++)
+        {           
+            // 横1列にブロックが全部埋まっていたら
+            if (CheckDeleteMino(i))
             {
-                // フィールドにブロックが置いていなかったら
-                if (FieldData[j, i] == null)
+                // ブロックの埋まった段から1番上まで進む
+                for (int k = i; k >= 0; k--)
                 {
-                    // この段を終了する
-                    break;
+                    // フィールドの1番左から1番右まで進む
+                    for (int l = 0; l < WIDTH; l++)
+                    {
+                        // 現在の高さがブロックの埋まった高さと同じ　かつ　フィールドにブロックが置いてあったら
+                        if (k == i && FieldData[l, i] != null)
+                        {
+                            // ブロックを削除する
+                            Destroy(FieldData[l, i].gameObject);
+
+                            // そのブロックのフィールドデータを初期化
+                            FieldData[l, i] = null;
+
+                        }
+                        // 1番上の段より下　かつ　1つ上の段にブロックが置いてあったら　
+                        if (k > 0 && FieldData[l, k - 1] != null)
+                        {
+                            // ブロックを1つ下に移動
+                            FieldData[l, k - 1].transform.Translate(-Vector3.up, Space.World);
+
+                            //　1つ上の段のデータを現在のデータに上書きする
+                            FieldData[l, k] = FieldData[l, k - 1];
+
+                            // 1つ上の段のフィールドデータを初期化
+                            FieldData[l, k - 1] = null;
+                        }
+                    }
                 }
 
-                // 横1列のブロック数を1つ増やす
-                blockCount++;
-            }
-            // 横1列にブロックが全部埋まっていたら
-            if (blockCount >= WIDTH)
-            {
-                // フィールドのミノを消す
-                DeleteFieldMino(i);
-
-                // 次に調べる段を1つ下に下げる
+                // 次に調べる段を1つ下げる
                 i++;
 
                 // 消した段数
                 deleteCount++;
             }
-            // 横1列のブロック数を初期化
-            blockCount = 0;
         }
+
+        // 消した段数が1以上だったら
+        if (deleteCount >= 1)
+        {
+            SelectDeleteText(deleteCount);
+
+            //　消した段数を送る
+            _scoreScript.ScoreDisplay(deleteCount);
+        }
+    }
+
+    /// <summary>
+    /// 横1列にブロックが全部埋まっているか
+    /// </summary>
+    /// <param name="row">段</param>
+    /// <returns>ブロックが全部埋まっているか</returns>
+    private bool CheckDeleteMino(int row)
+    {
+        // フィールドの1番左から1番右まで進む
+        for (int j = 0; j < WIDTH; j++)
+        {
+            // フィールドにブロックが置いていなかったら
+            if (FieldData[j, row] == null)
+            {
+                // ブロックが全部埋まっていない
+                return false;
+            }
+        }
+
+        // ブロックが全部埋まっている
+        return true;
+    } 
+    /// <summary>
+    /// フィールドのミノを消す
+    /// </summary>
+    /// <param name="i">消す段</param>
+    private void DeleteFieldMino(int i)
+    {
+        
+    }
+    private void SelectDeleteText(int deleteCount)
+    {
         // 4段消したら
         if (deleteCount >= 4)
         {
@@ -155,45 +207,6 @@ public class FieldManagerScript : MonoBehaviour
                     _scoreScript.ActionDisplay(TTRIPLE);
 
                     break;
-            }
-        }
-        //　消した段数を送る
-        _scoreScript.ScoreDisplay(deleteCount);
-    }
-    /// <summary>
-    /// フィールドのミノを消す
-    /// </summary>
-    /// <param name="i">消す段</param>
-    private void DeleteFieldMino(int i)
-    {
-        // ブロックの埋まった段から1番上まで進む
-        for (int k = i; k >= 0; k--)
-        {
-            // フィールドの1番左から1番右まで進む
-            for (int l = 0; l < WIDTH; l++)
-            {
-                // 現在の高さがブロックの埋まった高さと同じ　かつ　フィールドにブロックが置いてあったら
-                if (k == i && FieldData[l, i] != null)
-                {
-                    // ブロックを削除する
-                    Destroy(FieldData[l, i].gameObject);
-
-                    // そのブロックのフィールドデータを初期化
-                    FieldData[l, i] = null;
-
-                }
-                // 1番上の段より下　かつ　1つ上の段にブロックが置いてあったら　
-                if (k > 0 && FieldData[l, k - 1] != null)
-                {
-                    // ブロックを1つ下に移動
-                    FieldData[l, k - 1].transform.Translate(-Vector3.up, Space.World);
-
-                    //　1つ上の段のデータを現在のデータに上書きする
-                    FieldData[l, k] = FieldData[l, k - 1];
-
-                    // 1つ上の段のフィールドデータを初期化
-                    FieldData[l, k - 1] = null;
-                }
             }
         }
     }

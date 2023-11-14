@@ -134,7 +134,7 @@ public class GameControllerScript : MonoBehaviour
             case GameState.MINO_DELETE:
 
                 // フィールドのミノを消す
-                _fieldManagerScript.CheckFieldMino();
+                _fieldManagerScript.DeleteMino();
 
                 // プレイヤーミノを消す
                 Destroy(_playerControllerScript.PlayerableMino);

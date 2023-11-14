@@ -117,7 +117,7 @@ public class PlayerControllerScript : MonoBehaviour
     /// 更新前処理
     /// </summary>
     private void Start()
-    {
+    {     
         // FieldDataScriptを取得
         _fieldManagerScript = GameObject.Find("Stage").GetComponent<FieldManagerScript>();
 
@@ -142,8 +142,7 @@ public class PlayerControllerScript : MonoBehaviour
     /// プレイヤーの挙動を制御する
     /// </summary>
     public void PlayerController()
-    {
-        
+    {      
         //入力取得
         _horizontalInput = Input.GetAxisRaw("Horizontal");
         _verticalInput = Input.GetAxisRaw("Vertical");
