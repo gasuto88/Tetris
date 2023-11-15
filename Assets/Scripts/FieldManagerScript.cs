@@ -125,7 +125,8 @@ public class FieldManagerScript : MonoBehaviour
         // 消した段数が1以上だったら
         if (deleteCount >= 1)
         {
-            SelectDeleteText(deleteCount);
+            // 表示する文字を選択する
+            SelectDisplayText(deleteCount);
 
             //　消した段数を送る
             _scoreScript.ScoreDisplay(deleteCount);
@@ -154,14 +155,10 @@ public class FieldManagerScript : MonoBehaviour
         return true;
     } 
     /// <summary>
-    /// フィールドのミノを消す
+    /// 表示する文字を選択する
     /// </summary>
-    /// <param name="i">消す段</param>
-    private void DeleteFieldMino(int i)
-    {
-        
-    }
-    private void SelectDeleteText(int deleteCount)
+    /// <param name="deleteCount">消した段数</param>
+    private void SelectDisplayText(int deleteCount)
     {
         // 4段消したら
         if (deleteCount >= 4)
@@ -187,25 +184,20 @@ public class FieldManagerScript : MonoBehaviour
             {
                 // 1段
                 case 1:
-
                     // TSINGLEを画面に表示する
                     _scoreScript.ActionDisplay(TSINGLE);
-
                     break;
 
                 // 2段
                 case 2:
-
                     // TDOUBLEを画面に表示する
                     _scoreScript.ActionDisplay(TDOUBLE);
-
                     break;
+
                 // 3段
                 case 3:
-
                     // TTRIPLEを画面に表示する
                     _scoreScript.ActionDisplay(TTRIPLE);
-
                     break;
             }
         }
