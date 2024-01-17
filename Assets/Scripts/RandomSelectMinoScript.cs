@@ -81,11 +81,11 @@ public class RandomSelectMinoScript : MonoBehaviour
     }
 
     /// <summary>
-    /// <para>RandomSelectMino</para>
-    /// <para>７種類のミノを重複なくリストに入れる</para>
+    /// ７種類のミノを重複なくリストに入れる
     /// </summary>
     public void RandomSelectMino()
     {
+
         // リストの中に0～7の数字を追加する
         for (int i = 0; i < 7; i++)
         {
@@ -95,6 +95,7 @@ public class RandomSelectMinoScript : MonoBehaviour
         // 0～7の数字を全部作る
         for (int j = 0; j < 7; j++)
         {
+            
             // リストに中身が入ってたいら
             if (_numberList.Count > 0)
             {

@@ -110,7 +110,7 @@ public class PlayerControllerScript : MonoBehaviour
 
     // ’…’n”»’è
     public bool IsGround { get => isGround; set => isGround = value; }
-
+    
     #endregion
 
     /// <summary>
@@ -118,6 +118,8 @@ public class PlayerControllerScript : MonoBehaviour
     /// </summary>
     private void Start()
     {     
+
+    
         // FieldDataScript‚ðŽæ“¾
         _fieldManagerScript = GameObject.Find("Stage").GetComponent<FieldManagerScript>();
 

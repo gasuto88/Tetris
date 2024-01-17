@@ -20,9 +20,9 @@ public class FieldManagerScript : MonoBehaviour
 
     // 特殊消しの名前 ----------------------------------------
     private const string TETRIS = "TETRIS";
-    private const string TSINGLE = "TSPIN - SINGLE";
-    private const string TDOUBLE = "TSPIN - DOUBLE";
-    private const string TTRIPLE = "TSPIN - TRIPLE";
+    private const string TSINGLE = "TSPIN SINGLE";
+    private const string TDOUBLE = "TSPIN DOUBLE";
+    private const string TTRIPLE = "TSPIN TRIPLE";
     // -------------------------------------------------------
 
     // オブジェクトのタグの名前 ------------------------------

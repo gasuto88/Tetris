@@ -7,7 +7,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class ScoreManagerScript : MonoBehaviour
 {
@@ -25,10 +25,10 @@ public class ScoreManagerScript : MonoBehaviour
 
 
     // スコアを表示するテキスト
-    private TextMeshProUGUI _scoreText = default;
+    private Text _scoreText = default;
 
     // 特殊消し（TETRIS、TSPINなど）を表示するテキスト
-    private TextMeshProUGUI _actionText = default;
+    private Text _actionText = default;
 
     // 現在のスコア
     private int _scoreCount = default;
@@ -39,10 +39,10 @@ public class ScoreManagerScript : MonoBehaviour
     private void Start()
     {
         // TextMeshProUGUIを取得
-        _scoreText = GameObject.FindGameObjectWithTag(SCORE_TEXT).GetComponent<TextMeshProUGUI>();
+        _scoreText = GameObject.FindGameObjectWithTag(SCORE_TEXT).GetComponent<Text>();
 
         // TextMeshProUGUIを取得
-        _actionText = GameObject.FindGameObjectWithTag(ACTION_TEXT).GetComponent<TextMeshProUGUI>();
+        _actionText = GameObject.FindGameObjectWithTag(ACTION_TEXT).GetComponent<Text>();
     }
     /// <summary>
     /// ScoreDisplay
@@ -55,7 +55,7 @@ public class ScoreManagerScript : MonoBehaviour
         _scoreCount += eraseCount * UP_POINT;
 
         // スコアを画面に表示
-        _scoreText.text = "SCORE : " + _scoreCount.ToString();        
+        _scoreText.text = "SCORE " + _scoreCount.ToString();        
     }
 
     /// <summary>

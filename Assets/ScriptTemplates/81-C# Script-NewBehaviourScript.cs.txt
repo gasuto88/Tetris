@@ -1,9 +1,9 @@
-/*-------------------------------------------------
+ï»¿/*-------------------------------------------------
 * #SCRIPTNAME#.cs
 * 
-* ì¬“ú@2023/11/
+* ä½œæˆæ—¥ã€€2023/11/
 *
-* ì¬Ò@–{–Ø‘å’n
+* ä½œæˆè€…ã€€æœ¬æœ¨å¤§åœ°
 -------------------------------------------------*/
 using System;
 using System.Collections;
@@ -12,11 +12,11 @@ using UnityEngine;
 
 public class #SCRIPTNAME# : MonoBehaviour {
  
-	#region ƒtƒB[ƒ‹ƒh•Ï”
+	#region ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰å¤‰æ•°
 	#endregion
 
 	/// <summary>
-    /// XV‘Oˆ—
+    /// æ›´æ–°å‰å‡¦ç†
     /// </summary>
 	private void Start () 
 	{
@@ -24,7 +24,7 @@ public class #SCRIPTNAME# : MonoBehaviour {
 	}
 	
 	/// <summary>
-    /// XVˆ—
+    /// æ›´æ–°å‡¦ç†
     /// </summary>
 	private void Update () 
 	{
